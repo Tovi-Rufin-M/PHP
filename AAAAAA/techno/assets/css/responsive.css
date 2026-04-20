@@ -1,0 +1,112 @@
+/* ==========================================================================
+   EVENTS AND NEWS
+   ========================================================================== */
+/* ==========================================================================
+   RESPONSIVE IMPROVEMENTS
+   ========================================================================== */
+@media (max-width: 992px) { 
+    /* Medium screens: Tablets and smaller desktops */
+    .timeline-item {
+        grid-template-columns: 1fr; /* Stack image and content */
+        padding: 25px;
+        gap: 25px;
+    }
+
+    .timeline-item:not(:has(.timeline-image)) {
+        grid-template-columns: 1fr;
+    }
+
+    .timeline-image {
+        max-height: 250px;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Small screens: Large phones and smaller tablets */
+    .events-section {
+        margin: 20px auto;
+        padding: 40px 15px;
+    }
+
+    .section-header h1 {
+        font-size: 2.4rem;
+    }
+
+    .timeline-image {
+        height: auto;
+        min-height: 180px;
+        max-height: 300px;
+    }
+
+    .news-grid {
+        grid-template-columns: 1fr; /* Single column layout for news */
+    }
+    
+    .details-section {
+        padding: 40px 10px;
+    }
+
+    .details-container {
+        padding: 25px;
+        border-radius: 0; /* Full width look */
+    }
+
+    .details-container h1 {
+        font-size: 2.2rem;
+        margin-bottom: 15px;
+    }
+
+    .details-meta {
+        font-size: 0.9rem;
+    }
+
+    .details-image {
+        /* Reduced from 300px to maintain the smaller, subtle look */
+        max-height: 250px;
+        margin-bottom: 20px; 
+    }
+    .details-image-container {
+        flex: 0 0 auto;
+        max-width: 100%;
+    }
+    .media-content-wrapper {
+        flex-direction: column;
+        gap: 20px;
+    }
+}
+
+@media (max-width: 576px) {
+    /* Extra small screens: Phones */
+    .section-header h1 {
+        font-size: 2rem;
+    }
+
+    .timeline-item {
+        padding: 16px;
+    }
+
+    .event-meta {
+        flex-direction: column;
+        gap: 6px;
+        margin-bottom: 15px;
+    }
+
+    .btn-group {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .register-btn,
+    .view-gallery-btn {
+        width: 100%; /* Full-width buttons on mobile */
+    }
+}
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}

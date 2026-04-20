@@ -1,0 +1,1702 @@
+/* ==================================== */
+/* 0. Base Styles & Variables - DARK THEME */
+/* ==================================== */
+
+:root {
+    /* ==================================== */
+    /* 🎨 DARK THEME CORE COLORS (Simplified) */
+    /* ==================================== */
+    --color-primary: #00c6ff;      /* ⚡ Electric Cyan (Main Accent) */
+    --color-secondary: #007bff;    /* Official Blue (Secondary Accent) */
+    --color-primary-hover: #00a0e6; /* NEW: Standardized hover color */
+
+    --color-text: #e6e9f0;         /* Light Text for Dark BG */
+    --color-text-subtle: #9aa5b5;  /* Renamed from --color-text-subtle
+ */
+    
+    --color-background: #0d121c;   /* 🌌 Deep Midnight Blue/Black */
+    --color-background-light: #151b27; /* Subtle background variation */
+	--color-background-dark: rgba(0, 0, 0, 0.6);
+    --color-card-bg: #1a2230;      /* Darker Card/Element Background */
+    
+    --color-border: rgba(0, 198, 255, 0.15); /* Slightly stronger border glow */
+    
+    /* ==================================== */
+    /* 💡 ALIASES (Reference Primary Colors) */
+    /* ==================================== */
+    --primary-color: var(--color-primary);
+    --primary-hover: var(--color-primary-hover);
+    --background-light: var(--color-background-light);
+    --text-color-dim: var(--color-text-subtle); /* Keep old name as alias for backward compatibility */
+
+
+    /* ==================================== */
+    /* 💡 GLOWS & SHADOWS (Tech Look) */
+    /* ==================================== */
+    
+    /* Subtle Cyan Glow */
+    --shadow-subtle: 0 0 10px rgba(0, 198, 255, 0.12); /* Slightly stronger */
+    
+    /* Stronger Cyan Glow for Hover */
+    --shadow-hover: 0 0 30px rgba(0, 198, 255, 0.4); /* Boosted intensity (from 0.3) */
+
+    /* Standard Dark Box Shadow (Increased spread for visibility) */
+    --box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6); /* Increased spread and opacity (from 0.4) */
+    
+    --glow-shadow-blue: 0 0 10px rgba(0, 198, 255, 0.4);
+    --hover-shadow: var(--shadow-hover); /* Keep alias for ease of use */
+
+    /* ==================================== */
+    /* 🖋️ TYPOGRAPHY */
+    /* ==================================== */
+    --font-stack: "Poppins", "Segoe UI", sans-serif;
+    --font-family-sans: var(--font-stack);
+    --font-size-base: 16px;
+    --heading-font-weight: 700;
+}
+
+header,
+.navbar,
+.site-header {
+	margin-top: 0 !important;
+	padding-top: 0 !important;
+}
+
+/* Base Reset */
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+html {
+	scroll-behavior: smooth;
+	overflow-x: hidden;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+	overflow-x: hidden;
+}
+
+
+.container,
+.wrapper {
+	max-width: none;
+}
+
+/* --- Core Body Styling --- */
+body {
+	color: var(--color-text-subtle
+);
+	font-family: var(--font-family-sans);
+	font-size: var(--font-size-base);
+	line-height: 1.6;
+
+	/* Dark theme background */
+	background-image: none;
+	background-repeat: repeat;
+	background-size: 200px auto;
+	background-attachment: fixed;
+	background-color: var(--color-background);
+	padding-top: 70px;
+}
+
+body.no-scroll {
+	overflow: hidden;
+	height: 100vh;
+}
+
+a {
+	text-decoration: none;
+	color: var(--primary-color);
+	transition: color 0.3s ease, box-shadow 0.3s ease;
+}
+
+a:hover {
+	color: var(--primary-hover);
+	text-shadow: 0 0 5px rgba(0, 198, 255, 0.6);
+}
+
+ul {
+	list-style: none;
+}
+
+section {
+	padding: 60px 0;
+	margin-bottom: 0;
+}
+
+section:first-of-type {
+	padding-top: 80px;
+}
+
+
+.nav-container,
+.footer-content {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0 20px;
+}
+
+/* ==================================== */
+/* ✦ Refined Navbar (Dark Theme) ✦  */
+/* ==================================== */
+
+.navbar {
+	position: fixed;
+	top: 0;
+	z-index: 1000;
+	width: 100%;
+	/* REFACTORED: Using var(--color-card-bg) with opacity */
+	backdrop-filter: blur(5px);
+	-webkit-backdrop-filter: blur(15px);
+
+}
+
+
+
+.nav-container {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 16px 40px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 32px;
+}
+
+
+/* --- Logo + Title --- */
+.nav-logo {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	margin-right: 30px;
+}
+
+.nav-logo img {
+	height: 55px;
+	width: auto;
+	border-radius: 6px;
+}
+
+.nav-title h2 {
+	font-size: 1.3rem;
+	color: var(--primary-color);
+	font-weight: 800;
+	letter-spacing: 0.5px;
+	text-shadow: 0 0 5px rgba(0, 198, 255, 0.4);
+}
+
+.nav-title p {
+	font-size: 10.5px;
+	color: var(--color-text-subtle);
+	margin-top: -2px;
+}
+
+/* --- Navigation Links --- */
+.nav-links {
+	display: flex;
+	align-items: center;
+	gap: 35px;
+	margin-right: 30px;
+	margin-left: auto;
+	font-size: 16px;
+}
+
+.nav-links li a {
+	position: relative;
+	color: var(--color-text);
+	font-weight: 600;
+	padding: 10px 5px;
+	transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), color 0.3s ease, box-shadow 0.4s ease;
+}
+
+.nav-links li a:hover,
+.nav-links li a.active {
+	color: var(--primary-color);
+	text-shadow: 0 0 8px rgba(0, 198, 255, 0.6);
+}
+
+.nav-links li a::after {
+	content: "";
+	position: absolute;
+	bottom: 5px;
+	left: 0;
+	width: 0%;
+	height: 3px;
+	background: var(--primary-color);
+	transition: width 0.3s ease;
+}
+
+.nav-links li a:hover::after,
+.nav-links li a.active::after {
+	width: 100%;
+}
+
+/* --- Dropdown Menu --- */
+.dropdown {
+	position: relative;
+}
+
+/* Remove the dropdown arrow */
+.dropdown>a::after {
+	content: none;
+}
+
+.dropdown-menu {
+	position: absolute;
+	top: calc(100% + 10px);
+	left: 0;
+	min-width: 200px;
+	/* REFACTORED: Using var(--color-background) with opacity */
+	background: rgba(13, 18, 28, 0.65);
+	backdrop-filter: blur(20px);
+	-webkit-backdrop-filter: blur(20px);
+	border-radius: 12px;
+	border: 1px solid var(--color-border);
+	box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), var(--glow-shadow-blue);
+	opacity: 0;
+	visibility: hidden;
+	transform: translateY(-10px);
+	transition: all 0.35s ease;
+	z-index: 1000;
+
+	/* Layout & spacing */
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	padding: 10px;
+}
+
+.dropdown:hover>.dropdown-menu {
+	opacity: 1;
+	visibility: visible;
+	transform: translateY(0);
+}
+
+.dropdown-menu li a {
+	display: block;
+	padding: 10px 15px;
+	color: var(--color-text);
+	border-radius: 8px;
+	font-weight: 500;
+	transition: all 0.3s ease;
+	background: transparent;
+	text-shadow: none;
+}
+
+.dropdown-menu li a:hover {
+	background: rgba(0, 198, 255, 0.1);
+	color: var(--primary-color);
+	box-shadow: 0 0 10px rgba(0, 198, 255, 0.15);
+	transform: translateY(0);
+	transform: translateX(4px);
+}
+
+
+/* --- Menu Button (for smaller viewports) --- */
+.menu-btn {
+	background: var(--primary-color);
+	color: var(--color-background);
+	border: none;
+	padding: 8px 18px;
+	border-radius: 8px;
+	cursor: pointer;
+	font-weight: 700;
+	transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.menu-btn:hover {
+	background: var(--primary-hover);
+	box-shadow: var(--glow-shadow-blue);
+	transform: translateY(-2px);
+}
+
+.menu-dropdown {
+	right: 0;
+	left: auto;
+}
+
+/* ------------------------------------ */
+/* 2.1 Static Hero Section (Dark Theme)  */
+/* ------------------------------------ */
+
+.hero-static-section {
+    position: relative;
+    width: 100%;
+    
+    /* Responsive height to fill the screen */
+    min-height: 95vh; 
+    height: auto; 
+    
+    /* Background properties for the image set in HTML */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    
+    /* REMOVED: background-color and background-blend-mode for a clean image */
+    background-color: transparent; /* Explicitly set to transparent */
+    
+    /* Flexbox for perfect content centering */
+    display: flex;
+    align-items: center; 
+    justify-content: center; 
+    text-align: center;
+    
+    /* Cleaned up padding/margin */
+    padding: 0;
+    margin: 0;
+    
+    /* Removed box-shadow: inset for a cleaner background */
+    
+    /* OPTIONAL: Better performance */
+    will-change: transform;
+}
+
+.hero-content-overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 10;
+	background: linear-gradient(135deg,
+        rgba(13, 18, 28, 0.98) 10%, /* Stronger start opacity */
+        rgba(26, 34, 48, 0.95) 90%  /* Stronger end opacity */
+    ) !important;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	padding: 20px;
+}
+
+.hero-main-text {
+	font-size: 5rem;
+	font-weight: 900;
+	color: var(--text-color-light);
+	margin-bottom: 15px;
+	text-shadow: 0 0 5px var(--color-background), 0 0 20px var(--primary-color), 0 0 40px rgba(0, 198, 255, 0.4);
+	line-height: 1.1;
+	max-width: 90%;
+}
+
+.transparent-text {
+	font-size: 5rem;
+	font-weight: 900;
+	background-size: cover;
+	background-position: center;
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
+	-webkit-text-stroke: 2px var(--color-text);
+	text-shadow: 0 0 5px rgba(0, 0, 0, 0);
+	display: inline;
+	line-height: 0.9;
+	font-style: italic;
+}
+
+.hero-sub-text {
+	font-size: 1.15rem;
+	color: var(--primary-color); 
+    text-shadow: 0 0 8px rgba(0, 198, 255, 0.4);
+	margin-bottom: 30px;
+	font-weight: 500;
+	max-width: 600px;
+}
+
+.hero-btn {
+	display: inline-block;
+	padding: 17px 40px;
+	border-radius: 50px;
+	cursor: pointer;
+	border: 0;
+	background-color: var(--primary-color);
+	box-shadow: var(--shadow-subtle);
+	letter-spacing: 1.5px;
+	text-transform: uppercase;
+	font-size: 1rem;
+	font-weight: 800;
+	box-shadow: 0 0 10px rgba(0, 198, 255, 0.4), 0 4px 15px rgba(0, 0, 0, 0.3); 
+    transition: all 0.3s ease;
+}
+
+.hero-btn:hover {
+	letter-spacing: 2px;
+	background-color: var(--primary-hover);
+	color: var(--color-background);
+	box-shadow: 0 0 30px rgba(0, 198, 255, 0.8), 0 6px 20px rgba(0, 0, 0, 0.4); 
+    transform: translateY(-2px);
+}
+
+.hero-btn:active {
+	letter-spacing: 3px;
+	/* REFACTORED: Use primary hover for base color mix */
+	background-color: #008ebf;
+	color: var(--color-background);
+	box-shadow: 0 0 5px rgba(0, 198, 255, 0.5) inset;
+	transform: translateY(1px);
+	transition: 100ms;
+}
+
+
+/* ==================================== */
+/* 2.2 Why Choose Us Section (Dark Theme) */
+/* ==================================== */
+
+.why-choose-us-section {
+	width: 100%;
+	/* Secondary dark background for contrast */
+	background: linear-gradient(180deg, var(--background-light) 0%, var(--color-background) 100%);
+	padding: 70px 20px 70px 20px;
+	border-top: 1px solid var(--color-border);
+	position: relative;
+}
+
+.why-choose-us-container {
+	max-width: 1400px;
+	margin: 0 auto;
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 60px;
+	align-items: start;
+	padding: 0 20px;
+}
+
+.why-choose-us-top-section-content {
+	display: grid;
+	grid-template-columns: 1.2fr 2.3fr;
+	gap: 40px;
+	align-items: center;
+	grid-column: 1 / -1;
+}
+
+.why-choose-us-images {
+	grid-column: 1 / 2;
+	width: 100%;
+}
+.why-choose-us-video {
+    /* * The video now fills the entire space allocated by the 1fr column 
+    * in .why-choose-us-top-section-content. 
+    */
+    width: 100%;
+    /* Set a maximum height to prevent the video from becoming too tall */
+    max-height: 480px; 
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: var(--box-shadow);
+    /* Ensure video is visible and does not overflow container */
+    display: block;
+	box-shadow: var(--shadow-subtle), 0 0 10px rgba(0, 198, 255, 0.4);
+}
+
+.why-choose-us-quote-wrapper {
+	grid-column: 2 / 3;
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	width: 100%;
+}
+
+/* ==================================== */
+/* WHY CHOOSE US - MAIN QUOTE           */
+/* ==================================== */
+
+.why-choose-us-main-quote {
+	font-size: 2.8rem;
+	font-weight: 800;
+	line-height: 1.35;
+	color: var(--color-text);
+	max-width: 900px;
+	text-align: right;
+	margin: 0 auto 0;
+	font-family: "Poppins", var(--font-family-sans);
+	letter-spacing: 0.4px;
+	text-shadow: 0 0 5px rgba(0, 198, 255, 0.1); 
+    transition: var(--transition, all 0.3s ease);
+
+	quotes: "“" "”";
+}
+
+.why-choose-us-main-quote strong {
+	color: var(--primary-color);
+	font-weight: 800;
+}
+
+
+/* ==================================== */
+/* WHY CHOOSE US - BOTTOM CONTENT       */
+/* ==================================== */
+
+.why-choose-us-bottom-section-content {
+	display: grid;
+	grid-template-columns: 1.8fr 2.2fr;
+	gap: 48px;
+	align-items: flex-start;
+	grid-column: 1 / -1;
+	padding-top: 60px;
+}
+
+/* --- Benefits List (Left Column) --- */
+.key-benefits-list {
+	grid-column: 1 / 2;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	text-align: left;
+	max-width: 460px;
+	justify-self: start;
+	padding-top: 20px;
+}
+
+.key-benefits-list li {
+	font-size: 1.1rem;
+	color: var(--color-text);
+	margin-bottom: 25px;
+	position: relative;
+	padding-left: 30px;
+	line-height: 1.6;
+
+	/*font-weight: 500;
+	transition: color 0.3s ease, transform 0.2s ease;*/
+}
+
+.key-benefits-list li strong {
+	color: var(--primary-hover);
+	font-weight: 500;
+}
+
+.key-benefits-list li::before {
+	content: '◆';
+	position: absolute;
+	left: 0;
+	top: 5px;
+	color: var(--primary-color);
+	font-size: 0.8rem;
+	font-weight: bold;
+
+	line-height: 1;
+	width: 10px;
+    height: 10px;
+
+	transform: translateY(-50%);
+    background-color: var(--primary-color);
+	box-shadow: 0 0 8px var(--primary-color);
+	transform: translateY(-50%) rotate(45deg);
+}
+
+.key-benefits-list li:hover {
+	color: var(--primary-hover);
+	transform: translateX(6px);
+}
+
+/* --- Icons Grid (Right Column) --- */
+.impact-icons-grid {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 3.5rem;
+	margin-top: 2.5rem;
+	flex-wrap: wrap;
+	width: 100%;
+}
+
+.impact-icon-item {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), color 0.3s ease;
+	cursor: pointer;
+}
+
+.feature-icon-circle {
+	width: 95px;
+	height: 95px;
+	/* REFACTORED: Consistent background using theme variables */
+	background: linear-gradient(135deg, var(--color-card-bg), var(--background-light));
+	border-radius: 50%;
+	border: 3px solid var(--primary-color);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	box-shadow: 
+        0 0 10px rgba(0, 198, 255, 0.4),
+        inset 0 0 8px rgba(0, 198, 255, 0.1);
+	transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.feature-icon-circle i {
+	font-size: 2.4rem;
+	color: var(--primary-color);
+	transition: transform 0.4s ease;
+}
+
+.impact-icon-item:hover .feature-icon-circle i {
+	transform: scale(1.1);
+}
+
+.impact-icon-item:hover .feature-icon-circle {
+	transform: translateY(-8px); /* Increased lift from -5px */
+    box-shadow: 0 0 25px rgba(0, 198, 255, 0.5), /* Stronger outer glow */
+        inset 0 0 20px rgba(0, 198, 255, 0.3);
+}
+
+.feature-label {
+	margin-top: 1rem;
+	font-size: 1.1rem;
+	font-weight: 700;
+	color: var(--color-text);
+	letter-spacing: 0.2px;
+	transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), color 0.3s ease, box-shadow 0.4s ease;
+}
+
+.impact-icon-item:hover .feature-label {
+	color: var(--primary-color);
+	text-shadow: 0 0 8px rgba(0, 198, 255, 0.6);
+	transform: translateY(-3px);
+}
+
+
+/* --- 1. General Section Styling --- */
+
+.dynamic-hero-section {
+	padding: 100px 5% 50px 5%;
+	background-color: var(--color-background);
+}
+
+/* --- 2. Hero Content Layout --- */
+
+.hero-content-wrapper {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	max-width: 1200px;
+	margin: 0 auto 80px auto;
+	gap: 40px;
+	padding-top: 50px;
+}
+
+.hero-text-area {
+	flex-basis: 45%;
+	max-width: 500px;
+}
+
+.hero-visual-area {
+	flex-basis: 55%;
+	position: relative;
+	padding: 20px;
+	/* Dark card background for the visual area */
+	background-color: var(--color-card-bg);
+	border-radius: 20px;
+	box-shadow: 0 0 30px rgba(0, 0, 0, 0.5), var(--shadow-subtle);
+	border: 1px solid var(--color-border);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	overflow: visible;
+	min-height: 480px;
+}
+
+/* Main Image Display Container */
+.hero-image-display {
+	width: 100%;
+	position: relative;
+	height: 380px;
+	margin-bottom: 20px;
+	border-radius: 12px;
+	overflow: hidden;
+	margin-top: 0;
+	flex-shrink: 0;
+}
+
+.main-hero-image {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	position: absolute;
+	top: 0;
+	left: 0;
+	opacity: 0;
+	transition: opacity 0.5s ease-in-out;
+	border-radius: 12px;
+}
+
+.main-hero-image.active-image {
+	opacity: 1;
+}
+
+/* Animation Classes */
+.main-hero-image.fade-out {
+	opacity: 0;
+}
+
+.main-hero-image.fade-in {
+	opacity: 1;
+}
+
+/* Hero Right Navigation Arrows */
+.hero-right-nav {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	right: 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	z-index: 15;
+}
+
+.nav-arrow {
+	background-color: var(--background-light);
+	border: 1px solid var(--color-border);
+	color: var(--primary-color);
+	border-radius: 50%;
+	width: 40px;
+	height: 40px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 1.2rem;
+	cursor: pointer;
+	transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.nav-arrow:hover {
+	background-color: var(--primary-color);
+	color: var(--color-background);
+	box-shadow: var(--shadow-subtle);
+}
+
+/* Small Thumbnail (positioned to the right-bottom) */
+.small-thumb {
+	width: 100px;
+	height: 100px;
+	object-fit: cover;
+	border-radius: 8px;
+	border: 3px solid var(--primary-color);
+	box-shadow: var(--shadow-subtle);
+	position: absolute;
+	bottom: 20px;
+	right: 20px;
+	z-index: 15;
+}
+
+/* Hero Dot Navigation (bottom dots) */
+.hero-dot-nav {
+	display: flex;
+	justify-content: center;
+	gap: 8px;
+	margin-top: 15px;
+	flex-shrink: 0;
+	position: absolute;
+	bottom: 140px;
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 10;
+}
+
+.hero-dot {
+	background-color: rgba(230, 233, 240, 0.3);
+	/* REFACTORED: Use var(--color-text) with opacity */
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	cursor: pointer;
+	transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.hero-dot.active-dot,
+.hero-dot:hover {
+	background-color: var(--primary-color);
+	box-shadow: 0 0 5px var(--primary-color);
+	transform: scale(1.1);
+}
+
+/* Text & Button Styling */
+.pill-badge {
+	display: inline-block;
+	background-color: var(--background-light);
+	color: var(--primary-color);
+	padding: 8px 18px;
+	border-radius: 20px;
+	font-size: 0.9rem;
+	font-weight: 700;
+	margin-bottom: 15px;
+}
+
+.main-headline {
+	font-size: 3.8rem;
+	font-weight: 800;
+	margin: 10px 0 20px 0;
+	color: var(--color-text);
+	text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.hero-description {
+	font-size: 1.1rem;
+	color: var(--color-text-subtle
+);
+	line-height: 1.6;
+	margin-bottom: 30px;
+}
+
+.hero-cta-buttons .btn-primary,
+.hero-cta-buttons .btn-secondary {
+	display: inline-block;
+	padding: 12px 25px;
+	border-radius: 8px;
+	font-weight: 600;
+	text-decoration: none;
+	margin-right: 15px;
+	transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), color 0.3s ease, box-shadow 0.4s ease;
+}
+
+.btn-primary {
+    /* Main Background: Cyan Fill */
+    background-color: var(--primary-color); 
+    /* Text: Deep background color for high contrast */
+    color: var(--color-background); 
+    /* Remove redundant border (or make it internal glow) */
+    border: 2px solid var(--primary-color); 
+    font-weight: 700;
+    
+    /* Keep existing transitions */
+    transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), color 0.3s ease, box-shadow 0.4s ease;
+}
+
+/* Cleanup: Use the general .btn-primary:hover for all hover states */
+.btn-primary:hover {
+    background-color: var(--primary-hover); /* Slightly darker/more intense cyan */
+    border-color: var(--primary-hover);
+    color: var(--color-background);
+    box-shadow: var(--hover-shadow); /* Strong cyan glow */
+    transform: translateY(-3px); /* Increased lift (from -2px) */
+}
+
+/* REVISED .btn-secondary: CYAN OUTLINE */
+.btn-secondary {
+    background: none;
+    /* Use the primary cyan color for the border */
+    border: 2px solid var(--primary-color); 
+    /* Use the primary cyan color for the text */
+    color: var(--primary-color); 
+    
+    /* Harmonize padding with .btn-primary */
+    padding: 12px 25px; /* Harmonized from 10px 20px */
+    border-radius: 8px; /* Harmonized from 6px */
+    
+    text-decoration: none;
+    font-weight: 600;
+    transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), color 0.3s ease, box-shadow 0.4s ease;
+}
+
+.btn-secondary:hover {
+    /* Background: Subtle cyan fill for glow effect */
+    background-color: rgba(0, 198, 255, 0.15); 
+    
+    /* Maintain border and text color (or use primary-hover) */
+    color: var(--primary-hover);
+    border-color: var(--primary-hover);
+    
+    /* Add lift and glow */
+    transform: translateY(-3px); 
+    box-shadow: var(--shadow-subtle); 
+}
+
+/* ==================================== */
+/* 3.0 Merchandise Section (Dark Theme) */
+/* ==================================== */
+
+.merchandise-section {
+	width: 100vw;
+	position: relative;
+	left: 50%;
+	right: 50%;
+	margin-left: -50vw;
+	margin-right: -50vw;
+	background: linear-gradient(180deg, var(--color-background) 0%, var(--background-light) 100%);
+	padding-top: 20px;
+	padding-bottom: 15px;
+	border-top: 1px solid var(--color-border);
+	text-align: center;
+	max-width: none !important;
+	border-radius: 0 !important;
+	box-shadow: none !important;
+
+}
+
+.merchandise-container {
+	max-width: 1100px;
+	margin: 0 auto;
+	padding: 0 20px;
+	position: relative;
+	z-index: 1;
+}
+
+.merchandise-title {
+	font-size: 2.8rem;
+	font-weight: 800;
+	color: var(--color-text);
+	margin-bottom: 50px;
+	text-transform: uppercase;
+	letter-spacing: 3px;
+	text-shadow: 0 0 7px rgba(0, 198, 255, 0.5), /* Cyan glow */
+				0 0 1px var(--primary-color);
+}
+
+.product-grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 40px;
+	margin-bottom: 60px;
+}
+
+.product-card {
+	background-color: var(--color-card-bg);
+	border: 1px solid var(--color-border);
+	padding-bottom: 24px;
+	width: 100%;
+	text-align: left;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), color 0.3s ease, box-shadow 0.4s ease;
+	border-radius: 12px;
+	box-shadow: var(--box-shadow);
+}
+
+.product-card:hover {
+	transform: translateY(-8px);
+	box-shadow: 
+        0 8px 30px rgba(0, 198, 255, 0.35), /* Stronger cyan glow */
+        0 0 5px rgba(0, 0, 0, 0.5);
+	border-color: var(--primary-color);
+}
+
+.product-image-wrapper {
+	aspect-ratio: 1 / 1;
+	position: relative;
+	width: 100%;
+	object-fit: contain;
+	border-top-left-radius: 12px;
+	border-top-right-radius: 12px;
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+	;
+	padding-top: 125%;
+	overflow: hidden;
+	/* REFACTORED: Using theme variable for product image background */
+	background-color: var(--background-light);
+	border-bottom: none;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: inset 0 -3px 5px rgba(0, 0, 0, 0.3);
+}
+
+.product-image {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	max-width: 90%;
+	max-height: 90%;
+	object-fit: contain;
+	display: block;
+	transition: filter 0.3s ease;
+}
+
+.product-card:hover .product-image {
+	filter: brightness(1.05) contrast(1.05);
+}
+
+.product-name {
+	font-size: 1.25rem;
+	font-weight: 700;
+	color: var(--color-text);
+	margin: 20px 24px 8px 24px;
+}
+
+.product-price {
+	font-size: 1.1rem;
+	font-weight: 600;
+	color: var(--primary-color);
+	margin: 0 24px 0 24px;
+}
+
+.merchandise-actions {
+	margin-top: 30px;
+}
+
+.btn {
+	display: inline-block;
+	padding: 15px 30px;
+	font-size: 1.1rem;
+	font-weight: 700;
+	text-decoration: none;
+	background-color: var(--primary-color);
+	color: var(--color-background);
+	border-radius: 5px;
+	transition: background-color 0.3s ease, transform 0.3s ease;
+	border: none;
+	cursor: pointer;
+	margin-bottom: 40px;
+}
+
+.btn:hover {
+	background-color: var(--primary-hover);
+	transform: translateY(-3px);
+	box-shadow: 
+        0 4px 15px rgba(0, 198, 255, 0.3);
+}
+
+
+/* --- 3. News & Events Grid Styling --- */
+
+.news-events-showcase,
+.projects-showcase {
+	max-width: 1200px;
+	margin: 60px auto;
+}
+
+.news-events-showcase h2,
+.projects-showcase h2 {
+	font-size: 2.5rem;
+	font-weight: 800;
+	color: var(--primary-color);
+	text-shadow: 0 0 10px rgba(0, 198, 255, 0.4), 
+                 0 0 2px var(--primary-color);
+	text-align: center;
+	margin-bottom: 50px;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+}
+
+.news-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+	gap: 30px;
+	margin-bottom: 40px;
+}
+
+.news-card {
+	margin-bottom: 20px;
+	background-color: var(--color-card-bg);
+	border-radius: 12px;
+	overflow: hidden;
+	box-shadow: var(--box-shadow);
+	border: 1px solid var(--color-border);
+	transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.4s ease, border-color 0.3s ease;
+}
+
+.news-card:hover {
+	transform: translateY(-8px);
+	box-shadow: var(--shadow-hover);
+	border-color: var(--primary-color);
+}
+
+.card-header {
+	position: relative;
+	height: 200px;
+	overflow: hidden;
+	box-shadow: 0 4px 5px rgba(0, 0, 0, 0.3);
+}
+
+.news-thumbnail {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.news-card h4 {
+	color: var(--color-text);
+	font-size: 1.25rem;
+	margin: 15px 15px 5px 15px;
+}
+
+.news-card p {
+	color: var(--color-text-subtle
+);
+	padding: 0 15px 15px 15px;
+	font-size: 0.95rem;
+}
+
+.read-more-link {
+	display: inline-block;
+	color: var(--primary-color);
+	font-weight: 700;
+	text-decoration: none;
+	padding: 0 15px 15px 15px;
+	transition: color 0.3s ease;
+}
+
+.read-more-link:hover {
+    color: var(--primary-hover);
+    text-decoration: underline; /* Add underline on hover for clarity */
+}
+
+/* Badges */
+.badge {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	padding: 5px 10px;
+	border-radius: 5px;
+	font-size: 0.75rem;
+	font-weight: 700;
+	color: var(--color-background);
+}
+
+.new-badge {
+	background-color: #E74C3C;
+	/* Red - kept hardcoded as it's a specific status color */
+}
+
+.live-badge {
+	background-color: #2ECC71;
+	/* Green - kept hardcoded as it's a specific status color */
+}
+
+.view-all-cta {
+	text-align: center;
+}
+
+.btn-ghost-blue {
+	background: none;
+	border: 2px solid var(--primary-color);
+	color: var(--primary-color);
+	padding: 12px 25px;
+	border-radius: 8px;
+	text-decoration: none;
+	font-weight: 700;
+	transition: all 0.3s ease;
+	text-transform: uppercase;
+}
+
+.btn-ghost-blue:hover {
+	background-color: rgba(0, 198, 255, 0.15);
+	color: var(--primary-hover);
+	box-shadow: var(--shadow-subtle); 
+    transform: translateY(-2px);
+}
+
+/* --- 4. Projects Showcase Styling --- */
+
+.projects-grid {
+	display: flex;
+	justify-content: space-around;
+	gap: 30px;
+	flex-wrap: wrap;
+}
+
+.project-card {
+	flex-basis: calc(33.333% - 20px);
+	min-width: 300px;
+	background-color: var(--color-card-bg);
+	border-radius: 12px;
+	overflow: hidden;
+	box-shadow: var(--box-shadow);
+	border: 1px solid var(--color-border);
+	transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), 
+		box-shadow 0.4s ease, 
+		border-color 0.3s ease;
+}
+
+.project-card:hover {
+	transform: translateY(-8px);
+	box-shadow: var(--shadow-hover);
+	border-color: var(--primary-color);
+}
+
+.project-image {
+	width: 100%;
+	height: 220px;
+	object-fit: cover;
+}
+
+.project-info {
+	padding: 15px;
+}
+
+.project-info h3 {
+	color: var(--color-text);
+	margin-top: 0;
+	margin-bottom: 5px;
+	font-size: 1.25rem;
+	font-weight: 700;
+}
+
+.project-info p {
+	color: var(--color-text-subtle
+);
+	font-size: 0.9rem;
+	margin-bottom: 15px;
+}
+
+.view-project-btn {
+	display: inline-block;
+	color: var(--primary-color);
+	font-weight: 600;
+	text-decoration: none;
+	padding-bottom: 5px;
+    border-bottom: 2px solid transparent;
+	transition: all 0.3s ease;
+}
+
+.view-project-btn:hover {
+    color: var(--primary-hover);
+    border-bottom: 2px solid var(--primary-hover); /* Animated underline */
+}
+
+/* =========================
+    Footer: Technowatch (Dark)
+    ========================= */
+footer {
+    width: 100%;
+    background: linear-gradient(
+        180deg,
+        var(--background-color) 0%,
+        rgba(0, 198, 255, 0.05) 100%
+    ); /* Adds a very soft downward glow gradient */
+    color: var(--text-color);
+    padding: 60px 0 40px 0;
+    line-height: 1.7;
+    font-size: 15px;
+
+    /* Subtle glow and depth */
+    box-shadow:
+        0 -2px 15px rgba(0, 198, 255, 0.08), /* faint cyan glow above */
+        inset 0 1px 0 rgba(255, 255, 255, 0.05); /* soft top light for structure */
+    
+    border-top: 1px solid rgba(0, 198, 255, 0.15); /* replaces default border color for a faint accent */
+    position: relative;
+    z-index: 2;
+}
+
+/* Optional: Gentle animated glow at top edge */
+footer::before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #00c6ff, transparent);
+    opacity: 0.3;
+    animation: footerGlow 4s ease-in-out infinite alternate;
+}
+
+@keyframes footerGlow {
+    from {
+        opacity: 0.3;
+        filter: blur(0px);
+    }
+    to {
+        opacity: 0.6;
+        filter: blur(2px);
+    }
+}
+
+
+/* --- Optional Enhancements for Structure --- */
+/* If the footer content is intended to stretch across the page */
+.footer-content-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.row {
+	width: 85%;
+	margin: auto;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	justify-content: space-between;
+}
+
+.footer-centered-cols {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	flex-grow: 1;
+	gap: 20px;
+	margin-top: 50px;
+}
+
+.col {
+    padding: 10px;
+    box-sizing: border-box;
+    /* Important: This establishes a positioning context for the pseudo-element */
+    position: relative; 
+    cursor: pointer; /* Indicates it's interactive */
+}
+
+.col:nth-child(1) {
+	flex-basis: 20%;
+	padding: 15px;
+	text-align: justify;
+	flex-shrink: 0;
+}
+
+.footer-centered-cols .col {
+	flex-basis: 22%;
+	max-width: 250px;
+	text-align: left;
+}
+
+.footer-centered-cols .col:nth-child(1) {
+	padding-left: 18px;
+	text-align: justify;
+}
+
+/* --- 1. Positioning and Layout (Updates) --- */
+
+.logo-swap-container {
+    /* Keep this for the overall column structure */
+    position: relative; 
+}
+
+/* FIX: Push the paragraph down (Still needed, but now relative to the wrapper height) */
+.logo-swap-container p {
+    margin-top: 15px; 
+}
+
+/* NEW: The Wrapper for the Logos */
+.logo-wrapper {
+    /* CRITICAL: Establishes context for absolute positioning of logos */
+    position: relative; 
+    
+    /* Sets the visible area for the logos (120px wide + 60px margin) */
+    width: 180px; 
+    
+    /* Sets the height of the wrapper to reserve space */
+    height: 130px; 
+    
+    /* Moves the entire wrapper to the left: 60px position */
+    margin-left: 60px; 
+    margin-bottom: 10px; 
+    
+    cursor: pointer; /* Pointer only appears when hovering over this wrapper */
+}
+
+/* Base Logo Styles (Applies to both logos) */
+.foot_logo {
+    width: 120px;
+    
+    /* NOTE: We remove margin-left: 60px and margin-bottom: 10px here,
+       as they are now handled by the .logo-wrapper! */
+    
+    /* Allows layering within the wrapper */
+    position: absolute; 
+    left: 0; 
+    top: 0;
+	bottom: 0;
+    
+    /* Transition for fade and shape shadow (filter) */
+    transition: opacity 0.4s ease-in-out, filter 0.3s ease-in-out; 
+}
+
+/* --- 2. Logo Swap and Drop-Shadow Effects --- */
+
+/* Primary (white) logo: visible by default, subtle shape shadow */
+.logo-primary {
+    z-index: 2; 
+    opacity: 1; 
+    filter: drop-shadow(0 2px 8px rgba(255, 255, 255, 0.50));
+}
+
+/* Secondary (dark) logo: hidden by default, no initial shadow */
+.logo-secondary {
+    z-index: 1; 
+    opacity: 0; 
+    filter: none; 
+}
+
+/* --- 3. The Hover Effect (Restricted to the Wrapper) --- */
+
+/* When hovering ONLY over the .logo-wrapper: */
+.logo-wrapper:hover .logo-primary {
+    opacity: 0; /* White logo fades out */
+    filter: none; /* Remove shadow as it fades out */
+}
+
+.logo-wrapper:hover .logo-secondary {
+    opacity: 1; /* Dark logo fades in */
+    /* Stronger shadow when the dark logo is visible */
+    filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.4)); 
+}
+
+.col h3 {
+	width: fit-content;
+	margin-bottom: 25px;
+	position: relative;
+	font-size: 16px;
+	text-align: left;
+	padding-bottom: 5px;
+	padding-left: 3px;
+	color: var(--primary-color);
+}
+
+/* Basic styling for the list */
+.footer-quick-links {
+    list-style: none; /* Remove default bullet points */
+    padding: 0;
+}
+
+.footer-dropdown-item {
+    margin-bottom: 10px; /* Space between main categories */
+}
+
+/* Style for the main category link */
+.footer-dropdown-title {
+    /* Make the main link stand out */
+    font-weight: bold; 
+    display: block;
+    margin-bottom: 5px;
+    color: white; /* Example color, adjust to your theme */
+    text-decoration: none;
+}
+
+/* Style for the subtle dropdown menu (the sub-links) */
+.footer-dropdown-menu {
+    list-style: none;
+    padding-left: 15px; /* Indent the sub-links */
+    max-height: 0; /* Initially hide the sub-links */
+    overflow: hidden;
+    transition: max-height 0.3s ease-in-out;
+}
+
+.footer-dropdown-menu li a {
+    /* Style for the sub-links */
+    color: #ccc; /* Lighter color for sub-links */
+    text-decoration: none;
+    display: block;
+    padding: 2px 0;
+    font-size: 0.9em;
+}
+
+/* **THE DROPDOWN EFFECT** (Show sub-links on hover/focus) */
+/* When the main item is hovered, reveal the menu */
+.footer-dropdown-item:hover > .footer-dropdown-menu,
+.footer-dropdown-item:focus-within > .footer-dropdown-menu {
+    max-height: 200px; /* Set a value large enough to show all links */
+}
+
+/* Updated Underline Class to mimic <hr> */
+.underline {
+	width: 100%;
+	height: 1px;
+	background: transparent;
+	border-bottom: 1px solid var(--color-border);
+	position: absolute;
+	top: auto;
+	bottom: 0;
+	left: 0;
+	border-radius: 0;
+	overflow: visible;
+}
+
+.underline span {
+	display: none;
+}
+
+.footer-centered-cols .col h3 .underline {
+	left: 0;
+	transform: none;
+}
+
+
+.email-id {
+	width: fit-content;
+	border-bottom: 1px solid var(--color-border);
+	margin: 20px 0;
+}
+
+ul li {
+	list-style: none;
+	margin-bottom: 12px;
+}
+
+ul li a {
+	text-decoration: none;
+	color: var(--color-text-subtle
+);
+	transition: color 0.3s ease, transform 0.2s ease;
+}
+
+ul li a:hover {
+	color: var(--primary-color);
+	transform: translateX(3px)
+}
+
+form {
+	padding-bottom: 15px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	border-bottom: 1px solid var(--color-border);
+	margin-bottom: 50px;
+}
+
+form .fa-solid {
+	font-size: 18px;
+	margin-right: 10px;
+	color: var(--primary-color);
+}
+
+form input {
+	width: 100%;
+	background: transparent;
+	color: var(--color-text);
+	border: 0;
+	outline: none;
+}
+
+form button {
+	background: transparent;
+	border: 0;
+	outline: none;
+	cursor: pointer;
+}
+
+form button .fa-solid {
+	font-size: 16px;
+	color: var(--primary-color);
+}
+
+.social-icons {
+	display: flex;
+	justify-content: flex-start;
+	gap: 15px;
+}
+
+.social-icons .fa-brands {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	text-align: center;
+	line-height: 40px;
+	font-size: 20px;
+	color: var(--primary-color);
+	background: var(--background-light);
+	border: 1px solid var(--primary-color);
+	cursor: pointer;
+	transition: all 0.3s ease;
+}
+
+.social-icons .fa-brands:hover {
+	background: var(--primary-color);
+	color: var(--color-background);
+	box-shadow: var(--shadow-subtle);
+	transform: translateY(-2px);
+}
+
+hr {
+	width: 90%;
+	border: 0;
+	border-bottom: 1px solid var(--color-border);
+	margin: 20px auto;
+}
+
+.copyright {
+	text-align: center;
+}
+
+/* ==================================== */
+/* DARKER SECTION BACKGROUNDS - PREMIUM LOOK */
+/* ==================================== */
+
+section {
+    padding: 70px 25px;
+    background: radial-gradient(
+        circle at top left,
+        #0d1b2a 0%,
+        #0a192f 40%,
+        #06101d 100%
+    );
+    color: #e6f1ff; /* Softer light blue for text */
+    position: relative;
+    overflow: hidden;
+    transition: background 0.4s ease, color 0.4s ease;
+}
+
+/* Gentle background texture / glow effect */
+section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        circle at 30% 20%,
+        rgba(0, 198, 255, 0.08),
+        transparent 70%
+    );
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Alternate section with deeper hue contrast */
+section.alt {
+    background: radial-gradient(
+        circle at bottom right,
+        #081423 0%,
+        #0c2238 50%,
+        #071625 100%
+    );
+}
+
+/* Content boxes - polished look */
+section .card,
+section .content-box {
+    position: relative;
+    z-index: 1;
+    background: linear-gradient(
+        145deg,
+        rgba(15, 30, 50, 0.95),
+        rgba(10, 20, 35, 0.95)
+    );
+    box-shadow:
+        0 0 15px rgba(0, 198, 255, 0.08),
+        0 4px 20px rgba(0, 0, 0, 0.4);
+    border-radius: 14px;
+    padding: 25px 30px;
+    margin-bottom: 25px;
+    border: 1px solid rgba(0, 198, 255, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover interaction for cards */
+section .card:hover,
+section .content-box:hover {
+    transform: translateY(-5px);
+    box-shadow:
+        0 0 20px rgba(0, 198, 255, 0.15),
+        0 8px 25px rgba(0, 0, 0, 0.5);
+}
+
+/* Subtle accent glow line */
+section .card::after,
+section .content-box::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #00c6ff, transparent);
+    opacity: 0.3;
+    transition: opacity 0.3s ease;
+}
+
+section .card:hover::after,
+section .content-box:hover::after {
+    opacity: 0.7;
+}

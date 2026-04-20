@@ -1,0 +1,1503 @@
+/* ==================================== */
+/* 0. Base Styles & Variables           */
+/* ==================================== */
+
+:root {
+    --primary-color: #007bff;
+    --primary-hover: #0056b3;
+    --secondary-color: #6c757d;
+    --text-color: #333;
+    --text-color-light: #f8f9fa;
+    --background-color: #fff;
+    --background-light: #f8f9fa;
+    --border-color: #dee2e6;
+    --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+    --font-family-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-size-base: 16px;
+    --heading-font-weight: 700;
+}
+
+/* Base Reset */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+html, body {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* Prevents horizontal scroll if something unexpectedly overflows */
+}
+
+.container, .wrapper {
+    max-width: none; /* Reset this if these classes wrap your sections */
+}
+
+body {
+    font-family: var(--font-family-sans);
+    font-size: var(--font-size-base);
+    color: var(--text-color);
+    line-height: 1.6;
+
+    background-image: url('assets/imgs/circuit-bg2.jpg');
+    background-repeat: repeat;
+    background-size: 200px auto;
+    background-attachment: fixed;
+    background-color: #E6F1F6;
+}
+
+body.no-scroll {
+    overflow: hidden;
+    height: 100vh;
+}
+
+a {
+    text-decoration: none;
+    color: var(--primary-color);
+    transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+a:hover {
+    color: var(--primary-hover);
+}
+
+ul {
+    list-style: none;
+}
+
+section {
+    padding: 40px 0;
+    margin-bottom: 20px;
+}
+
+.nav-container, .footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* ==================================== */
+/* 1. Navbar Styles                     */
+/* ==================================== */
+
+.navbar {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: var(--box-shadow);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    gap: 20px;
+}
+
+.nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nav-logo img {
+    height: 40px;
+    width: auto;
+}
+
+.nav-title h2 {
+    font-size: 1.25rem;
+    color: var(--primary-color);
+    line-height: 1.2;
+}
+
+.nav-title p {
+    font-size: 0.75rem;
+    color: var(--secondary-color);
+    margin-top: -3px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 25px;
+    justify-content: flex-start;
+}
+
+.nav-links li a {
+    display: block;
+    padding: 10px 0;
+    color: var(--text-color);
+    font-weight: 500;
+}
+.nav-main {
+    margin-left: auto;
+    padding-right: 55px;
+}
+
+.nav-links li a:hover,
+.nav-links li a.active {
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 8px;
+}
+
+.nav-links .dropdown > a::after {
+    content: " ▼";
+    font-size: 0.5em;
+    margin-left: 5px;
+    transition: transform 0.3s;
+}
+
+.dropdown {
+    position: relative;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    box-shadow: var(--box-shadow);
+    min-width: 200px;
+    z-index: 100;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+}
+
+.dropdown:hover > .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-menu li a {
+    padding: 10px 15px;
+    display: block;
+    color: var(--text-color);
+    white-space: nowrap;
+    border-bottom: 1px solid var(--background-light);
+}
+
+.dropdown-menu li:last-child a {
+    border-bottom: none;
+}
+
+.dropdown-menu li a:hover {
+    background-color: var(--background-light);
+    color: var(--primary-color);
+    border-bottom: none;
+}
+
+.nav-extra {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.menu-btn {
+    order: 2;
+    margin-left: auto;
+    background: var(--primary-color);
+    color: var(--text-color-light);
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.menu-btn:hover {
+    background: var(--primary-hover);
+}
+
+.menu-dropdown {
+    right: 0;
+    left: auto;
+}
+
+.darkmode-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 15px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.darkmode-toggle input[type="checkbox"] {
+    transform: scale(1.2);
+}
+
+/* ------------------------------------ */
+/* 2.1 Static Hero Section (Recreated)  */
+/* ------------------------------------ */
+
+.hero-static-section {
+    position: relative;
+    width: 100%;
+    height: 93vh;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0;
+    margin-bottom: 0;
+}
+
+.hero-content-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        135deg,
+        rgba(13, 59, 102, 0.7) 0%,
+        rgba(35, 44, 49, 0.7) 100%
+    );
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.hero-main-text {
+    font-size: 5rem;
+    font-weight: 900;
+    color: var(--text-color-light);
+    margin-bottom: 15px;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    line-height: 1.1;
+    max-width: 90%;
+    font-style: italic;
+}
+
+.transparent-text {
+    font-size: 5rem;
+    font-weight: 900;
+    background: url('assets/imgs/to9.jpg');
+    background-size: cover;
+    background-position: center;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-stroke: 2px rgb(255, 255, 255);
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0);
+    display: inline;
+    line-height: 0.9;
+    font-style: italic;
+}
+
+.hero-sub-text {
+    font-size: 1.25rem;
+    color: #ffffff;
+    margin-bottom: 30px;
+    font-weight: 600;
+    max-width: 600px;
+}
+
+.hero-btn {
+    display: inline-block;
+    padding: 17px 40px;
+    border-radius: 50px;
+    cursor: pointer;
+    border: 0;
+    background-color: var(--background-color);
+    box-shadow: rgba(0, 0, 0, 0.05) 0 0 8px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    transition: all 0.5s ease;
+}
+
+.hero-btn:hover {
+    letter-spacing: 3px;
+    background-color: #0D3B66;
+    color: hsl(0, 0%, 100%);
+    box-shadow: rgba(13, 59, 102, 0.8) 0px 7px 29px 0px;
+}
+
+.hero-btn:active {
+    letter-spacing: 3px;
+    background-color: #0D3B66;
+    color: hsl(0, 0%, 100%);
+    box-shadow: rgba(13, 59, 102, 0) 0px 0px 0px 0px;
+    transform: translateY(10px);
+    transition: 100ms;
+}
+
+@media (max-width: 768px) {
+    .hero-static-section {
+        height: 50vh;
+    }
+    .hero-main-text {
+        font-size: 2.2rem;
+    }
+    .transparent-text {
+        font-size: 3rem;
+    }
+    .hero-sub-text {
+        font-size: 1rem;
+        max-width: 90%;
+    }
+    .hero-btn {
+        padding: 14px 30px;
+    }
+}
+
+/* ==================================== */
+/* 2.2 Why Choose Us Section (Precise Layout with Benefits List) */
+/* ==================================== */
+
+.why-choose-us-section {
+    width: 100%;
+    background-color: #b4d6e3;
+    background: linear-gradient(180deg, #b4d6e3 0%, #e6f1f6 100%);
+    padding: 80px 20px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.why-choose-us-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    /* This sets up the overall 2-row layout */
+    display: grid;
+    grid-template-columns: 1fr; /* Initially 1 column, we'll use subgrid for inner layout */
+    gap: 60px; /* Space between the top and bottom content rows */
+    align-items: start;
+    padding: 0 20px;
+}
+
+/* --- Top Section Content: Images (left) and Quote (right) --- */
+.why-choose-us-top-section-content {
+    display: grid;
+    /* This defines the 2-column layout for images and quote */
+    grid-template-columns: 1.25fr 2.75fr;
+    gap: 40px;
+    align-items: center; /* Vertically center images and quote */
+    grid-column: 1 / -1; /* Ensure this spans the full width of the container */
+}
+
+.why-choose-us-images {
+    grid-column: 1 / 2; /* Occupy the first column */
+    display: flex;
+    gap: 20px;
+    flex-shrink: 0;
+    justify-content: flex-start;
+}
+
+.why-choose-us-image-item {
+    width: 250px;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.why-choose-us-quote-wrapper { /* NEW WRAPPER CLASS */
+    grid-column: 2 / 3; /* Occupy the second column */
+    display: flex; /* Use flex to align the h1 */
+    justify-content: flex-end; /* Push quote to the right */
+    align-items: center; /* Vertically center the quote if needed */
+    width: 100%; /* Ensure it takes available width */
+}
+
+.why-choose-us-main-quote {
+    font-size: 2.8rem;
+    font-weight: 600;
+    line-height: 1.25;
+    color: #6c757d;
+    max-width: 850px; /* Keep max-width for readability */
+    text-align: right; /* Align text within its container */
+    margin: 0;
+}
+
+.why-choose-us-main-quote strong {
+    color: #333;
+    font-weight: 800;
+}
+
+/* --- Bottom Section Content: Benefits List (left) and Icons (right) --- */
+.why-choose-us-bottom-section-content {
+    display: grid;
+    /* This defines the 2-column layout for benefits and icons */
+    grid-template-columns: 1.25fr 2.75fr;
+    gap: 40px;
+    align-items: flex-start; /* Align benefits and icons to the top */
+    grid-column: 1 / -1; /* Ensure this spans the full width of the container */
+    padding-top: 60px; /* Space from the top content */
+}
+
+.key-benefits-list { /* YOUR NEW ELEMENT */
+    grid-column: 1 / 2; /* Occupy the first column */
+    list-style: none;
+    padding: 0;
+    margin: 0; /* Override default list margins */
+    text-align: left;
+    max-width: 450px; /* Limit width for readability */
+    justify-self: start; /* Align to the start of its grid cell */
+    padding-top: 20px; /* Adjust to align with icons if needed */
+}
+
+.key-benefits-list li {
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 15px;
+    position: relative;
+    padding-left: 30px;
+    line-height: 1.4;
+    font-weight: 500;
+}
+
+.key-benefits-list li::before {
+    content: "✔️";
+    position: absolute;
+    left: 0;
+    color: #0d3b66; /* Use your club's primary color */
+    font-size: 1.2rem;
+    line-height: 1;
+}
+
+.impact-icons-grid { /* Your original .why-choose-us-features element */
+    grid-column: 2 / 3; /* Occupy the second column */
+    display: flex; /* Use flex to arrange the feature items within it */
+    justify-content: flex-end; /* Push icons to the right */
+    align-items: flex-end; /* Align to the bottom of their container */
+    gap: 100px; /* Gap between feature-items */
+    flex-wrap: wrap; /* Allow features to wrap */
+    padding-top: 20px; /* Adjust as needed for vertical alignment */
+}
+
+.feature-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 80px; /* Fixed width for icon/label group */
+    flex-shrink: 0; /* Prevent from shrinking */
+}
+
+.feature-icon-circle {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: var(--background-color, #fff);
+    border: 1px solid rgba(0, 123, 255, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 24px;
+    color: var(--primary-color, #0d3b66);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.feature-icon-circle:hover {
+    background-color: var(--primary-color, #0d3b66);
+    color: var(--background-color, #fff);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-color: var(--primary-color, #0d3b66);
+}
+
+.feature-label {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-color, #333);
+}
+
+/* --- Responsive adjustments --- */
+@media (max-width: 992px) {
+    .why-choose-us-container {
+        grid-template-columns: 1fr; /* Main container goes to 1 column */
+        gap: 30px;
+        padding: 0 20px;
+    }
+
+    /* Top and Bottom sections now also become single column flex containers */
+    .why-choose-us-top-section-content,
+    .why-choose-us-bottom-section-content {
+        grid-template-columns: 1fr; /* Switch to a single column grid internally */
+        display: flex; /* Or use flexbox for more flexibility in stacking */
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+        padding-top: 0; /* Reset padding if stacked */
+    }
+
+    .why-choose-us-images {
+        grid-column: 1 / -1; /* Span full width when stacked */
+        justify-content: center;
+        width: 100%;
+        max-width: 400px; /* Constrain width of image group */
+        gap: 15px;
+    }
+    .why-choose-us-image-item {
+        width: 150px;
+        height: 150px;
+    }
+
+    .why-choose-us-quote-wrapper {
+        grid-column: 1 / -1; /* Span full width when stacked */
+        order: -1; /* Make quote appear before images on mobile, if preferred */
+        justify-content: center; /* Center the quote wrapper */
+    }
+    .why-choose-us-main-quote {
+        font-size: 2rem;
+        max-width: 90%;
+        text-align: center;
+    }
+
+    .key-benefits-list {
+        grid-column: 1 / -1; /* Span full width when stacked */
+        width: 100%;
+        max-width: 500px; /* Keep a max-width for readability */
+        text-align: left; /* Keep text left-aligned */
+        padding-top: 0;
+    }
+
+    .impact-icons-grid {
+        grid-column: 1 / -1; /* Span full width when stacked */
+        justify-content: center;
+        width: 100%;
+        max-width: 400px;
+        gap: 30px;
+        padding-top: 10px;
+    }
+
+    .feature-item {
+        width: 90px;
+    }
+    .feature-icon-circle {
+        width: 55px;
+        height: 55px;
+        font-size: 22px;
+    }
+}
+
+@media (max-width: 576px) {
+    .why-choose-us-main-quote {
+        font-size: 1.6rem;
+    }
+    .why-choose-us-images {
+        flex-direction: column; /* Stack images vertically */
+        align-items: center;
+    }
+    .why-choose-us-image-item {
+        width: 120px;
+        height: 120px;
+    }
+    .key-benefits-list {
+        font-size: 1rem;
+        padding: 0 10px;
+    }
+    .key-benefits-list li {
+        margin-bottom: 10px;
+        padding-left: 25px;
+    }
+    .key-benefits-list li::before {
+        font-size: 1.1rem;
+    }
+    .impact-icons-grid {
+        gap: 20px;
+        grid-template-columns: repeat(2, 1fr); /* Still 2 columns if possible, but adjust max-width */
+        max-width: 300px; /* Further constrain impact icons grid */
+    }
+    .feature-item {
+        width: 70px;
+    }
+    .feature-icon-circle {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+    }
+    .feature-label {
+        font-size: 0.8rem;
+    }
+}
+
+/* --- 1. General Section Styling --- */
+
+.dynamic-hero-section {
+    padding: 100px 5% 50px 5%; /* Top, Right/Left, Bottom padding */
+    background-color: #f7f7f7; /* Light background for the whole section */
+}
+
+/* --- 2. Hero Content Layout --- */
+
+.hero-content-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Align items to center again now that widget is gone */
+    max-width: 1200px;
+    margin: 0 auto 80px auto; /* Add margin below hero */
+    gap: 40px;
+    padding-top: 50px; /* Add some top padding to align with the design */
+}
+
+.hero-text-area {
+    flex-basis: 45%;
+    max-width: 500px;
+}
+
+.hero-visual-area {
+    flex-basis: 55%;
+    position: relative;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column; /* Stack weather, main image, side arrows, dots, thumb */
+    align-items: center;
+    overflow: hidden; /* Important for animation and containing elements */
+    min-height: 480px; /* Adjusted min-height without widget */
+}
+
+/* Main Image Display Container */
+.hero-image-display {
+    width: 100%;
+    position: relative;
+    height: 380px; /* Fixed height for consistent aspect ratio */
+    margin-bottom: 20px;
+    border-radius: 12px; /* For the container */
+    overflow: hidden; /* Crucial for animation */
+    margin-top: 0; /* No need to push down for weather widget */
+    flex-shrink: 0; /* Don't let it shrink */
+}
+
+.main-hero-image {
+    width: 100%;
+    height: 100%; /* Fill the hero-image-display container */
+    object-fit: cover; /* Ensures image covers the area without distortion */
+    position: absolute; /* Needed for fade animation */
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out; /* Fade transition */
+    border-radius: 12px; /* Image border-radius */
+}
+
+.main-hero-image.active-image {
+    opacity: 1; /* Show active image */
+}
+
+/* Animation Classes */
+.main-hero-image.fade-out {
+    opacity: 0;
+}
+.main-hero-image.fade-in {
+    opacity: 1;
+}
+
+/* Hero Right Navigation Arrows */
+.hero-right-nav {
+    position: absolute; /* Position relative to hero-visual-area */
+    top: 50%; /* Center vertically */
+    transform: translateY(-50%);
+    right: 20px; /* Position to the right */
+    display: flex;
+    flex-direction: column; /* Stack arrows */
+    gap: 10px;
+    z-index: 15; /* Ensure arrows are clickable */
+}
+
+.nav-arrow {
+    background-color: #E6F1F6; /* Light background for arrows */
+    border: 1px solid #7f9db1; /* Subtle border */
+    color: #0d3b66; /* Dark text for arrows */
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.nav-arrow:hover {
+    background-color: #0d3b66;
+    color: #fff;
+}
+
+/* Small Thumbnail (positioned to the right-bottom) */
+.small-thumb {
+    width: 100px; /* Slightly larger thumbnail */
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 3px solid #0d3b66; /* Stronger highlight for the active thumbnail */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    position: absolute; /* Position to the bottom right */
+    bottom: 20px;
+    right: 20px;
+    z-index: 15; /* Ensure it's on top */
+}
+
+/* Hero Dot Navigation (bottom dots) */
+.hero-dot-nav {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 15px; /* Space between main image and dots */
+    flex-shrink: 0;
+    position: absolute; /* Position dots within visual area */
+    bottom: 140px; /* Adjusted position, moved up as small-thumb is below */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+.hero-dot {
+    width: 10px;
+    height: 10px;
+    background-color: rgba(0, 0, 0, 0.3); /* Default dot color */
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.hero-dot.active-dot,
+.hero-dot:hover {
+    background-color: #0d3b66; /* Active/hover color */
+    transform: scale(1.1);
+}
+
+/* Text & Button Styling (no changes here) */
+.pill-badge {
+    display: inline-block;
+    background-color: #e0e0e0; /* Light gray background */
+    color: #555; /* Darker text color */
+    padding: 8px 18px;
+    border-radius: 20px; /* Pill shape */
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+.main-headline {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin: 10px 0 20px 0;
+    color: #0d3b66; /* Your primary color */
+}
+
+.hero-description {
+    font-size: 1.1rem;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+.hero-cta-buttons .btn-primary,
+.hero-cta-buttons .btn-secondary {
+    display: inline-block;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    margin-right: 15px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: #0d3b66;
+    color: #fff;
+    border: 2px solid #0d3b66;
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: #0d3b66;
+    border: 2px solid #0d3b66;
+}
+
+/* ==================================== */
+/* 3.0 Merchandise Section (Revised Image Handling) */
+/* ==================================== */
+
+.merchandise-section {
+    width: 100vw; 
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    background-color: #b4d6e3;
+    background: linear-gradient(180deg, #b4d6e3 0%, #e6f1f6 100%);
+    padding-top: 20px;    /* Vertical padding */
+    padding-bottom: 15px; /* Vertical padding */
+    border-top: 1px solid rgba(0, 0, 0, 0.05); /* Replicating border-top */
+    text-align: center; 
+    max-width: none !important; /* Force no max-width */
+    border-radius: 0 !important; /* Force no rounded corners */
+    box-shadow: none !important; /* Force no section-level shadow */
+
+}
+
+.merchandise-container {
+    max-width: 1100px; /* Max width of your content */
+    margin: 0 auto;    /* Centers the container */
+    padding: 0 20px;   /* Internal padding for content spacing */
+    position: relative; 
+    z-index: 1;
+}
+
+.merchandise-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 50px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columns for products */
+    gap: 80px; /* Space between product cards */
+    margin-bottom: 60px; /* Space above the button */
+    margin-right: 20px;
+    justify-content: center; /* Center items if they don't fill the grid */
+}
+
+.product-card {
+    background-color: #ffffff; /* Explicitly white card background */
+    border: 1px solid #e0e0e0; /* A slightly softer border */
+    padding-bottom: 20px;
+    width: 110%;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03); /* Lighter shadow */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 10px;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08); /* Slightly stronger hover shadow */
+}
+
+.product-image-wrapper {
+    position: relative;
+    width: 100%;
+    border-radius: 10px;
+    padding-top: 125%; 
+    overflow: hidden;
+    background-color: #fcfcfc; /* Match the section background, or a slightly different tone */
+    border-bottom: 1px solid #f0f0f0; /* Subtle line below image */
+    display: flex; /* Added flex to help center image if smaller */
+    align-items: center; /* Center vertically */
+    justify-content: center;
+}
+
+.product-image {
+    position: absolute; /* Needed for positioning within the wrapper */
+    top: 50%; /* Center image vertically */
+    left: 50%; /* Center image horizontally */
+    transform: translate(-50%, -50%); /* Adjust for image's own size */
+    max-width: 100%; /* Ensure image doesn't overflow its wrapper horizontally */
+    max-height: 100%; /* Ensure image doesn't overflow its wrapper vertically */
+    object-fit: contain; /* CRITICAL CHANGE: This will scale the image down to *fit* without cropping */
+    display: block; /* Remove any extra space */
+}
+
+.product-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+    margin: 15px 20px 5px 20px;
+}
+
+.product-price {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #666;
+    margin: 0 20px 0 20px;
+}
+
+.merchandise-actions {
+    margin-top: 30px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 15px 30px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-decoration: none;
+    background-color: #0d3b66; /* Example primary color */
+    color: #fff;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 40px;
+}
+
+.btn:hover {
+    background-color: #1a4f80;
+    transform: translateY(-2px);
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 992px) {
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+    }
+    .merchandise-title {
+        font-size: 2.2rem;
+        margin-bottom: 40px;
+    }
+}
+
+@media (max-width: 992px) {
+    .merchandise-section {
+        padding: 60px 0; /* Adjust vertical padding, horizontal remains 0 */
+    }
+    .merchandise-container {
+        padding: 0 20px; /* Keep horizontal padding on container */
+    }
+}
+
+@media (max-width: 600px) {
+    .merchandise-section {
+        padding: 40px 0; /* Adjust vertical padding, horizontal remains 0 */
+    }
+    .merchandise-container {
+        padding: 0 15px; /* Adjust container padding for smaller screens if needed */
+    }
+}
+
+@media (max-width: 600px) {
+    .product-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        max-width: 300px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .merchandise-title {
+        font-size: 1.8rem;
+        margin-bottom: 30px;
+        letter-spacing: 1px;
+    }
+    .product-name {
+        font-size: 1rem;
+    }
+    .product-price {
+        font-size: 0.9rem;
+    }
+    .btn {
+        padding: 12px 25px;
+        font-size: 1rem;
+    }
+}
+
+/* --- 3. News & Events Grid Styling --- */
+
+.news-events-showcase,
+.projects-showcase {
+    max-width: 1200px;
+    margin: 60px auto;
+}
+
+.news-events-showcase h2,
+.projects-showcase h2 {
+    font-size: 2rem;
+    color: #0d3b66;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.news-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.news-card {
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+}
+
+.news-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.news-thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.news-card h4 {
+    color: #0d3b66;
+    font-size: 1.25rem;
+    margin: 15px 15px 5px 15px;
+}
+
+.news-card p {
+    color: #555;
+    padding: 0 15px 15px 15px;
+    font-size: 0.95rem;
+}
+
+.read-more-link {
+    display: block;
+    color: #0d3b66;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 0 15px 15px 15px;
+}
+
+/* Badges */
+.badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.new-badge {
+    background-color: #E74C3C; /* Red */
+}
+
+.live-badge {
+    background-color: #2ECC71; /* Green */
+}
+
+.view-all-cta {
+    text-align: center;
+}
+
+.btn-ghost-blue {
+    background: none;
+    border: 2px solid #0d3b66;
+    color: #0d3b66;
+    padding: 10px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-ghost-blue:hover {
+    background-color: #0d3b66;
+    color: #fff;
+}
+
+/* --- 4. Projects Showcase Styling --- */
+
+.projects-grid {
+    display: flex;
+    justify-content: space-around;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.project-card {
+    flex-basis: calc(33.333% - 20px); /* 3 cards per row */
+    min-width: 280px;
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.project-image {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+}
+
+.project-info {
+    padding: 15px;
+}
+
+.project-info h3 {
+    color: #0d3b66;
+    margin-top: 0;
+    font-size: 1.1rem;
+}
+
+.project-info p {
+    color: #777;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+}
+
+.view-project-btn {
+    display: inline-block;
+    color: #0d3b66;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+/* --- 5. Media Queries for Responsiveness --- */
+
+@media (max-width: 992px) {
+    .hero-content-wrapper {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .hero-text-area,
+    .hero-visual-area {
+        flex-basis: 100%;
+        max-width: 100%;
+    }
+
+    .hero-visual-area {
+        min-height: 400px; /* Adjusted min-height for mobile without widget */
+        padding: 15px;
+    }
+
+    .main-hero-image {
+        height: 250px;
+        margin-top: 0; /* No need for margin-top */
+    }
+
+    .hero-right-nav {
+        right: 10px;
+    }
+
+    .small-thumb {
+        width: 80px;
+        height: 80px;
+        bottom: 15px;
+        right: 15px;
+    }
+
+    .hero-dot-nav {
+        bottom: 110px; /* Adjusted dot position for mobile */
+    }
+
+    .main-headline {
+        font-size: 2.5rem;
+    }
+
+    .hero-cta-buttons {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .projects-grid {
+        justify-content: center;
+    }
+
+    .project-card {
+        flex-basis: 45%;
+    }
+}
+
+@media (max-width: 600px) {
+    .project-card {
+        flex-basis: 100%;
+    }
+
+    .news-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ==================================== */
+/* 4. Footer Styles                     */
+/* ==================================== */
+
+.footer {
+    background-color: var(--text-color);
+    color: var(--text-color-light);
+    padding: 20px 0;
+    text-align: center;
+    margin-top: 40px;
+    width: 100%;
+}
+
+.footer-content p {
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+}
+
+.footer-content span {
+    display: block;
+    font-size: 0.8rem;
+    opacity: 0.8;
+}
+
+/* =========================
+   Footer: Technowatch
+   ========================= */
+
+footer {
+  width: 100%;
+  bottom: 0;
+  background: linear-gradient(135deg, #0d3b66, #0d3b66, #7f9db1);
+  color: #fff;
+  padding: 15px 0;
+  line-height: 1.4;
+  font-size: 14px;
+}
+
+.row {
+  width: 85%;
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.footer-centered-cols {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  flex-grow: 1;
+  gap: 20px;
+  margin-top: 50px;
+}
+
+.col {
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.col:nth-child(1) {
+  flex-basis: 20%;
+  padding: 15px;
+  text-align: justify;
+  flex-shrink: 0;
+}
+
+.footer-centered-cols .col {
+  flex-basis: 22%;
+  max-width: 250px;
+  text-align: left;
+}
+
+.footer-centered-cols .col:nth-child(1) {
+  padding-left: 18px;
+  text-align: justify;
+}
+
+.foot_logo {
+  width: 120px;
+  margin-bottom: 10px;
+  margin-left: 60px;
+}
+
+.col h3 {
+  width: fit-content;
+  margin-bottom: 25px;
+  position: relative;
+  font-size: 16px;
+  text-align: left;
+  padding-bottom: 5px; /* Add some space for the new underline */
+}
+
+/* Updated Underline Class to mimic <hr> */
+.underline {
+  width: 100%; /* Make it span the full width of the h3 */
+  height: 1px; /* The thickness of the line */
+  background: transparent; /* No background color itself */
+  border-bottom: 1px solid #ccc; /* This creates the line */
+  position: absolute;
+  top: auto; /* Remove specific top positioning */
+  bottom: 0; /* Position at the bottom of the h3 */
+  left: 0;
+  border-radius: 0; /* No border-radius */
+  overflow: visible; /* No need to hide overflow if not animating */
+}
+
+.underline span {
+  display: none; /* Hide the span as it's not needed for a static line */
+}
+
+.footer-centered-cols .col h3 .underline {
+  left: 0;
+  transform: none; /* Remove transform specific to mobile centering */
+}
+
+
+.email-id {
+  width: fit-content;
+  border-bottom: 1px solid #ccc;
+  margin: 20px 0;
+}
+
+ul li {
+  list-style: none;
+  margin-bottom: 12px;
+}
+
+ul li a {
+  text-decoration: none;
+  color: #fff;
+}
+
+form {
+  padding-bottom: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 50px;
+}
+
+form .fa-solid {
+  font-size: 18px;
+  margin-right: 10px;
+}
+
+form input {
+  width: 100%;
+  background: transparent;
+  color: #ffffff;
+  border: 0;
+  outline: none;
+}
+
+form button {
+  background: transparent;
+  border: 0;
+  outline: none;
+  cursor: pointer;
+}
+
+form button .fa-solid {
+  font-size: 16px;
+  color: #ccc;
+}
+
+.social-icons {
+  display: flex;
+  justify-content: flex-start;
+  gap: 15px;
+}
+
+.social-icons .fa-brands {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 40px;
+  font-size: 20px;
+  color: #0d3b66;
+  background: #fff;
+  cursor: pointer;
+}
+
+hr {
+  width: 90%;
+  border: 0;
+  border-bottom: 1px solid #ccc;
+  margin: 20px auto;
+}
+
+.copyright {
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .row {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .col {
+    flex-basis: 100%;
+    max-width: 90%;
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 10px 0;
+  }
+
+  .col:nth-child(1) {
+    padding: 0;
+    text-align: center;
+    max-width: 100%;
+  }
+
+  .foot_logo {
+    width: 200px;
+  }
+
+  .footer-centered-cols {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 0;
+  }
+
+  .footer-centered-cols .col {
+    flex-basis: 100%;
+    text-align: center;
+    padding: 10px 0;
+    max-width: 90%;
+  }
+
+  .col h3 {
+    text-align: center;
+  }
+
+  .col h3 .underline {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .email-id, form, .social-icons {
+    justify-content: center;
+  }
+
+  form {
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .social-icons {
+    max-width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}

@@ -1,0 +1,133 @@
+/* ================================
+    TECHNOWATCH | CLUB INFO PAGE
+    Modern • Engaging • All Ages - DARK THEME
+================================ */
+
+.club-info {
+    /* UPDATED: Dark theme background gradient */
+    background: radial-gradient(circle at top left, var(--color-background) 0%, var(--background-light) 100%);
+    padding: 100px 20px;
+    font-family: var(--font-stack, "Poppins", "Segoe UI", sans-serif);
+    color: var(--color-text); /* Light text color for dark background */
+    position: relative;
+    overflow: hidden;   
+}
+
+.club-info::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        130deg, 
+        rgba(0, 198, 255, 0.2) 0%, 
+        rgba(0, 198, 255, 0.05) 50%, 
+        rgba(0, 198, 255, 0.2) 100% 
+    );
+    animation: moveGradient 15s ease infinite alternate;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.club-info-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+.club-info h1.main-title {
+    font-size: 3.5rem; 
+    font-weight: 900;
+    /* Focused Cyan Gradient */
+    background: linear-gradient(90deg, var(--primary-hover), var(--primary-color), #69a6f7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    margin-bottom: 20px;
+    
+    /* Boosted Cyan text glow */
+    text-shadow: 0 0 20px rgba(0, 198, 255, 0.5), 0 0 5px var(--primary-color); 
+}
+
+/* --- Intro Section --- */
+.club-intro {
+    margin-bottom: 60px;
+}
+
+.club-logo {
+    width: 100px;
+    margin-bottom: 20px;
+    opacity: 1; /* Keep logo visible against dark BG */
+    filter: brightness(1.2); /* May help light logos pop */
+}
+
+.club-intro p {
+    max-width: 800px;
+    margin: 0 auto;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--color-text); /* Dimmer text for paragraphs */
+}
+
+/* --- Vertical Cards --- */
+.club-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+}
+
+.club-card {
+    /* UPDATED: Use dark card background */
+    background: var(--color-card-bg); 
+    border-radius: 12px;
+    padding: 40px 30px;
+    width: 320px;
+    /* 💥 CONSISTENCY FIX: Use the global subtle shadow for a clean look */
+    box-shadow: var(--box-shadow); 
+    border: 2px solid var(--color-border); 
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    text-align: center;
+}
+
+.club-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--hover-shadow);
+}
+
+.club-card h3 {
+    font-size: 1.6rem;
+    color: var(--primary-color); /* Cyan accent */
+    margin-bottom: 15px;
+    font-weight: 800;
+    text-shadow: 0 0 5px rgba(0, 198, 255, 0.3);
+}
+
+.club-card p {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 25px;
+    color: var(--color-text-subtle);
+}
+
+.club-card .btn {
+    display: inline-block;
+    /* UPDATED: Use theme primary and hover colors for button gradient */
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+    color: var(--color-background); /* Dark text on bright button */
+    text-decoration: none;
+    padding: 12px 28px;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 198, 255, 0.3); 
+}
+
+.club-card .btn:hover {
+    transform: translateY(-4px);
+    /* UPDATED: Use theme shadow variables */
+    box-shadow: var(--shadow-hover);
+}

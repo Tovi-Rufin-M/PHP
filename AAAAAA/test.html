@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="styles.css">
+<style>
+    /* ------------------------------- */
+/* MOBILE CIRCULAR NAV BUTTON     */
+/* ------------------------------- */
+
+.nav-toggle {
+    display: none; /* default hidden */
+    position: fixed;
+    top: 18px;
+    right: 20px;
+    width: 48px;
+    height: 48px;
+
+    border-radius: 50%;
+    border: 1px solid var(--color-border);
+
+    background: rgba(13, 18, 28, 0.75);
+    backdrop-filter: blur(10px);
+
+    font-size: 20px;
+    color: var(--primary-color);
+    font-weight: 900;
+
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+
+    box-shadow: var(--glow-shadow-blue), 0 0 15px rgba(0, 0, 0, 0.6);
+    transition: all 0.3s ease;
+    z-index: 2000; /* above everything */
+}
+
+.nav-toggle:hover {
+    background: rgba(13, 18, 28, 0.9);
+    box-shadow: var(--shadow-hover);
+    transform: scale(1.08);
+}
+
+
+/* ---------------------------------------- */
+/* SHOW BUTTON + HIDE NAV BELOW 480x800     */
+/* ---------------------------------------- */
+@media (max-width: 480px){
+    
+    .nav-toggle {
+        display: flex;
+    }
+
+    /* hide nav initially */
+    .nav-main {
+        display: none;
+        position: absolute;
+        top: 80px;
+        right: 20px;
+
+        background: rgba(13, 18, 28, 0.75);
+        backdrop-filter: blur(12px);
+        padding: 18px 25px;
+
+        border-radius: 12px;
+        border: 1px solid var(--color-border);
+        box-shadow: var(--box-shadow), var(--glow-shadow-blue);
+    }
+
+    /* vertical mobile layout */
+    .nav-links {
+        flex-direction: column;
+        gap: 18px;
+        margin: 0;
+    }
+
+    /* show nav when toggled */
+    .nav-main.active {
+        display: block;
+    }
+
+    /* dropdown inside mobile */
+    .dropdown-menu {
+        position: relative;
+        top: 0;
+        left: 0;
+        opacity: 1;
+        visibility: visible;
+
+        backdrop-filter: none;
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        gap: 2px;
+        padding: 0;
+    }
+}
+</style>
+<script>
+const navToggle = document.getElementById("navToggle");
+const navMain = document.querySelector(".nav-main");
+
+navToggle.addEventListener("click", () => {
+    navMain.classList.toggle("active");
+});
+
+</script>
+</head>
+<body>
+    <!-- Circular Mobile Toggle Button -->
+<button class="nav-toggle" id="navToggle">☰</button>
+<header class="navbar">
+    <div class="nav-container">
+
+        <!-- Logo -->
+        <div class="nav-logo" id="logoClickArea">
+            <img src="assets/imgs/logo_white.png" alt="Technowatch Logo" id="navbarLogo">
+            <div class="nav-title">
+                <h2>TechnoWatch</h2>
+                <p>College of Computer Engineering Technology</p>
+            </div>
+        </div>
+
+        <!-- MOBILE BUTTON -->
+        <button class="nav-toggle" id="navToggle">☰</button>
+
+        <!-- Main NAV -->
+        <nav class="nav-main">
+            <ul class="nav-links">
+                <li><a href="index.php" class="<?php if ($current_page == 'index.php') echo 'active'; ?>">Home</a></li>
+                <li><a href="about.php" class="<?php if ($current_page == 'about.php') echo 'active'; ?>">About</a></li>
+                <li><a href="join-us.php" class="<?php if ($current_page == 'join-us.php') echo 'active'; ?>">Join Us</a></li>
+                <li><a href="organization.php" class="<?php if ($current_page == 'organization.php') echo 'active'; ?>">Organization</a></li>
+
+                <li class="dropdown">
+                    <a href="resources.php" class="<?php if (in_array($current_page, $updates_pages)) echo 'active'; ?>">Resources</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="eventsNews.php" class="<?php if ($current_page == 'eventsNews.php') echo 'active'; ?>">Events & News</a></li>
+                        <li><a href="jobposting.php" class="<?php if ($current_page == 'jobposting.php') echo 'active'; ?>">Job Postings</a></li>
+                        <li><a href="projects.php" class="<?php if ($current_page == 'projects.php') echo 'active'; ?>">Projects</a></li>
+                    </ul>
+                </li>
+
+                <li><a href="merch.php" class="<?php if ($current_page == 'merch.php') echo 'active'; ?>">Merchandise</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+</body>
+</html>

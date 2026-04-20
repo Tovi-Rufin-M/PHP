@@ -1,0 +1,354 @@
+/* Custom CSS Variables (Assuming a Dark Theme) */
+:root {
+    --color-primary: #007bff; /* Bright accent color */
+    --color-secondary: #6c757d;
+    --color-background: #1e1e1e; /* Dark background */
+    --color-card-bg: #2a2a2a; /* Slightly lighter card background */
+    --color-text-main: #f0f0f0; /* Light text */
+    --color-text-light: #b0b0b0; /* Lighter text for details */
+    --color-border: #3c3c3c; /* Subtle border color */
+    --color-success: #28a745;
+    --color-danger: #dc3545;
+    --color-warning: #ffc107;
+}
+
+/* Global Styles for the Section */
+.events-section {
+    padding: 60px 0;
+    background-color: var(--color-background);
+    color: var(--color-text-main);
+    max-width: 1200px; /* Adjust as needed */
+    margin: 0 auto;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 0 20px;
+}
+
+.section-header h1 {
+    font-size: 2.5rem;
+    color: var(--color-primary);
+    margin-bottom: 5px;
+}
+
+.section-header p {
+    font-size: 1.1rem;
+    color: var(--color-text-light);
+}
+
+/* --- Events Timeline Styles --- */
+
+.events-timeline {
+    padding: 0 20px;
+}
+
+/* MODIFIED: The main grid container for each item */
+.timeline-item {
+    display: grid;
+    /* Defines a 2-column layout: 1 fractional unit for the image, 2 for the content */
+    grid-template-columns: 1fr 2fr; 
+    gap: 30px;
+    
+    background: var(--color-card-bg);
+    border-radius: 12px;
+    padding: 30px;
+    margin-bottom: 30px;
+    border: 1px solid var(--color-border);
+    transition: all 0.3s ease;
+    position: relative;
+    
+    /* MODIFIED: Use 'center' or 'flex-start' instead of 'stretch' for fixed image height */
+    align-items: center; 
+}
+
+/* Special styling for items without an image to span both columns */
+.timeline-item:not(:has(.timeline-image)) {
+    grid-template-columns: auto 1fr;
+    align-items: flex-start; /* Default alignment for content-only items */
+}
+
+.timeline-item:hover {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 15px rgba(0, 123, 255, 0.2);
+}
+
+/* Featured Event Styling */
+.timeline-item.featured {
+    border: 2px solid var(--color-primary);
+    box-shadow: 0 0 25px rgba(0, 123, 255, 0.4);
+}
+
+/* Past Event Styling */
+.timeline-item.past-event {
+    opacity: 0.8;
+    border-color: var(--color-secondary);
+}
+
+
+/* --- Image Styles --- */
+
+/* MODIFIED: Image Wrapper to set fixed height */
+.timeline-image {
+    border-radius: 8px;
+    overflow: hidden;
+    /* FIX: Set a fixed height for consistency */
+    height: 180px; 
+    min-height: 180px; 
+    max-height: none; 
+}
+
+.timeline-image img {
+    width: 100%;
+    /* Image height should be 100% of its fixed container height */
+    height: 100%; 
+    /* Ensures image covers the whole space, cropping if aspect ratio is off */
+    object-fit: cover; 
+    transition: transform 0.5s ease;
+}
+
+.timeline-image:hover img {
+    transform: scale(1.05);
+}
+
+/* Featured image specific adjustments (matching the fixed height) */
+.timeline-item.featured .timeline-image {
+    height: 180px;
+    min-height: 180px; 
+}
+
+/* --- Content Styles --- */
+
+/* MODIFIED: Content container for vertical alignment (if needed) */
+.timeline-content {
+    /* Use flex column layout to keep elements stacked */
+    display: flex;
+    flex-direction: column;
+    /* Since the parent item is aligned to center, this might not strictly need center, 
+       but keeping it helps manage internal vertical spacing. */
+    justify-content: center; 
+    position: relative;
+}
+
+.timeline-date {
+    font-size: 0.9rem;
+    color: var(--color-primary);
+    font-weight: 600;
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+}
+
+.timeline-content h3 {
+    font-size: 1.5rem;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    color: var(--color-text-main);
+}
+
+.timeline-content p {
+    color: var(--color-text-light);
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.event-badge {
+    position: absolute;
+    top: -15px; 
+    right: 0;
+    background-color: var(--color-danger);
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+.timeline-item.featured .event-badge {
+    background-color: var(--color-primary);
+}
+
+.timeline-item.past-event .event-badge {
+    background-color: var(--color-secondary);
+}
+
+.event-meta {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+    color: var(--color-text-light);
+    font-size: 0.9rem;
+}
+
+.event-meta i {
+    margin-right: 5px;
+    color: var(--color-primary);
+}
+
+/* --- Button Styles --- */
+
+.register-btn, .view-gallery-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    border: none;
+    cursor: pointer;
+    
+    /* FIX: Ensures the button only takes up the necessary width */
+    width: fit-content; 
+}
+
+.register-btn {
+    background-color: var(--color-primary);
+    color: #fff;
+}
+
+.register-btn:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+.view-gallery-btn {
+    /* Using transparent background and primary border for a secondary button style */
+    background-color: transparent;
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+}
+
+.view-gallery-btn:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+/* --- News Section Styles --- */
+
+.news-section {
+    padding: 40px 20px 0;
+}
+
+.news-section h2 {
+    font-size: 2rem;
+    color: var(--color-text-main);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.news-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.news-card {
+    background-color: var(--color-card-bg);
+    border-radius: 10px;
+    padding: 20px;
+    border: 1px solid var(--color-border);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.news-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.news-category {
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: var(--color-success);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.news-card h3 {
+    font-size: 1.2rem;
+    color: var(--color-text-main);
+    margin-bottom: 10px;
+}
+
+.news-card p {
+    font-size: 0.95rem;
+    color: var(--color-text-light);
+    margin-bottom: 15px;
+}
+
+.news-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+    border-top: 1px solid var(--color-border);
+}
+
+.news-footer span {
+    font-size: 0.85rem;
+    color: var(--color-text-light);
+}
+
+.news-footer a {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.news-footer a:hover {
+    text-decoration: underline;
+}
+
+/* --- Responsive Adjustments --- */
+
+@media (max-width: 768px) {
+    .timeline-item {
+        /* On small screens, stack the image and content vertically */
+        grid-template-columns: 1fr; 
+        gap: 20px;
+        padding: 20px;
+        align-items: flex-start;
+    }
+
+    /* Adjust items without images to flow in a single column */
+    .timeline-item:not(:has(.timeline-image)) {
+        grid-template-columns: 1fr; 
+    }
+    
+    .timeline-date {
+        order: -1; 
+        margin-bottom: 5px;
+    }
+
+    /* Reset image height to auto on mobile since it is no longer constrained by another column's height */
+    .timeline-image {
+        height: auto;
+        min-height: 200px;
+        max-height: 300px;
+    }
+
+    .timeline-item.featured .timeline-image {
+        height: auto;
+        min-height: 200px; 
+    }
+
+    .news-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 576px) {
+    .section-header h1 {
+        font-size: 2rem;
+    }
+    
+    .timeline-item {
+        padding: 15px;
+    }
+    
+    .event-meta {
+        flex-direction: column;
+        gap: 5px;
+        margin-bottom: 15px;
+    }
+}

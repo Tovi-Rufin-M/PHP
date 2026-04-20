@@ -1,0 +1,132 @@
+/* ========================================= */
+/* 1. CSS Variables (Themable Colors & Sizing) */
+/* ========================================= */
+:root {
+    --sidebar-width: 250px;
+    --sidebar-bg: #2c3e50;
+    --sidebar-text: #ecf0f1;
+    --sidebar-hover: #34495e;
+    --sidebar-active: #1abc9c;
+}
+
+/* ========================================= */
+/* 2. Base Layout & Sidebar Positioning */
+/* ========================================= */
+
+body {
+    font-family: 'Inter', sans-serif; 
+    margin: 0; 
+    padding: 0; 
+    display: flex;
+    min-height: 100vh;
+}
+
+/* 1. Sidebar Styles (FIXED) */
+.admin-sidebar {
+    width: var(--sidebar-width);
+    background-color: var(--sidebar-bg);
+    color: var(--sidebar-text);
+    padding: 20px 0;
+    position: fixed;
+    height: 100%;
+    overflow-y: auto;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+}
+
+.sidebar-header {
+    text-align: center;
+    padding: 0 10px 20px;
+    border-bottom: 1px solid #34495e;
+    margin-bottom: 20px;
+}
+.sidebar-header h2 {
+    margin: 0;
+    color: #fff;
+    font-size: 1.4rem;
+}
+
+/* 2. Main Content Area (OFFSET) */
+.main-content {
+    margin-left: var(--sidebar-width);
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    width: calc(100% - var(--sidebar-width)); 
+}
+
+/* 3. Navigation Links & Behavior */
+.nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.nav-list li a {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    color: var(--sidebar-text);
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s;
+}
+.nav-list li a i {
+    margin-right: 10px;
+}
+.nav-list li a:hover {
+    background-color: var(--sidebar-hover);
+}
+/* Active state styling */
+.nav-list li a.active {
+    background-color: var(--sidebar-hover);
+    color: var(--sidebar-active);
+    border-left: 5px solid var(--sidebar-active);
+    padding-left: 15px;
+}
+
+/* 5. Footer Styles (If the footer is meant to be dark/sidebar-themed) */
+.admin-footer {
+    padding: 15px 30px;
+    background-color: var(--sidebar-hover);
+    color: var(--sidebar-text);
+    text-align: center;
+    font-size: 0.85rem;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: auto;
+}
+
+/* ========================================= */
+/* 6. Mobile Responsiveness (Sidebar Changes) */
+/* ========================================= */
+@media (max-width: 768px) {
+    /* Sidebar becomes full width and static (at the top) on mobile */
+    .admin-sidebar {
+        position: relative; 
+        width: 100%;
+        height: auto;
+        padding: 10px 0;
+        box-shadow: none;
+    }
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+    }
+    .nav-list {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+    .nav-list li {
+        width: 48%;
+        margin-bottom: 5px;
+    }
+    .nav-list li a {
+        justify-content: center;
+        padding: 10px;
+        border-left: none !important;
+    }
+    .nav-list li a i {
+        display: none;
+    }
+}

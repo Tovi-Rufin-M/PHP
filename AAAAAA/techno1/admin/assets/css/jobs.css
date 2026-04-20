@@ -1,0 +1,119 @@
+/* assets/css/jobs.css - Job Postings Management Styles */
+
+/* Import base variables */
+:root {
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --accent: #6366f1;
+  --text-primary: #f8fafc;
+  --text-secondary: #adb5bd;
+  --border: #334155;
+  --success: #10b981;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+}
+
+/* Form Control Styling */
+input[type="text"],
+input[type="email"],
+input[type="url"],
+input[type="number"],
+select,
+textarea {
+  background-color: var(--bg-secondary) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text-primary) !important;
+  border-radius: 0.5rem !important;
+  padding: 0.75rem 1rem !important;
+  width: 100%;
+  transition: all 0.2s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none !important;
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2) !important;
+}
+
+/* Label Styling */
+label {
+  display: block;
+  color: var(--text-primary);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+/* Job Type Badge */
+.badge {
+  font-size: 0.875em;
+  padding: 0.5em 0.75em;
+}
+
+/* Table Specific */
+.table-hover tbody tr:hover {
+  background-color: rgba(99, 102, 241, 0.05);
+}
+
+.table-dark th {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border-bottom: 2px solid var(--accent);
+}
+
+/* Action Buttons */
+.btn-sm {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.875rem;
+}
+
+/* Form Actions */
+.form-actions {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+}
+
+/* Checkbox Styling */
+.job_checkbox {
+  width: 1.2em;
+  height: 1.2em;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+/* Salary Range Text */
+small.text-muted {
+  color: var(--text-secondary) !important;
+  font-size: 0.875rem;
+}
+
+/* Published Badge */
+.badge.bg-success { background-color: var(--success) !important; }
+.badge.bg-secondary { background-color: var(--text-secondary) !important; }
+
+/* Button Variants */
+.btn-primary {
+  background-color: var(--accent) !important;
+  border-color: var(--accent) !important;
+}
+
+.btn-success {
+  background-color: var(--success) !important;
+  border-color: var(--success) !important;
+}
+
+.btn-danger {
+  background-color: var(--danger) !important;
+  border-color: var(--danger) !important;
+}
+
+/* Alert Styling */
+.alert {
+  border-radius: 0.5rem;
+  border: none;
+  padding: 1rem 1.5rem;
+}
+
+.alert-dismissible .btn-close {
+  filter: invert(1);
+  opacity: 0.6;
+}

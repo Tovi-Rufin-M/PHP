@@ -1,0 +1,216 @@
+@font-face {
+    font-family: 'Poppins';
+    src: url('Poppins-1/Poppins-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+/* Global Reset - Keep this at the top of your main CSS or similar global file */
+* {
+    margin: 0;
+    padding: 0;
+    font-family: "Poppins", sans-serif;
+    box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
+}
+
+html, body {
+    width: 100%;
+    overflow-x: hidden; /* Prevent horizontal scroll from full-width elements */
+}
+
+/* Mission Section - Adjusted for Technowatch styling */
+section.mission { /* Added "section" to make it more specific */
+    position: relative;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    
+    /* Make it full width to align with other Technowatch sections */
+    width: 100%; /* No need for 100vw, left/right -50vw if placed correctly within body */
+    /* background: linear-gradient(135deg, #ffffff, #ffffff, #fdfdfd); */
+    background-color: var(--background-color-primary, #f0f2f5); /* Use a neutral background, or match Technowatch's body background */
+    color: var(--text-color-primary, #333); /* Default text color, will be overridden by .content.active */
+    overflow: hidden;
+    padding: 60px 0; /* Add top/bottom padding to the section */
+}
+
+.mission .content {
+    z-index: 2;
+    /* Original color was white, but the new section.mission background is light. */
+    /* This will be overridden by .content.active anyway. */
+    color: var(--text-color-secondary, #333); 
+    
+    /* Centering the content and limiting its width */
+    width: 90%; /* Adjust as needed, but give some side padding */
+    max-width: 1000px; /* Max width for readability, similar to Technowatch's main content */
+    margin: 0 auto; /* Center the content */
+    
+    display: none; /* Keep this if you have JS to toggle it */
+}
+
+.mission .content.active {
+    display: block;
+    /* Technowatch seems to use darker colors, so a darker background here might fit better */
+    background: linear-gradient(135deg, #7f9db1, #0d3b66, #0d3b66);
+    color: #ffffff; /* White text on dark background */
+    border-radius: 8px; /* Slightly larger border-radius for modern look */
+    animation: fadeIn 0.8s ease forwards;
+    padding: 40px; /* Increased padding inside the content box */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* Add some shadow */
+}
+
+.mission .content h1 {
+    font-size: 2.2em; /* Slightly larger heading */
+    font-weight: 800; /* Bolder */
+    text-transform: uppercase;
+    letter-spacing: 3px; /* Reduced letter spacing for better readability */
+    margin-left: 0; /* Align with padding of parent .content.active */
+    text-align: center; /* Center main title */
+    margin-bottom: 25px;
+}
+
+.mission .content h2 {
+    font-size: 1.8em; /* Adjusted size */
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-left: 0; /* Align with padding */
+    text-align: center; /* Keep H2 left aligned */
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+
+.mission .content h3 {
+    margin-left: 0; /* Align with padding */
+    font-size: 1.2em;
+    font-weight: 600;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.mission .content li {
+    margin-left: 20px; /* Indent list items slightly */
+    list-style-type: disc; /* Ensure list style is visible */
+    padding-left: 5px; /* Visual spacing */
+    margin-bottom: 8px;
+    line-height: 1.6;
+}
+
+.mission .content p {
+    margin-left: 0; /* Align with padding */
+    margin-bottom: 15px;
+    line-height: 1.7; /* Improve readability */
+    font-size: 1.05em;
+}
+
+.mission .content.active .paragraph {
+    margin-top: 0; /* Remove extra top/bottom margin from .paragraph itself */
+    margin-bottom: 0;
+    text-align: center;
+}
+
+.goals p {
+    margin-left: 0; /* Ensure these are aligned too */
+    margin-bottom: 10px;
+}
+
+.goals p strong {
+    font-size: 1em;
+    color: #ffffff; /* Keep white for the red background */
+    padding-right: 10px;
+    font-weight: 700;
+}
+
+.mission .content hr {
+    width: 70%; /* Adjust HR width */
+    margin: 30px auto; /* Center and add more vertical space */
+    border: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.4); /* Lighter white for contrast on dark background */
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive adjustments for the mission section */
+@media (max-width: 768px) {
+    .mission .content {
+        width: 95%;
+        padding: 30px 20px;
+    }
+    .mission .content h1 {
+        font-size: 1.8em;
+        letter-spacing: 2px;
+    }
+    .mission .content h2 {
+        font-size: 1.4em;
+        letter-spacing: 1px;
+    }
+    .mission .content p {
+        font-size: 0.95em;
+    }
+    .mission .content li {
+        margin-left: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .mission .content {
+        padding: 25px 15px;
+    }
+    .mission .content h1 {
+        font-size: 1.5em;
+        letter-spacing: 1px;
+    }
+    .mission .content h2 {
+        font-size: 1.2em;
+    }
+    .mission .content p {
+        font-size: 0.9em;
+    }
+    .mission .content li {
+        margin-left: 10px;
+    }
+    .mission .content hr {
+        width: 85%;
+        margin: 20px auto;
+    }
+}
+
+.mission .content .core-values-list {
+    margin-left: 40px; /* Align with your existing paragraphs */
+    padding-left: 0; /* Remove default padding */
+    list-style: none; /* Remove default bullet points if you want custom styling */
+    margin-bottom: 20px;
+}
+
+.mission .content .core-values-list li {
+    margin-bottom: 15px; /* Spacing between each core value */
+    line-height: 1.6;
+    margin-left: 0; /* Override the li margin from the general rules */
+    font-size: 1.05em; /* Match paragraph font size */
+}
+
+.mission .content .core-values-list li strong {
+    color: #ffffff; /* Ensure strong text is visible on the red background */
+    margin-right: 8px; /* Space between the bolded term and its description */
+    white-space: nowrap; /* Keep the P - Progress on one line if possible */
+}
+
+/* For smaller screens, adjust margins */
+@media (max-width: 768px) {
+    .mission .content .core-values-list {
+        margin-left: 0; /* Remove left margin for better mobile fit */
+        padding-left: 20px; /* Add some padding if list-style is kept */
+    }
+    .mission .content .core-values-list li {
+        margin-left: 0;
+    }
+}

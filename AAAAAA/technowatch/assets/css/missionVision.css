@@ -1,0 +1,202 @@
+/* ================================ */
+/* TECHNOWATCH | MISSION PAGE LIVELY VERSION */
+/* ================================ */
+
+/* ---------- Mission Section ---------- */
+.mission {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 150px 20px 100px 20px;
+    background: radial-gradient(circle at top center, var(--color-background-light) 20%, var(--color-background) 100%);
+    color: var(--color-text);
+    overflow: hidden;
+}
+
+/* Subtle animated neon gradient overlay */
+.mission::before {
+    content: "";
+    position: absolute;
+    inset: -50%;
+    background: linear-gradient(45deg, var(--color-primary), var(--color-secondary, #69a6f7), var(--color-primary));
+    opacity: 0.15;
+    z-index: 0;
+    pointer-events: none;
+    animation: neonWave 15s ease-in-out infinite alternate;
+    mix-blend-mode: screen;
+}
+
+@keyframes neonWave {
+    0% { transform: translate(-25%, -25%) rotate(0deg); }
+    100% { transform: translate(25%, 25%) rotate(45deg); }
+}
+
+/* ---------- Container ---------- */
+.mission-container {
+    position: relative;
+    z-index: 1;
+    max-width: 1000px;
+    text-align: center;
+}
+
+/* ---------- Header ---------- */
+.mission-header h1 {
+    font-size: 4rem;
+    font-weight: 900;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-secondary, #69a6f7), var(--color-primary));
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 0.15em;
+    margin-bottom: 30px;
+    animation: textPulse 3s ease-in-out infinite alternate;
+    text-shadow: 0 0 5px var(--color-primary), 0 0 20px rgba(0, 198, 255, 0.5);
+}
+
+@keyframes textPulse {
+    0% { text-shadow: 0 0 5px var(--color-primary), 0 0 20px rgba(0, 198, 255, 0.3); }
+    50% { text-shadow: 0 0 15px var(--color-primary), 0 0 40px rgba(0, 198, 255, 0.6); }
+    100% { text-shadow: 0 0 5px var(--color-primary), 0 0 20px rgba(0, 198, 255, 0.3); }
+}
+
+/* Glow divider */
+.glow-divider {
+    width: 180px;
+    height: 5px;
+    margin: 0 auto 80px;
+    border-radius: 50px;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-secondary, #69a6f7));
+    box-shadow: 0 0 10px var(--color-primary), 0 0 20px var(--color-secondary, #69a6f7);
+    animation: dividerGlow 2.5s ease-in-out infinite alternate;
+}
+
+@keyframes dividerGlow {
+    0% { transform: scaleX(1); opacity: 0.8; }
+    100% { transform: scaleX(1.1); opacity: 1; }
+}
+
+/* ---------- Mission Cards ---------- */
+.mission-content {
+    display: flex;
+    flex-direction: column;
+    gap: 80px;
+    align-items: center;
+}
+
+.mission-section {
+    max-width: 800px;
+    width: 100%;
+    background: rgba(26, 34, 48, 0.6);
+    border-radius: 20px;
+    padding: 50px 40px;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 8px 20px rgba(0, 198, 255, 0.3);
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.mission-section::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle, rgba(0, 198, 255, 0.05), transparent 70%);
+    pointer-events: none;
+}
+
+.mission-section:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 15px 40px rgba(0, 198, 255, 0.4), 0 0 20px var(--color-primary);
+}
+
+.mission-section h2 {
+    font-size: 2.5rem;
+    color: var(--color-primary);
+    margin-bottom: 20px;
+    text-shadow: 0 0 10px rgba(0, 198, 255, 0.6);
+    position: relative;
+}
+
+.mission-section h2::after {
+    content: '';
+    display: block;
+    width: 50px;
+    height: 3px;
+    background: var(--color-primary);
+    border-radius: 2px;
+    margin-top: 8px;
+    animation: barGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes barGlow {
+    0% { box-shadow: 0 0 5px var(--color-primary); }
+    100% { box-shadow: 0 0 15px var(--color-primary); }
+}
+
+.mission-section p {
+    font-size: 1.2rem;
+    line-height: 1.7;
+    text-align: justify;
+    text-align-last: left;
+}
+
+/* ---------- Core Values ---------- */
+.core-values-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.core-values-list li {
+    position: relative;
+    background: rgba(26, 34, 48, 0.7);
+    padding: 15px 20px 15px 35px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 198, 255, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.core-values-list li::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 5px;
+    height: 100%;
+    background: var(--color-primary);
+    border-radius: 5px 0 0 5px;
+    transition: all 0.3s ease;
+}
+
+.core-values-list li:hover {
+    transform: translateX(8px) scale(1.02);
+    box-shadow: 0 6px 20px rgba(0, 198, 255, 0.35);
+    background: rgba(26, 34, 48, 0.85);
+}
+
+.core-values-list li:hover::before {
+    width: 8px;
+    background: var(--color-secondary, #69a6f7);
+    box-shadow: 0 0 12px var(--color-secondary, #69a6f7);
+}
+
+.core-values-list li strong {
+    color: var(--color-primary);
+}
+
+/* ---------- Fade-in Animation ---------- */
+.fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 1s ease forwards;
+    animation-delay: var(--delay, 0s);
+}
+
+@keyframes fadeInUp {
+    to { opacity: 1; transform: translateY(0); }
+}
+    

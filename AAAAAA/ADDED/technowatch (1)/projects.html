@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚡ Tech Showcase | Projects</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* ================================================= */
+        /* 🎨 CORE COLORS & STYLES (Provided by User) */
+        /* ================================================= */
+        :root {
+            /* ==================================== */
+            /* 🎨 DARK THEME CORE COLORS (Simplified) */
+            /* ==================================== */
+            --color-primary: #00c6ff;       /* ⚡ Electric Cyan (Main Accent) */
+            --color-secondary: #007bff;     /* Official Blue (Secondary Accent) */
+            --color-primary-hover: #00a0e6; /* NEW: Standardized hover color */
+
+            --color-text: #e6e9f0;           /* Light Text for Dark BG */
+            --color-text-subtle: #9aa5b5;    /* Renamed from --color-text-subtle */
+            
+            --color-background: #0d121c;    /* 🌌 Deep Midnight Blue/Black */
+            --color-background-light: #151b27; /* Subtle background variation */
+            --color-background-dark: rgba(0, 0, 0, 0.6);
+            --color-card-bg: #1a2230;       /* Darker Card/Element Background */
+            
+            --color-border: rgba(0, 198, 255, 0.15); /* Slightly stronger border glow */
+            
+            /* ==================================== */
+            /* 💡 ALIASES (Reference Primary Colors) */
+            /* ==================================== */
+            --primary-color: var(--color-primary);
+            --primary-hover: var(--color-primary-hover);
+            --background-light: var(--color-background-light);
+            --text-color-dim: var(--color-text-subtle); 
+
+
+            /* ==================================== */
+            /* 💡 GLOWS & SHADOWS (Tech Look) */
+            /* ==================================== */
+            
+            /* Subtle Cyan Glow */
+            --shadow-subtle: 0 0 10px rgba(0, 198, 255, 0.12); /* Slightly stronger */
+            
+            /* Stronger Cyan Glow for Hover */
+            --shadow-hover: 0 0 30px rgba(0, 198, 255, 0.4); /* Boosted intensity (from 0.3) */
+
+            /* Standard Dark Box Shadow (Increased spread for visibility) */
+            --box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6); /* Increased spread and opacity (from 0.4) */
+            
+            --glow-shadow-blue: 0 0 10px rgba(0, 198, 255, 0.4);
+            --hover-shadow: var(--shadow-hover); /* Keep alias for ease of use */
+
+            /* ==================================== */
+            /* 🖋️ TYPOGRAPHY */
+            /* ==================================== */
+            --font-stack: "Poppins", "Segoe UI", sans-serif;
+            --font-family-sans: var(--font-stack);
+            --font-size-base: 16px;
+            --heading-font-weight: 700;
+        }
+
+        /* ================================================= */
+        /* ⚙️ GENERAL & LAYOUT STYLES */
+        /* ================================================= */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-stack);
+            font-size: var(--font-size-base);
+            background-color: var(--color-background);
+            color: var(--color-text);
+            min-height: 100vh;
+            display: flex;
+        }
+
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color 0.3s, text-shadow 0.3s;
+        }
+
+        a:hover {
+            color: var(--color-primary-hover);
+            text-shadow: 0 0 5px rgba(0, 198, 255, 0.6);
+        }
+
+        /* ------------------- */
+        /* 🗣️ QUOTE SIDEBAR */
+        /* ------------------- */
+        .sidebar {
+            width: 300px;
+            padding: 40px;
+            background-color: var(--color-background-light);
+            box-shadow: var(--box-shadow);
+            border-right: 1px solid var(--color-border);
+            position: sticky;
+            top: 0;
+            height: 100vh; /* Fixed height for the quote section */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .quote-box {
+            border-left: 3px solid var(--primary-color);
+            padding-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        .quote-text {
+            font-size: 1.5rem;
+            font-weight: 300;
+            line-height: 1.4;
+            color: var(--color-text);
+        }
+
+        .quote-author {
+            margin-top: 10px;
+            font-style: italic;
+            color: var(--text-color-dim);
+            font-size: 1rem;
+        }
+
+        /* ------------------- */
+        /* 💻 MAIN CONTENT */
+        /* ------------------- */
+        .main-content {
+            flex-grow: 1;
+            padding: 40px 60px;
+        }
+
+        /* ------------------- */
+        /* 🔍 SEARCH BAR & POPULAR */
+        /* ------------------- */
+        .header-section {
+            margin-bottom: 40px;
+        }
+
+        .search-form {
+            display: flex;
+            margin-bottom: 15px;
+            box-shadow: var(--shadow-subtle);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .search-input {
+            flex-grow: 1;
+            padding: 15px 20px;
+            font-size: 1rem;
+            border: none;
+            background-color: var(--color-card-bg);
+            color: var(--color-text);
+            outline: none;
+        }
+        
+        .search-input::placeholder {
+            color: var(--text-color-dim);
+        }
+
+        .search-button {
+            padding: 15px 25px;
+            background-color: var(--primary-color);
+            color: var(--color-background);
+            border: none;
+            cursor: pointer;
+            font-weight: var(--heading-font-weight);
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        .search-button:hover {
+            background-color: var(--color-primary-hover);
+            box-shadow: var(--glow-shadow-blue);
+        }
+
+        .popular-searches {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            font-size: 0.9rem;
+            color: var(--text-color-dim);
+        }
+
+        .popular-searches span {
+            margin-right: 10px;
+            font-weight: 400;
+        }
+
+        .popular-tag {
+            background-color: var(--background-light);
+            padding: 5px 12px;
+            border-radius: 4px;
+            margin-right: 8px;
+            margin-top: 5px;
+            cursor: pointer;
+            border: 1px solid var(--color-border);
+            transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .popular-tag:hover {
+            background-color: rgba(0, 198, 255, 0.05);
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-subtle);
+        }
+
+        /* ------------------- */
+        /* 🚀 PROJECTS GRID */
+        /* ------------------- */
+        .projects-heading {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            color: var(--color-text);
+            font-weight: var(--heading-font-weight);
+            border-bottom: 2px solid var(--color-border);
+            padding-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .project-card {
+            background-color: var(--color-card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: var(--box-shadow);
+            border: 1px solid var(--color-border);
+            transition: transform 0.3s, box-shadow 0.5s, border-color 0.5s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background-color: var(--primary-color);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+            border-color: var(--primary-color);
+        }
+
+        .project-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .project-title {
+            font-size: 1.4rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-weight: var(--heading-font-weight);
+        }
+
+        .project-description {
+            color: var(--color-text-subtle);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .project-tags {
+            margin-bottom: 20px;
+        }
+
+        .tag {
+            display: inline-block;
+            background-color: var(--color-background-light);
+            color: var(--text-color-dim);
+            padding: 4px 10px;
+            border-radius: 3px;
+            font-size: 0.85rem;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .project-links a {
+            margin-right: 15px;
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="quote-box">
+            <p class="quote-text">
+                “The best way to learn technology is to break it, fix it, and build something better. Stop studying tech—start doing tech.”
+            </p>
+            <p class="quote-author">— Steve Jobs</p>
+        </div>
+        <div class="quote-box">
+            <p class="quote-text">
+                "CODE IT. WIRE IT. MAKE IT WORK."
+            </p>
+            <p class="quote-author">— Cory House</p>
+        </div>
+    </div>
+
+    <div class="main-content">
+
+        <div class="header-section">
+            <form class="search-form" onsubmit="return false;">
+                <input type="text" class="search-input" placeholder="Search projects by title, tech stack, or keyword..." aria-label="Project Search">
+                <button type="submit" class="search-button">SEARCH</button>
+            </form>
+            
+            <div class="popular-searches">
+                <span>Popular:</span>
+                <span class="popular-tag">#React</span>
+                <span class="popular-tag">#AI/ML</span>
+                <span class="popular-tag">#Web3</span>
+                <span class="popular-tag">#FullStack</span>
+                <span class="popular-tag">#API</span>
+            </div>
+        </div>
+
+        <h2 class="projects-heading">Featured Projects Showcase 💡</h2>
+        
+        <div class="projects-grid">
+
+            <div class="project-card">
+                <h3 class="project-title">NeuralNet Dashboard</h3>
+                <div class="project-tags">
+                    <span class="tag">Python</span>
+                    <span class="tag">TensorFlow</span>
+                    <span class="tag">DataViz</span>
+                    <span class="tag">AI/ML</span>
+                </div>
+                <p class="project-description">
+                    A real-time data visualization tool for monitoring deep learning model performance and training metrics. Features custom epoch tracking.
+                </p>
+                <div class="project-links">
+                    <a href="#">View Code</a>
+                    <a href="#">Live Demo</a>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <h3 class="project-title">Quantum Blog Engine</h3>
+                <div class="project-tags">
+                    <span class="tag">React</span>
+                    <span class="tag">Node.js</span>
+                    <span class="tag">MongoDB</span>
+                    <span class="tag">FullStack</span>
+                </div>
+                <p class="project-description">
+                    A high-performance, server-side rendered (SSR) blog platform with integrated markdown support and a custom-built CMS.
+                </p>
+                <div class="project-links">
+                    <a href="#">View Code</a>
+                    <a href="#">Live Demo</a>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <h3 class="project-title">Decentralized Wallet Tracker</h3>
+                <div class="project-tags">
+                    <span class="tag">Solidity</span>
+                    <span class="tag">Web3.js</span>
+                    <span class="tag">EVM</span>
+                </div>
+                <p class="project-description">
+                    A non-custodial portfolio tracker that interacts directly with Ethereum Virtual Machine (EVM) compatible chains.
+                </p>
+                <div class="project-links">
+                    <a href="#">View Code</a>
+                    <a href="#">Documentation</a>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <h3 class="project-title">CyberSec Penetration Test Suite</h3>
+                <div class="project-tags">
+                    <span class="tag">GoLang</span>
+                    <span class="tag">Networking</span>
+                    <span class="tag">CLI Tool</span>
+                </div>
+                <p class="project-description">
+                    A powerful command-line interface (CLI) tool for simulating various network attacks and assessing system vulnerabilities.
+                </p>
+                <div class="project-links">
+                    <a href="#">View Code</a>
+                    <a href="#">User Guide</a>
+                </div>
+            </div>
+
+        </div> </div> </body>
+</html>

@@ -1,0 +1,179 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --navy:     #0f1f3d;
+  --gold:     #c9a84c;
+  --gold-lt:  #e8c97a;
+  --white:    #f8f6f0;
+  --muted:    #8a96a8;
+  --header-h: 72px;
+}
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  height: var(--header-h);
+  background: var(--navy);
+  display: flex;
+  align-items: center;
+  padding: 0 2rem;
+  gap: 1.5rem;
+  box-shadow: 0 2px 20px rgba(0,0,0,.35);
+}
+
+/* Logo */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: .85rem;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.logo-icon {
+  width: 42px;
+  height: 42px;
+  background: var(--gold);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  color: var(--navy);
+  font-weight: 700;
+  box-shadow: 0 0 0 3px rgba(201,168,76,.25);
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.logo-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.05rem;
+  color: var(--white);
+  letter-spacing: .02em;
+}
+
+.logo-sub {
+  font-size: .68rem;
+  color: var(--gold);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+/* Divider */
+.divider {
+  width: 1px;
+  height: 36px;
+  background: rgba(255,255,255,.15);
+}
+
+/* Nav */
+nav {
+  display: flex;
+  align-items: center;
+  gap: .25rem;
+  flex: 1;
+}
+
+nav a {
+  text-decoration: none;
+  color: rgba(248,246,240,.7);
+  font-size: .82rem;
+  font-weight: 400;
+  letter-spacing: .04em;
+  padding: .4rem .85rem;
+  border-radius: 6px;
+  transition: color .2s, background .2s;
+  white-space: nowrap;
+}
+
+nav a:hover,
+nav a.active {
+  color: var(--gold-lt);
+  background: rgba(201,168,76,.1);
+}
+
+/* Spacer */
+.spacer { flex: 1; }
+
+/* School Year */
+.school-year {
+  font-size: .72rem;
+  color: var(--muted);
+  letter-spacing: .06em;
+  white-space: nowrap;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.school-year span {
+  color: var(--gold);
+  font-weight: 500;
+}
+
+/* CTA Button */
+.cta-btn {
+  text-decoration: none;
+  background: var(--gold);
+  color: var(--navy);
+  font-family: 'DM Sans', sans-serif;
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  padding: .5rem 1.2rem;
+  border-radius: 6px;
+  white-space: nowrap;
+  transition: background .2s, transform .15s;
+  flex-shrink: 0;
+}
+
+.cta-btn:hover {
+  background: var(--gold-lt);
+  transform: translateY(-1px);
+}
+
+/* Hamburger */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: .4rem;
+}
+
+.hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--white);
+  border-radius: 2px;
+  transition: transform .3s, opacity .3s;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  nav {
+    display: none;
+    position: absolute;
+    top: var(--header-h);
+    left: 0; right: 0;
+    background: var(--navy);
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem 1.5rem 1.5rem;
+    gap: .1rem;
+    border-top: 1px solid rgba(255,255,255,.08);
+  }
+  nav.open { display: flex; }
+  nav a { width: 100%; padding: .6rem .75rem; }
+  .hamburger { display: flex; }
+  .school-year { display: none; }
+  .divider { display: none; }
+  .cta-btn { display: none; }
+}

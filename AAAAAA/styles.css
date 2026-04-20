@@ -1,0 +1,289 @@
+/* ==================================== */
+/* 0. Base Styles & Variables - DARK THEME */
+/* ==================================== */
+
+:root {
+ 	/* ==================================== */
+ 	/* 🎨 DARK THEME CORE COLORS (Simplified) */
+ 	/* ==================================== */
+ 	--color-primary: #00c6ff;       /* ⚡ Electric Cyan (Main Accent) */
+ 	--color-secondary: #007bff;     /* Official Blue (Secondary Accent) */
+ 	--color-primary-hover: #00a0e6; /* NEW: Standardized hover color */
+
+ 	--color-text: #e6e9f0;          /* Light Text for Dark BG */
+ 	--color-text-subtle: #9aa5b5;   /* Renamed from --color-text-subtle */
+ 	
+ 	--color-background: #0d121c;    /* 🌌 Deep Midnight Blue/Black */
+ 	--color-background-light: #151b27; /* Subtle background variation */
+ 	--color-background-dark: rgba(0, 0, 0, 0.6);
+ 	--color-card-bg: #1a2230;       /* Darker Card/Element Background */
+ 	
+ 	--color-border: rgba(0, 198, 255, 0.15); /* Slightly stronger border glow */
+ 	
+ 	/* ==================================== */
+ 	/* 💡 ALIASES (Reference Primary Colors) */
+ 	/* ==================================== */
+ 	--primary-color: var(--color-primary);
+ 	--primary-hover: var(--color-primary-hover);
+ 	--background-light: var(--color-background-light);
+ 	--text-color-dim: var(--color-text-subtle); /* Keep old name as alias for backward compatibility */
+
+
+ 	/* ==================================== */
+ 	/* 💡 GLOWS & SHADOWS (Tech Look) */
+ 	/* ==================================== */
+ 	
+ 	/* Subtle Cyan Glow */
+ 	--shadow-subtle: 0 0 10px rgba(0, 198, 255, 0.12); /* Slightly stronger */
+ 	
+ 	/* Stronger Cyan Glow for Hover */
+ 	--shadow-hover: 0 0 30px rgba(0, 198, 255, 0.4); /* Boosted intensity (from 0.3) */
+
+ 	/* Standard Dark Box Shadow (Increased spread for visibility) */
+ 	--box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6); /* Increased spread and opacity (from 0.4) */
+ 	
+ 	--glow-shadow-blue: 0 0 10px rgba(0, 198, 255, 0.4);
+ 	--hover-shadow: var(--shadow-hover); /* Keep alias for ease of use */
+
+ 	/* ==================================== */
+ 	/* 🖋️ TYPOGRAPHY */
+ 	/* ==================================== */
+ 	--font-stack: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+ 	--font-family-sans: var(--font-stack);
+ 	--font-size-base: 16px;
+ 	--heading-font-weight: 700;
+}
+
+header,
+.navbar,
+.site-header {
+	margin-top: 0 !important;
+	padding-top: 0 !important;
+}
+
+/* Base Reset (Keep these minimal resets needed for the header/links) */
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+ul {
+	list-style: none;
+}
+
+a {
+	text-decoration: none;
+	color: var(--primary-color);
+	transition: color 0.3s ease, box-shadow 0.3s ease;
+}
+
+a:hover {
+	color: var(--primary-hover);
+	text-shadow: 0 0 5px rgba(0, 198, 255, 0.6);
+}
+
+.nav-container,
+.footer-content {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0 20px;
+}
+
+/* ==================================== */
+/* ✦ Refined Navbar (Dark Theme) ✦	 */
+/* ==================================== */
+.navbar {
+ 	position: fixed;
+ 	top: 0;
+ 	left: 0;
+ 	width: 100%;
+ 	z-index: 1000;
+
+ 	/* Background with MINIMAL opacity (0.01) to enable the backdrop-filter */
+ 	background-color: rgba(13, 18, 28, 0.01); 
+ 	
+ 	/* KEEPING the Blur effect */
+ 	backdrop-filter: blur(5px);
+ 	-webkit-backdrop-filter: blur(10px);
+
+ 	/* Removing the visible box shadow for a cleaner, fully transparent appearance */
+ 	box-shadow: none;	
+}
+
+
+.nav-container {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 16px 40px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 32px;
+}
+
+
+/* --- Logo + Title --- */
+.nav-logo {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	margin-right: 30px;
+	cursor: pointer;
+	transition: opacity 0.2s;
+}
+
+.nav-logo:hover {
+    opacity: 0.8; /* Subtle visual feedback on hover */
+}
+.nav-logo a {
+    cursor: pointer;
+    text-decoration: none; /* In case any default link styling is applied */
+    color: inherit; /* Keep text color consistent */
+    display: block; /* Make sure the link occupies the full space of the logo container */
+}
+.nav-logo img {
+	height: 55px;
+	width: auto;
+	border-radius: 6px;
+}
+
+.nav-title h2 {
+	font-size: 1.3rem;
+	color: var(--primary-color);
+	font-weight: 800;
+	letter-spacing: 0.5px;
+	text-shadow: 0 0 5px rgba(0, 198, 255, 0.4);
+}
+
+.nav-title p {
+	font-size: 10.5px;
+	color: var(--color-text-subtle);
+	margin-top: -2px;
+}
+
+/* --- Navigation Links --- */
+.nav-links {
+	display: flex;
+	align-items: center;
+	gap: 35px;
+	margin-right: 30px;
+	margin-left: auto;
+	font-size: 16px;
+}
+
+.nav-links li a {
+	position: relative;
+	color: var(--color-text);
+	font-weight: 600;
+	padding: 10px 5px;
+	transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), color 0.3s ease, box-shadow 0.4s ease;
+}
+
+.nav-links li a:hover,
+.nav-links li a.active {
+	color: var(--primary-color);
+	text-shadow: 0 0 8px rgba(0, 198, 255, 0.6);
+}
+
+.nav-links li a::after {
+	content: "";
+	position: absolute;
+	bottom: 5px;
+	left: 0;
+	width: 0%;
+	height: 3px;
+	background: var(--primary-color);
+	transition: width 0.3s ease;
+}
+
+.nav-links li a:hover::after,
+.nav-links li a.active::after {
+	width: 100%;
+}
+
+/* --- Dropdown Menu --- */
+.dropdown {
+	position: relative;
+}
+
+/* Remove the dropdown arrow */
+.dropdown>a::after {
+	content: none;
+}
+
+.dropdown-menu {
+	position: absolute;
+	top: calc(100% + 10px);
+	left: 0;
+	min-width: 200px;
+	/* REFACTORED: Using var(--color-background) with opacity */
+	background: rgba(13, 18, 28, 0.65);
+	backdrop-filter: blur(20px);
+	-webkit-backdrop-filter: blur(20px);
+	border-radius: 12px;
+	border: 1px solid var(--color-border);
+	box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), var(--glow-shadow-blue);
+	opacity: 0;
+	visibility: hidden;
+	transform: translateY(-10px);
+	transition: all 0.35s ease;
+	z-index: 1000;
+
+	/* Layout & spacing */
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	padding: 10px;
+}
+
+.dropdown:hover>.dropdown-menu {
+	opacity: 1;
+	visibility: visible;
+	transform: translateY(0);
+}
+
+.dropdown-menu li a {
+	display: block;
+	padding: 10px 15px;
+	color: var(--color-text);
+	border-radius: 8px;
+	font-weight: 500;
+	transition: all 0.3s ease;
+	background: transparent;
+	text-shadow: none;
+}
+
+.dropdown-menu li a:hover {
+	background: rgba(0, 198, 255, 0.1);
+	color: var(--primary-color);
+	box-shadow: 0 0 10px rgba(0, 198, 255, 0.15);
+	transform: translateY(0);
+	transform: translateX(4px);
+}
+
+
+/* --- Menu Button (for smaller viewports) --- */
+.menu-btn {
+	background: var(--primary-color);
+	color: var(--color-background);
+	border: none;
+	padding: 8px 18px;
+	border-radius: 8px;
+	cursor: pointer;
+	font-weight: 700;
+	transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.menu-btn:hover {
+	background: var(--primary-hover);
+	box-shadow: var(--glow-shadow-blue);
+	transform: translateY(-2px);
+}
+
+.menu-dropdown {
+	right: 0;
+	left: auto;
+}

@@ -1,0 +1,194 @@
+/* ================================
+    TECHNOWATCH | MISSION PAGE
+    Clean & Professional Aesthetic
+================================ */
+
+/* --- Custom Properties/Variables for Clean Refactoring --- */
+
+.mission {
+    position: relative;
+    /* Cleaner, deeper radial background */
+    background: radial-gradient(circle at top left, var(--color-background) 0%, #08111f 100%);
+    color: var(--color-text);
+    padding: 100px 20px;
+    font-family: var(--font-stack);
+    overflow: hidden;
+}
+
+/* Subtle moving gradient background effect */
+.mission::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    /* FIX: Replaced hardcoded colors with theme variables for consistency */
+    background: linear-gradient(
+        130deg, 
+        /* Use primary color for the subtle, moving glow */
+        rgba(0, 198, 255, 0.2) 0%, 
+        rgba(0, 198, 255, 0.05) 50%, /* Toned down middle point */
+        rgba(0, 198, 255, 0.2) 100%
+    );
+    animation: moveGradient 15s ease infinite alternate; /* Slower, more subtle animation */
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.7; /* Slightly toned down */
+}
+@keyframes moveGradient {
+    0% { transform: translate(-3%, -3%) scale(1.05); } /* Reduced movement */
+    100% { transform: translate(3%, 3%) scale(1.05); }
+}
+
+.mission-container {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px; /* Slightly wider container */
+    margin: 0 auto;
+    text-align: center;
+}
+
+/* --- Header --- */
+.mission-header h1 {
+    font-size: 3.5rem; /* Bolder size */
+    font-weight: 900; /* Heavier weight */
+    /* Clean gradient for text */
+    background: linear-gradient(90deg, var(--color-primary-hover), var(--color-primary), #69a6f7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-transform: uppercase;
+    letter-spacing: 5px; /* More sophisticated spacing */
+    margin-bottom: 20px;
+    text-shadow: 0 0 20px rgba(0, 198, 255, 0.5), 0 0 5px var(--color-primary); /* Subtle text glow */
+}
+
+.glow-divider {
+    width: 100px; /* Slimmer divider */
+    height: 3px; /* Flatter */
+    margin: 0 auto 80px; /* More vertical space */
+    background: linear-gradient(90deg, var(--color-primary), var(--color-primary-hover));
+    border-radius: 50px;
+    box-shadow: 0 0 12px var(--color-primary);
+}
+
+/* --- Mission Sections --- */
+.mission-content {
+    display: flex;
+    flex-direction: column;
+    gap: 100px; /* Increased spacing between sections */
+    align-items: center;
+}
+
+.mission-section {
+    max-width: 900px; 
+    background: var(--color-card-bg);
+    border: 1px solid rgba(255, 255, 255, 0.1); 
+    border-radius: 12px; 
+    padding: 60px 50px;
+    backdrop-filter: blur(15px); /* Enhance the glassmorphism effect */
+    -webkit-backdrop-filter: blur(15px);
+    
+    /* 💥 CONSISTENCY FIX: Apply the global subtle shadow for a clean look */
+    box-shadow: var(--box-shadow);
+    transition: transform 0.3s, box-shadow 0.3s; /* Added box-shadow to transition */
+}
+
+.mission-section:hover {
+    transform: translateY(-5px);
+    /* 💥 CONSISTENCY FIX: Apply the global hover shadow for a unified, engaging interaction */
+    box-shadow: var(--hover-shadow);
+}
+
+.mission-section h2 {
+    font-size: 2.5rem; /* Larger section title */
+    color: var(--color-primary);
+    font-weight: 800;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 0 0 5px rgba(0, 198, 255, 0.3);
+}
+
+.mission-section p {
+    font-size: 1.15rem; /* Better paragraph readability */
+    color: var(--color-text);
+    line-height: 1.7;
+    margin-bottom: 0;
+    text-align: left; /* Ensure text alignment is left for reading flow */
+}
+
+/* ==================================== */
+/* 3. CORE VALUES LIST STYLES (CLEAN & SIMPLE STACKED) */
+/* ==================================== */
+
+.core-values-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 40px;
+    text-align: left;
+    color: var(--color-text);
+    font-size: 1.1rem;
+    
+    /* ❗ UPDATED: Simple block display to force vertical stacking */
+    display: block; 
+}
+
+.core-values-list li {
+    margin-bottom: 20px; /* Space between stacked items */
+    padding: 0; /* Remove padding from previous card design */
+    position: relative;
+    transition: all 0.2s ease;
+    border-radius: 4px;
+    border-left: 3px solid var(--color-primary); /* Keep the clean accent line */
+    background: transparent; /* Remove background */
+    
+    /* Add padding for the border and hover shift */
+    padding-left: 15px; 
+    box-shadow: -2px 0 5px rgba(0, 198, 255, 0.1);
+}
+
+.core-values-list li:hover {
+    transform: translateX(8px); /* Simple subtle movement on hover */
+    background: transparent;
+    color: var(--primary-hover); /* Highlight text on hover */
+    box-shadow: -2px 0 8px var(--primary-color);
+}
+
+/* Add a clean dot or square for list item visual cue */
+.core-values-list li::before {
+    content: ''; /* Simple square bullet */
+    position: absolute;
+    left: 0px;
+    top: 0;
+    font-size: 0.8rem;
+    line-height: 1.8;
+    color: var(--color-primary);
+    font-weight: bold;
+    opacity: 0.9;
+}
+
+.core-values-list li strong {
+    /* Simple styling for the key letter/word */
+    display: inline; 
+    font-size: 1.1em;
+    font-weight: 700;
+    margin-right: 5px;
+    color: var(--color-primary); 
+    /* Remove complex background clip/underline effects */
+    -webkit-text-fill-color: unset; 
+    background: none;
+    color: var(--color-primary);
+    text-shadow: 0 0 3px rgba(0, 198, 255, 0.5);
+}
+
+/* --- Animations (No changes needed) --- */
+.fade-in {
+    opacity: 0;
+    transform: translateY(20px); /* Reduced movement for subtlety */
+    animation: fadeInUp 1s ease-out forwards; /* Changed timing function */
+    animation-delay: var(--delay, 0s);
+}
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

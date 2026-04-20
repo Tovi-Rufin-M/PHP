@@ -1,0 +1,422 @@
+/* ==================================== */
+/* 0. Base Styles & Variables - DARK THEME */
+/* ==================================== */
+
+:root {
+ 	/* ... (Variables remain the same as they are standard CSS) ... */
+ 	--color-primary: #00c6ff;
+ 	--color-secondary: #007bff;
+ 	--color-primary-hover: #00a0e6;
+
+ 	--color-text: #e6e9f0;
+ 	--color-text-subtle: #9aa5b5;
+
+ 	--color-background: #0d121c;
+ 	--color-background-light: #151b27;
+ 	--color-background-dark: rgba(0, 0, 0, 0.6);
+ 	--color-card-bg: #1a2230;
+
+ 	--color-border: rgba(0, 198, 255, 0.15);
+
+ 	--primary-color: var(--color-primary);
+ 	--primary-hover: var(--color-primary-hover);
+ 	--background-light: var(--color-background-light);
+ 	--text-color-dim: var(--color-text-subtle);
+
+ 	--shadow-subtle: 0 0 10px rgba(0, 198, 255, 0.12);
+ 	--shadow-hover: 0 0 30px rgba(0, 198, 255, 0.4);
+ 	--box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+ 	--glow-shadow-blue: 0 0 10px rgba(0, 198, 255, 0.4);
+ 	--hover-shadow: var(--shadow-hover);
+
+ 	--font-stack: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+ 	--font-family-sans: var(--font-stack);
+ 	--font-size-base: 16px;
+ 	--heading-font-weight: 700;
+}
+
+header,
+.navbar,
+.site-header {
+	margin-top: 0 !important;
+	padding-top: 0 !important;
+}
+
+/* Base Reset (Keep these minimal resets needed for the header/links) */
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+ul {
+	list-style: none;
+}
+
+a {
+	text-decoration: none;
+	color: var(--primary-color);
+	transition: color 0.3s ease, box-shadow 0.3s ease;
+}
+
+a:hover {
+	color: var(--primary-hover);
+	/* Use a small, high-compatibility text-shadow */
+	text-shadow: 0 0 3px rgba(0, 198, 255, 0.8);
+}
+
+.nav-container,
+.footer-content {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0 20px;
+}
+
+/* ==================================== */
+/* ✦ Refined Navbar (Dark Theme) ✦	 */
+/* ==================================== */
+.navbar {
+ 	position: fixed;
+ 	top: 0;
+ 	left: 0;
+ 	width: 100%;
+ 	z-index: 1000;
+
+ 	/* 💡 ENHANCEMENT for compatibility: Use a slightly solid color for max safety */
+ 	/* Increased opacity from 0.01 to 0.95 for a consistent look across WebViews */
+ 	background-color: rgba(13, 18, 28, 0.95);
+
+ 	/* 🛑 REMOVED: backdrop-filter for fixed navbar for max mobile WebView compatibility */
+ 	backdrop-filter: none !important;
+ 	-webkit-backdrop-filter: none !important;
+
+ 	/* Use a subtle, high-performance box-shadow */
+ 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+
+.nav-container {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 16px 40px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 32px;
+}
+
+
+/* --- Logo + Title --- */
+.nav-logo {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	margin-right: 30px;
+	cursor: pointer;
+	transition: opacity 0.2s;
+}
+
+.nav-logo:hover {
+    opacity: 0.8;
+}
+.nav-logo a {
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+.nav-logo img {
+	height: 55px;
+	width: auto;
+	border-radius: 6px;
+}
+
+.nav-title h2 {
+	font-size: 1.3rem;
+	color: var(--primary-color);
+	font-weight: 800;
+	letter-spacing: 0.5px;
+	/* Reduced shadow for consistency and performance */
+	text-shadow: 0 0 3px rgba(0, 198, 255, 0.6);
+}
+
+.nav-title p {
+	font-size: 10.5px;
+	color: var(--color-text-subtle);
+	margin-top: -2px;
+}
+
+/* --- Navigation Links (Desktop) --- */
+.nav-links {
+	display: flex;
+	align-items: center;
+	gap: 35px;
+	margin-right: 30px;
+	margin-left: auto;
+	font-size: 16px;
+}
+
+.nav-links li a {
+	position: relative;
+	color: var(--color-text);
+	font-weight: 600;
+	padding: 10px 5px;
+	/* Simplified transition for mobile compatibility */
+	transition: all 0.3s ease;
+}
+
+.nav-links li a:hover,
+.nav-links li a.active {
+	color: var(--primary-color);
+	text-shadow: 0 0 5px rgba(0, 198, 255, 0.8); /* Adjusted hover shadow */
+}
+
+.nav-links li a::after {
+	content: "";
+	position: absolute;
+	bottom: 5px;
+	left: 0;
+	width: 0%;
+	height: 3px;
+	background: var(--primary-color);
+	transition: width 0.3s ease;
+}
+
+.nav-links li a:hover::after,
+.nav-links li a.active::after {
+	width: 100%;
+}
+
+/* --- Dropdown Menu (Desktop) --- */
+.dropdown {
+	position: relative;
+}
+
+/* Remove the dropdown arrow */
+.dropdown>a::after {
+	content: none;
+}
+
+.dropdown-menu {
+	position: absolute;
+	top: calc(100% + 10px);
+	left: 0;
+	min-width: 200px;
+	/* 💡 ENHANCEMENT: Use a darker, less-transparent solid background for max safety */
+	background: var(--color-background-light); /* Use a more solid color variable */
+
+	/* 🛑 REMOVED/Disabled: backdrop-filter for max mobile WebView compatibility */
+	backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+
+	border-radius: 12px;
+	border: 1px solid var(--color-border);
+	/* Simplified box shadow for performance */
+	box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+	opacity: 0;
+	visibility: hidden;
+	transform: translateY(-10px);
+	transition: all 0.35s ease;
+	z-index: 1000;
+
+	/* Layout & spacing */
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	padding: 10px;
+}
+
+.dropdown:hover>.dropdown-menu {
+	opacity: 1;
+	visibility: visible;
+	transform: translateY(0);
+}
+
+.dropdown-menu li a {
+	display: block;
+	padding: 10px 15px;
+	color: var(--color-text);
+	border-radius: 8px;
+	font-weight: 500;
+	transition: all 0.3s ease;
+	background: transparent;
+	text-shadow: none;
+}
+
+.dropdown-menu li a:hover {
+	background: rgba(0, 198, 255, 0.1);
+	color: var(--primary-color);
+	box-shadow: 0 0 5px rgba(0, 198, 255, 0.15); /* Simplified hover box-shadow */
+	transform: translateY(0);
+	transform: translateX(4px);
+}
+
+
+/* --- Menu Button (for smaller viewports) --- */
+.menu-btn {
+	background: var(--primary-color);
+	color: var(--color-background);
+	border: none;
+	padding: 8px 18px;
+	border-radius: 8px;
+	cursor: pointer;
+	font-weight: 700;
+	transition: background-color 0.3s ease, transform 0.2s ease;
+    display: none;
+}
+
+.menu-btn:hover {
+	background: var(--primary-hover);
+	box-shadow: var(--glow-shadow-blue);
+	transform: translateY(-2px);
+}
+
+.menu-dropdown {
+	right: 0;
+	left: auto;
+}
+
+/* ===========================
+   MOBILE NAV FIX (Cleaned and Consolidated)
+   =========================== */
+
+/* Mobile only: reveal menu button & hide desktop links */
+@media (max-width: 768px) {
+  .nav-container { padding: 12px 18px; gap: 14px; }
+  .nav-logo img { height: 48px; }
+
+  .nav-links { display: none !important; }
+  .menu-btn {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    /* Added `flex-shrink: 0` for safety */
+    flex-shrink: 0;
+  }
+
+  /* Redefine mobile dropdown accordion behavior */
+  .mobile-menu .dropdown .dropdown-menu {
+    position: static !important;
+    transform: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+    margin-top: 6px;
+    display: none;
+    flex-direction: column;
+  }
+
+  .mobile-menu .dropdown.open .dropdown-menu {
+    display: flex;
+    padding-left: 12px;
+  }
+}
+
+/* Overlay that darkens page */
+.mobile-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.48);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+  z-index: 1200;
+  pointer-events: none;
+}
+
+/* Slide-in mobile menu */
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 80%;
+  max-width: 360px;
+  height: 100vh;
+  background: var(--color-background);
+
+  /* 💡 ENHANCEMENT: Added will-change for smoother animation */
+  will-change: transform;
+
+  padding: 22px;
+  /* Simplified shadow for performance */
+  box-shadow: 0 0 30px rgba(0,0,0,0.7);
+  /* Changed transition for transform for better performance and compatibility */
+  transition: right 0.33s cubic-bezier(.2,.9,.2,1);
+  z-index: 1250;
+  overflow-y: auto;
+  /* Always include this for iOS WebViews/Safari */
+  -webkit-overflow-scrolling: touch;
+  border-left: 1px solid rgba(0,198,255,0.08);
+}
+
+/* When nav opened (JS adds .nav-open to <html>) */
+.nav-open .mobile-overlay { opacity: 1; visibility: visible; pointer-events: auto; }
+.nav-open .mobile-menu { right: 0; }
+
+/* Close button style */
+.mobile-close {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: none;
+  background: var(--primary-color);
+  color: var(--color-background);
+  font-weight: 800;
+  cursor: pointer;
+  margin-bottom: 12px;
+}
+
+/* Ensure the cloned menu shows as a block list */
+.mobile-menu .mobile-nav-links,
+.mobile-menu .nav-links {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px;
+  padding-left: 0;
+  list-style: none;
+}
+
+/* Make each link large and tappable */
+.mobile-menu a {
+  display: block;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+/* Hover / active state inside mobile panel */
+.mobile-menu a:hover,
+.mobile-menu a.active {
+  background: rgba(0,198,255,0.08);
+  color: var(--primary-color);
+  text-shadow: none;
+}
+
+/* Accessibility focus */
+.menu-btn:focus,
+.mobile-close:focus,
+.mobile-menu a:focus {
+  outline: 3px solid rgba(0,198,255,0.12);
+  outline-offset: 2px;
+}
+
+/* 🔥 NEW: MOBILE SAFETY FALLBACK (For screens <= 360px) 🔥 */
+@media (max-width: 360px) {
+  .mobile-menu {
+    width: 100%;
+    max-width: none;
+    padding: 16px;
+  }
+  .nav-title h2 { font-size: 1.1rem; }
+  .nav-title p { font-size: 9px; }
+  .nav-logo img { height: 40px; }
+  .menu-btn { padding: 6px 12px; font-size: 14px; }
+}

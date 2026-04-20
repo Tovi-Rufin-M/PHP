@@ -1,0 +1,102 @@
+/* -------------------------------------------------------------------------- */
+/* Technowatch Custom CSS: Admin Dashboard Layout and Element Styles */
+/* -------------------------------------------------------------------------- */
+
+:root {
+    --sidebar-width: 250px;
+    --primary-color: #007bff;
+    --success-color: #4CAF50; /* Changed from #28a745 for visual differentiation */
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+    --secondary-color: #6c757d;
+    --info-color: #00bcd4; /* For News badge */
+    --bg-color: #f4f7f6;
+    --text-color: #333;
+    --card-bg: #fff;
+    --sidebar-bg: #2c3e50;
+    --sidebar-text: #ecf0f1;
+    --sidebar-hover: #34495e;
+    --sidebar-active: #1abc9c;
+    --header-height: 60px;
+}
+
+/* Base Layout */
+body { 
+    font-family: 'Inter', sans-serif; 
+    margin: 0; 
+    padding: 0; 
+    background-color: var(--bg-color); 
+    color: var(--text-color); 
+    display: flex;
+    min-height: 100vh;
+}
+#page-content-wrapper {
+    /* Pushes the content to the right, clearing the fixed sidebar */
+    margin-left: var(--sidebar-width);
+    /* Ensure it takes up the rest of the screen width */
+    width: calc(100% - var(--sidebar-width));
+    /* Add padding/flow control */
+    padding-left: 1rem;
+    padding-right: 1rem;
+    min-height: 100vh; /* Ensure content area takes full viewport height */
+}
+
+/* 2. Style the sidebar itself, ensuring it is fixed */
+.admin-sidebar {
+    position: fixed; /* Keep the sidebar in place when scrolling */
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: var(--sidebar-width);
+    z-index: 1000; /* Ensure it stays above other elements */
+    background-color: #212529; /* Example: dark background to match Bootstrap dark theme */
+    color: #fff;
+    padding-top: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+/* --- Specific Styles for Events/News Management --- */
+
+.table-responsive {
+    margin-top: 15px;
+}
+
+/* Style for the badges in the list view */
+.badge {
+    font-weight: 600;
+    padding: 0.4em 0.6em;
+}
+.btn-primary { background-color: var(--success-color); color: white; }
+.btn-primary:hover { background-color: #1e7e34; }
+/* Custom styling for the image preview in the edit form */
+.mt-2 img {
+    max-width: 100px;
+    height: auto;
+    border-radius: 4px;
+    object-fit: cover;
+    border: 1px solid #ddd;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* Hide the event/date fields if the item type is 'news' (requires JavaScript to dynamically apply a class) */
+/* Example: .news-only-fields { display: none; } */
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    :root {
+        --sidebar-width: 0; /* Sidebar collapses on smaller screens */
+    }
+    
+    .admin-sidebar {
+        /* You should handle mobile view by making the sidebar a collapsible menu, 
+           but for simplicity, we treat it as hidden or overlaying on small screens */
+        width: 100%;
+        height: auto;
+        position: static; /* Allows content to flow normally */
+    }
+    
+    #page-content-wrapper {
+        margin-left: 0;
+        width: 100%;
+    }
+}

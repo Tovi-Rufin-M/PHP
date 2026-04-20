@@ -1,0 +1,187 @@
+/* ============================
+   Technowatch Club Preloader
+   ============================ */
+
+/* -------- Variables -------- */
+:root {
+  --bg-primary: #050505;
+  --text-color: #e0e0e0;
+  --accent-blue: #0b4da1;
+  --accent-light: #b0e6ff;
+  --scanline-opacity: 0.05;
+  --scanline-color: rgba(11, 77, 161, 0.15);
+}
+
+/* -------- Base Reset -------- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Consolas", "Courier New", monospace;
+  background-color: var(--bg-primary);
+  color: var(--text-color);
+}
+
+body.loading {
+  overflow: hidden;
+}
+
+/* ============================
+   PRELOADER CONTAINER
+============================ */
+#preloader {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at center, #000 0%, #060606 100%);
+  z-index: 9999;
+  transition: opacity 1s ease, visibility 1s ease;
+}
+
+.loader-content {
+  position: relative;
+  text-align: center;
+  display: inline-block;
+  user-select: none;
+  pointer-events: none;
+  overflow: visible;
+}
+
+/* ============================
+   SCANLINE BACKDROP
+============================ */
+.scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--scanline-color),
+    var(--scanline-color) 1px,
+    transparent 2px,
+    transparent 3px
+  );
+  background-size: 100% 3px;
+  opacity: var(--scanline-opacity);
+  animation: scanMove 2s linear infinite, flicker 0.5s alternate infinite;
+}
+
+@keyframes scanMove {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(-3px); }
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 0.03; }
+  50%      { opacity: 0.07; }
+}
+
+/* ============================
+   SYNCHRONIZED LIGHT SHINE
+============================ */
+.shine {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    75deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.8) 45%,
+    rgba(255, 255, 255, 0.4) 55%,
+    transparent 100%
+  );
+  transform: translateX(-150%) skewX(-15deg);
+  mix-blend-mode: overlay;
+  animation: sweepTogether 4.5s 1.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes sweepTogether {
+  0%   { transform: translateX(-150%) skewX(-15deg); opacity: 0.3; }
+  30%  { opacity: 0.9; }
+  60%  { transform: translateX(120%) skewX(-15deg); opacity: 0.5; }
+  100% { transform: translateX(120%) skewX(-15deg); opacity: 0; }
+}
+
+/* --------------------------
+   FADE OUT
+--------------------------- */
+.fade-out {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 1s ease-out, visibility 1s ease-out;
+}
+
+/* ============================
+   LOGO ANIMATION
+============================ */
+#logo {
+  width: 13.75rem; /* 220px */
+  height: auto;
+  opacity: 0;
+  transform: scale(0.9);
+  filter: drop-shadow(0 0 14px var(--accent-blue));
+  animation:
+    logoFadeIn 1s forwards ease-out,
+    logoPulse 2.5s 1.2s infinite ease-in-out;
+  display: block;
+  margin: 0 auto;
+}
+
+@keyframes logoFadeIn {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes logoPulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 14px var(--accent-blue));
+  }
+  50% {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 20px var(--accent-blue));
+  }
+}
+
+/* ============================
+   CLUB TEXT BELOW LOGO
+============================ */
+#club-text {
+  position: absolute;
+  top: 85%;
+  margin-top: 40px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  background: linear-gradient(120deg, var(--accent-blue), var(--accent-light), var(--accent-blue));
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow:
+    0 0 4px rgba(255, 255, 255, 0.5),
+    0 0 12px var(--accent-blue),
+    0 0 20px var(--accent-blue);
+  opacity: 0;
+  animation:
+    textFadeIn 0.8s 1s forwards ease-out,
+    textGradient 3s linear 1s infinite;
+  pointer-events: none;
+}
+
+@keyframes textFadeIn {
+  to { opacity: 1; }
+}
+
+@keyframes textGradient {
+  0%   { background-position: 0% center; }
+  50%  { background-position: 100% center; }
+  100% { background-position: 0% center; }
+}

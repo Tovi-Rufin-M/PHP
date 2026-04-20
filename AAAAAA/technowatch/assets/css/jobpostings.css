@@ -1,0 +1,269 @@
+/* JOB POSTINGS STYLES - DARK THEME */
+.jobs-section {
+    font-family: var(--font-stack);
+    padding: 60px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.section-header h1 {
+    font-size: 2.8rem;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    text-shadow: 0 0 10px rgba(0, 198, 255, 0.4);
+}
+
+.section-header p {
+    color: var(--color-text-subtle);
+    font-size: 1.1rem;
+    max-width: 700px;
+    margin: 0 auto 30px;
+}
+
+.job-search {
+    /* Ensures the outer wrapper or the form itself is a flex container */
+    display: flex;
+    max-width: 1800px;
+    margin: 0 auto;
+    gap: 10px;
+    align-items: center; /* Vertically centers the items */
+}
+
+/* --- THE FIX: Make the form itself a flex container if it's nested --- */
+/* If the form is the direct child of another flex container, this makes 
+   the form elements line up. If .job-search is the form, this rule is redundant 
+   but harmless. */
+.job-search#job-filter-form,
+.job-search > form {
+    display: flex;
+    flex-grow: 1;
+    gap: 10px;
+    align-items: center;
+}
+
+.job-search input {
+    flex: 1; /* This is correct for stretching */
+    padding: 12px 20px;
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+    background: var(--color-card-bg);
+    color: var(--color-text);
+    font-size: 1rem;
+}
+
+.job-search button {
+    background: var(--primary-color);
+    color: var(--color-background);
+    border: none;
+    border-radius: 8px;
+    padding: 0 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    height: 48px; /* Added height to match input/select for better vertical alignment */
+}
+
+.job-search button:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-subtle);
+}
+
+.job-search select {
+    padding: 0 15px;
+    height: 48px; /* Added height to match input/button */
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+    background: var(--color-card-bg);
+    color: var(--color-text);
+    cursor: pointer;
+}
+
+.jobs-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+
+.jobs-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+.job-card {
+    background: var(--color-card-bg);
+    border-radius: 12px;
+    padding: 25px;
+    border: 1px solid var(--color-border);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.job-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--primary-color);
+}
+
+.job-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.featured .job-badge {
+    background: #00c6ff;
+    color: var(--color-background);
+}
+
+.urgent .job-badge {
+    background: #e74c3c;
+    color: white;
+}
+
+.job-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.company-logo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--primary-color);
+}
+
+.job-header h3 {
+    color: var(--color-text);
+    margin: 0;
+    font-size: 1.3rem;
+}
+
+.company-name {
+    color: var(--color-text-subtle);
+    font-size: 0.9rem;
+    margin-top: 5px;
+}
+
+.job-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 15px;
+    color: var(--color-text-subtle);
+    font-size: 0.9rem;
+}
+
+.job-details i {
+    margin-right: 5px;
+    color: var(--primary-color);
+}
+
+.job-card p {
+    color: var(--color-text-subtle);
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+.job-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.job-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.job-tags span {
+    background: rgba(0, 198, 255, 0.1);
+    color: var(--primary-color);
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.apply-btn {
+    background: var(--primary-color);
+    color: var(--color-background);
+    padding: 8px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.apply-btn:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-subtle);
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 40px;
+}
+
+.pagination a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: var(--color-card-bg);
+    color: var(--color-text-subtle);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.pagination a:hover, 
+.pagination a.active {
+    background: var(--primary-color);
+    color: var(--color-background);
+    box-shadow: var(--shadow-subtle);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .jobs-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .job-search {
+        flex-direction: column;
+    }
+    
+    .section-header h1 {
+        font-size: 2.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .job-footer {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+}

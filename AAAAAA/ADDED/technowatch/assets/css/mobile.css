@@ -1,0 +1,136 @@
+/* ==================================== */
+/* Mobile & Tablet Responsive Navbar     */
+/* ==================================== */
+
+/* Default (Desktop) */
+.menu-btn {
+    display: none; /* hide button on desktop */
+}
+
+/* Tablet and smaller (max-width: 992px) */
+@media (max-width: 992px) {
+  /* Sidebar Mobile Menu */
+  .nav-main {
+    position: fixed;
+    top: 0;
+    left: -260px; /* slightly wider for padding */
+    width: 260px;
+    height: 100%;
+    background: var(--background-color);
+    flex-direction: column;
+    padding: 25px 20px;
+    gap: 15px;
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.25);
+    transition: left 0.3s ease;
+    z-index: 999;
+    overflow-y: auto; /* scroll if too tall */
+  }
+
+  /* Show sidebar when active */
+  .nav-main.active {
+    left: 0;
+  }
+
+  /* Menu links stacked vertically */
+  .nav-links {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* Dropdowns inside sidebar */
+  .dropdown-menu {
+    display: none;
+    flex-direction: column;
+    margin-left: 10px;
+    padding-left: 10px;
+  }
+
+  .dropdown.active .dropdown-menu {
+    display: flex;
+  }
+
+  /* Menu button visible on tablet/mobile */
+  .menu-btn {
+    display: block;
+    margin-left: auto;
+    z-index: 1001; /* above sidebar */
+    font-size: 16px;
+    padding: 8px 15px;
+    background: var(--primary-color);
+    color: var(--text-color-light);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    order: 2; /* ensure after logo */
+  }
+
+  .menu-btn:hover {
+    background: var(--primary-hover);
+  }
+
+  /* Logo and Title adjustments */
+  .nav-logo img {
+    height: 35px;
+  }
+
+  .nav-title h2 {
+    font-size: 1.1rem;
+    line-height: 1.2;
+  }
+
+  .nav-title p {
+    font-size: 0.65rem;
+    line-height: 1.1;
+    color: var(--secondary-color);
+    margin-top: 0; /* remove negative spacing */
+  }
+}
+
+/* Mobile (max-width: 576px) */
+@media (max-width: 576px) {
+  .nav-container {
+    padding: 8px 10px;
+    gap: 10px;
+  }
+
+  .nav-logo img {
+    height: 28px;
+  }
+
+  .nav-title h2 {
+    font-size: 0.95rem;
+  }
+
+  .nav-title p {
+    font-size: 0.6rem;
+  }
+
+  .menu-btn {
+    font-size: 14px;
+    padding: 6px 12px;
+  }
+
+  /* Hero section adjustments */
+  .hero-section .slide img {
+    height: 28vh;
+    object-fit: cover;
+  }
+
+  /* Updates section adjustments */
+  .updates h2 {
+    font-size: 1.4rem;
+  }
+
+  .update-container {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  /* Dropdown links */
+  .dropdown-menu li a {
+    padding: 10px 12px;
+    font-size: 0.9rem;
+  }
+}

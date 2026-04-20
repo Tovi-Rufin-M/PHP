@@ -1,0 +1,129 @@
+/* assets/css/officers.css - Club Officers/Officials Management Styles */
+
+:root {
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --accent: #6366f1;
+  --text-primary: #f8fafc;
+  --text-secondary: #adb5bd;
+  --border: #334155;
+  --success: #10b981;
+  --danger: #ef4444;
+}
+
+/* Officer Profile Thumbnails */
+.officer-img-thumb {
+  width: 50px !important;
+  height: 50px !important;
+  object-fit: cover !important;
+  border-radius: 50% !important;
+  border: 2px solid var(--accent) !important;
+  transition: all 0.3s ease;
+}
+
+.officer-img-thumb:hover {
+  transform: scale(1.15);
+  border-color: var(--text-primary);
+}
+
+/* Sort Order Column */
+td:nth-child(3) {
+  font-weight: 700;
+  color: var(--accent);
+  text-align: center;
+}
+
+/* Role & Category Badges */
+td:nth-child(6), td:nth-child(7) {
+  font-size: 0.875rem;
+}
+
+/* Form Section Headers */
+h3 {
+  color: var(--text-primary);
+  margin-top: 2.5rem;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+h3::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: var(--accent);
+  border-radius: 3px;
+}
+
+/* Two-Column Form Layout */
+.row .col-md-6 {
+  padding: 0 1.5rem;
+}
+
+/* Social Link Icons */
+.form-control[type="url"] {
+  padding-left: 2.5rem;
+  position: relative;
+}
+
+.form-control[type="url"]::before {
+  font-family: 'Font Awesome 6 Free';
+  content: '\f08c';
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+}
+
+/* Image Upload */
+input[type="file"] {
+  padding: 0.5rem !important;
+  background-color: var(--bg-secondary);
+}
+
+/* Sort Order Input */
+input[name="sort_order"] {
+  font-weight: 600;
+}
+
+/* Email Field */
+input[name="email"] {
+  font-family: 'Inter', monospace;
+}
+
+/* Textarea Styling */
+textarea.form-control {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Current Image Display */
+img[style*="border-radius: 50%"] {
+  border: 1px solid var(--border) !important;
+  padding: 2px;
+  background-color: var(--bg-primary);
+}
+
+/* Select Styling */
+select.form-select {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236366f1' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+}
+
+/* Required Field Indicator */
+label[for]:has(+ input[required])::after,
+label[for]:has(+ select[required])::after {
+  content: ' *';
+  color: var(--danger);
+}
+
+/* Motto Field */
+input[name="motto"] {
+  font-style: italic;
+  color: var(--text-secondary);
+}

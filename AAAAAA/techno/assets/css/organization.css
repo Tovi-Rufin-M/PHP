@@ -1,0 +1,362 @@
+/* 1. GLOBAL RESET & BASE STYLES */
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: #0d121c; /* Deep Midnight Blue/Black */
+    color: #e6e9f0; /* Light Text */
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    padding-top: 80px;
+}
+
+.banner-section {
+    /* Increased height for a bigger banner */
+    height: 450px; 
+    background-size: cover;
+    background-repeat: no-repeat;
+    /* Adjust background-position to better frame group photos */
+    background-position: center center; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);
+    position: relative;
+    margin-bottom: 40px;
+    /* Ensure the banner spans full width outside the container */
+    width: 100%; 
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    margin-top: 20px;
+    position: relative;
+    z-index: 0; /* Ensures it is behind the potential fixed header content */
+}
+
+/* Dark overlay for text readability */
+.banner-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5); /* Slightly darker overlay */
+}
+
+.banner-content {
+    z-index: 1;
+    text-align: center;
+    padding: 0 20px;
+}
+
+.banner-title {
+    font-size: 3.5em; /* Slightly larger title */
+    margin-bottom: 0.15em;
+    font-weight: 900;
+    line-height: 1.1;
+}
+
+.banner-subtitle {
+    font-size: 1.8em; /* Slightly larger subtitle */
+    font-weight: 600;
+}
+.container {
+    max-width: 1280px; /* Equivalent to max-w-6xl */
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 6rem; /* pt-24 */
+    padding-bottom: 3rem; /* pb-12 */
+    padding-left: 1.5rem; /* px-6 */
+    padding-right: 1.5rem; /* px-6 */
+}
+
+@media (min-width: 1024px) { /* lg breakpoint */
+    .container {
+        padding-left: 2rem; /* lg:px-8 */
+        padding-right: 2rem; /* lg:px-8 */
+    }
+}
+
+/* 2. COLOR & GRADIENT VARIABLES */
+:root {
+    --color-background-dark: #0d121c; 
+    --color-card-bg: #1a2230; 
+    --color-text: #e6e9f0; 
+    --color-text-subtle: #9aa5b5; 
+    --color-primary-cyan: #00c6ff; 
+    
+    --gradient-head: linear-gradient(135deg, #007bff 0%, var(--color-background-dark) 100%);
+    --gradient-president: linear-gradient(135deg, var(--color-primary-cyan) 0%, var(--color-background-dark) 100%);
+
+    /* Glassmorphic Card Variables */
+    --glass-bg: rgba(26, 34, 48, 0.4); 
+    --glass-border: rgba(0, 198, 255, 0.1); 
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); 
+}
+
+/* 3. TYPOGRAPHY & HEADINGS */
+.main-title {
+    font-size: 2.25rem; /* text-4xl */
+    font-weight: 800; /* font-extrabold */
+    text-align: center;
+    margin-bottom: 4rem; /* mb-16 */
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 0.05em; /* tracking-widest */
+    text-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* drop-shadow-lg */
+}
+.main-title span {
+    color: var(--color-primary-cyan);
+}
+
+.section-title {
+    font-size: 1.875rem; /* text-3xl */
+    font-weight: 800; /* font-extrabold */
+    text-align: center;
+    margin-bottom: 2.5rem; /* mb-10 */
+    color: var(--color-primary-cyan);
+    text-transform: uppercase;
+    letter-spacing: 0.025em; /* tracking-wider */
+}
+
+.subsection-title {
+    font-size: 1.25rem; /* text-xl */
+    font-weight: 700; /* font-bold */
+    text-align: center;
+    margin-bottom: 2rem; /* mb-8 */
+    margin-top: 4rem; /* mt-16 */
+    text-transform: uppercase;
+    letter-spacing: 0.05em; /* tracking-wider */
+    color: var(--color-text-subtle);
+    border-bottom: 2px solid rgba(var(--color-text-subtle-rgb), 0.2); /* border-b-2 border-opacity-20 */
+    padding-bottom: 0.5rem; /* pb-2 */
+}
+/* Helper for CSS variables like --color-text-subtle-rgb if needed in rgba */
+/* :root { --color-text-subtle-rgb: 154, 165, 181; } */
+
+
+/* 4. CARD LAYOUTS & STYLES */
+
+/* Centering utility for hero cards */
+.flex-center-x {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 4rem; /* mb-16 */
+}
+
+/* Base for the main head/president cards */
+.hero-card {
+    border-radius: 1.5rem; /* rounded-3xl */
+    padding: 2rem; /* p-8 */
+    display: flex;
+    flex-direction: column; /* flex-col */
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem; /* gap-8 */
+    width: 100%;
+    max-width: 900px; /* max-w-4xl */
+    transform: scale(1); /* For transition start */
+    transition: transform 0.5s ease, box-shadow 0.5s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2); /* border border-white/20 */
+}
+.hero-card:hover {
+    transform: scale(1.01);
+}
+
+@media (min-width: 768px) { /* md breakpoint */
+    .hero-card {
+        flex-direction: row; /* md:flex-row */
+    }
+    .hero-card.president { /* for the reversed layout */
+        flex-direction: row-reverse; /* md:flex-row-reverse */
+    }
+}
+
+.hero-card .text-info {
+    text-align: center;
+}
+@media (min-width: 768px) {
+    .hero-card .text-info.left { /* for department head */
+        text-align: left;
+    }
+    .hero-card .text-info.right { /* for president */
+        text-align: right;
+    }
+}
+
+
+.hero-card .role-title {
+    font-size: 1.25rem; /* text-xl */
+    font-weight: 700; /* font-bold */
+    color: white;
+    margin-bottom: 0.5rem; /* mb-2 */
+    letter-spacing: 0.1em; /* tracking-widest */
+    text-transform: uppercase;
+    position: relative;
+}
+.hero-card .role-title::after {
+    content: '';
+    display: block;
+    width: 4rem; /* w-16 */
+    height: 0.25rem; /* h-1 */
+    background-color: white;
+    border-radius: 9999px; /* rounded-full */
+    margin-top: 0.25rem; /* mt-1 */
+    margin-left: auto; /* for center alignment on mobile */
+    margin-right: auto;
+}
+@media (min-width: 768px) {
+    .hero-card .role-title.left::after {
+        margin-left: 0; /* Align left on desktop */
+        margin-right: auto;
+    }
+    .hero-card .role-title.right::after {
+        margin-right: 0; /* Align right on desktop */
+        margin-left: auto;
+    }
+}
+
+
+.hero-card .person-name {
+    font-size: 3rem; /* text-5xl */
+    font-weight: 900; /* font-black */
+    color: white;
+    margin-bottom: 0.75rem; /* mb-3 */
+    text-shadow: 0 4px 6px rgba(0, 0, 0, 0.4); /* drop-shadow-lg */
+}
+.hero-card .quote {
+    font-size: 1rem; /* text-base */
+    font-weight: 300; /* font-light */
+    font-style: italic;
+    color: #cbd5e0; /* gray-300 */
+}
+
+/* Department Head specific styling */
+.head-card {
+    background: var(--gradient-head);
+    box-shadow: 0 0 50px rgba(0, 123, 255, 0.7); /* Blue glow */
+}
+
+/* Club President specific styling */
+.president-card {
+    background: var(--gradient-president);
+    box-shadow: 0 0 50px rgba(0, 198, 255, 0.7); /* Cyan glow */
+}
+
+
+/* General Profile Image Styles */
+.profile-image-base {
+    background-size: cover;
+    background-position: center;
+    border-radius: 9999px; /* rounded-full */
+    overflow: hidden;
+    flex-shrink: 0;
+}
+/* Large image for head/president */
+.profile-image-head {
+    width: 140px; /* w-36 */
+    height: 140px; /* h-36 */
+    border: 5px solid var(--color-primary-cyan);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5), 0 0 40px rgba(0, 198, 255, 0.8); /* Stronger shadow with cyan glow */
+}
+/* Smaller image for grid members */
+.profile-image-prof {
+    width: 80px; /* w-20 */
+    height: 80px; /* h-20 */
+    border: 3px solid var(--color-primary-cyan);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5), 0 5px 15px rgba(0, 0, 0, 0.4); /* Inner shadow for depth */
+}
+
+
+/* GRID CONTAINER FOR SMALLER CARDS */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr)); /* grid-cols-2 */
+    gap: 1.5rem; /* gap-6 */
+}
+@media (min-width: 640px) { /* sm breakpoint */
+    .grid-container {
+        grid-template-columns: repeat(3, minmax(0, 1fr)); /* sm:grid-cols-3 */
+    }
+}
+@media (min-width: 768px) { /* md breakpoint */
+    .grid-container {
+        grid-template-columns: repeat(4, minmax(0, 1fr)); /* md:grid-cols-4 */
+    }
+}
+@media (min-width: 1024px) { /* lg breakpoint */
+    .grid-container.large-cols { /* For larger grids like Executive Committee */
+        grid-template-columns: repeat(5, minmax(0, 1fr)); /* lg:grid-cols-5 */
+    }
+}
+
+/* Individual Officer Card (Glassmorphic) */
+.officer-card {
+    border-radius: 0.75rem; /* rounded-xl */
+    padding: 1rem; /* p-4 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transform: scale(1); /* For transition start */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    
+    /* Glassmorphic properties */
+    background: var(--glass-bg); 
+    backdrop-filter: blur(8px); 
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid var(--glass-border); 
+    box-shadow: var(--glass-shadow); 
+}
+.officer-card:hover {
+    transform: scale(1.05);
+    box-shadow: var(--glass-shadow), 0 0 25px rgba(0, 198, 255, 0.6); /* Cyan glow on hover */
+}
+
+.officer-card .role {
+    font-size: 0.75rem; /* text-xs */
+    font-weight: 600; /* font-semibold */
+    text-transform: uppercase;
+    color: var(--color-text-subtle);
+    margin-bottom: 0.25rem; /* mb-1 */
+}
+.officer-card .name {
+    font-size: 0.875rem; /* text-sm */
+    font-weight: 700; /* font-bold */
+    color: var(--color-text);
+}
+
+
+/* 5. SEPARATORS & DIVIDERS */
+.divider {
+    border-top: 1px solid rgba(255, 255, 255, 0.05); /* border-t border-white/5 */
+    opacity: 0.2;
+    margin-top: 2.5rem; /* my-10 */
+    margin-bottom: 2.5rem;
+}
+
+/* Prominent glowing separator for major section division */
+.glowing-separator {
+    margin-top: 5rem; /* mt-20 */
+    margin-bottom: 4rem; /* mb-16 */
+    background: linear-gradient(90deg, transparent 0%, var(--color-primary-cyan) 50%, transparent 100%);
+    height: 2px;
+    opacity: 0.5;
+    box-shadow: 0 0 20px var(--color-primary-cyan);
+    border-radius: 9999px; /* rounded-full */
+}
+
+/* Max width utility for smaller grids */
+.grid-max-w-2xl {
+    max-width: 42rem; /* approx max-w-2xl (672px) */
+    margin-left: auto;
+    margin-right: auto;
+}
+.grid-max-w-4xl {
+    max-width: 56rem; /* approx max-w-4xl (896px) */
+    margin-left: auto;
+    margin-right: auto;
+}

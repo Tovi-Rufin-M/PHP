@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3D Card Swap</title>
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    font-family: "Poppins", sans-serif;
+  }
+
+  .scene {
+    width: 320px;
+    height: 420px;
+    perspective: 1000px;
+  }
+
+  .card {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.8s cubic-bezier(0.4, 0.2, 0.2, 1);
+    cursor: pointer;
+  }
+
+  .card.is-swapped {
+    transform: rotateY(180deg);
+  }
+
+  .card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 16px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: white;
+  }
+
+  .front {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  }
+
+  .back {
+    background: linear-gradient(135deg, #22c55e, #15803d);
+    transform: rotateY(180deg);
+  }
+
+  .card-content {
+    padding: 24px;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 1.6em;
+  }
+
+  p {
+    font-size: 0.95em;
+    opacity: 0.9;
+  }
+
+  .button {
+    margin: 24px;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    padding: 10px 16px;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+
+  .button:hover {
+    background: rgba(255,255,255,0.25);
+  }
+</style>
+</head>
+<body>
+
+<div class="scene">
+  <div class="card" id="swapCard">
+    <!-- Front Side -->
+    <div class="card-face front">
+      <div class="card-content">
+        <h2>Project Alpha</h2>
+        <p>Click to see project details and contributors.</p>
+      </div>
+      <div class="button">View Details</div>
+    </div>
+
+    <!-- Back Side -->
+    <div class="card-face back">
+      <div class="card-content">
+        <h2>Details</h2>
+        <p>Created by: Person Chatting me<br>Version: 1.2.3<br>Status: Active</p>
+      </div>
+      <div class="button">Go Back</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const card = document.getElementById("swapCard");
+
+  card.addEventListener("click", () => {
+    card.classList.toggle("is-swapped");
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,308 @@
+/* Base Styles - Professional Dark Theme using Variables */
+.org-chart-container.professional-theme {
+    /* 💥 CONSISTENCY FIX: Use the global font stack defined in index.css */
+    font-family: var(--font-stack, Arial, sans-serif); 
+    background-color: var(--color-background); /* Replaced var(--navy-blue) */
+    color: var(--color-text); /* Replaced var(--white) */
+    padding-top: 85px;
+    padding-bottom: 70px;
+}
+
+.department-title {
+    font-size: 20px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: var(--color-text); /* Replaced var(--white) */
+}
+
+.staff-grid-title {
+    color: var(--color-primary); /* Replaced var(--light-blue) with Cyan Accent */
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-align: center;
+    margin: 40px 0 20px;
+    text-transform: uppercase;
+}
+
+/* Card General Styles */
+.hero-card {
+    position: relative;
+    overflow: hidden;
+    background-color: var(--color-card-bg); /* Replaced var(--dark-card-base) */
+    border: 1px solid var(--color-background); /* Replaced var(--navy-blue) */
+    margin-bottom: 20px;
+    transition: transform 0.3s, box-shadow 0.3s; /* Added box-shadow to transition */
+    
+    /* 💥 CONSISTENCY FIX: Apply the global subtle shadow for a clean look */
+    box-shadow: var(--box-shadow); 
+}
+
+.hero-card:hover {
+    transform: translateY(-5px);
+    
+    /* 💥 CONSISTENCY FIX: Apply the global hover shadow for a unified, engaging interaction */
+    box-shadow: var(--hover-shadow); 
+}
+
+/* Department Head Card */
+.head-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.head-card {
+    width: 90%;
+    max-width: 1000px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 40px 0;
+    /* Clean gradient using your theme colors */
+    background: linear-gradient(90deg, var(--color-card-bg) 50%, var(--color-background) 100%); /* Replaced variables */
+    min-height: 250px;
+}
+
+.head-card .text-info {
+    z-index: 3;
+    padding-left: 50px;
+    flex: 1;
+}
+
+.motto-text {
+    font-size: 14px;
+    color: var(--color-primary); /* Replaced var(--light-blue) with Cyan Accent */
+    margin-top: 10px;
+}
+
+.head-card .profile-image {
+    width: 200px;
+    height: 200px;
+    background-size: cover;
+    background-position: center top;
+    z-index: 2;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 85%, 0% 100%);
+    /* Border color uses primary color for strong accent */
+    border: 3px solid var(--color-primary); /* Replaced var(--light-blue) with Cyan Accent */
+    margin-right: 50px;
+}
+
+/* Staff Grid */
+.professors-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px; 
+    justify-content: center;
+}
+
+.prof-card {
+    width: 220px;
+    padding: 0;
+    flex-direction: column;
+    align-items: center;
+    background: var(--color-card-bg); /* Replaced var(--dark-card-base) */
+    text-align: center;
+    /* 💥 CONSISTENCY FIX: Apply the global subtle shadow to all staff cards */
+    box-shadow: var(--box-shadow); 
+}
+
+.prof-card .profile-image {
+    width: 100%;
+    height: 180px;
+    background-size: cover;
+    background-position: center top;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 85%, 0% 100%);
+    margin-bottom: 0;
+}
+
+.prof-card .text-info.staff-text-bottom {
+    position: relative;
+    z-index: 4;
+    padding: 10px 5px;
+}
+
+/* Text & Font Styling */
+.role-tag {
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 1px;
+    padding: 2px 0;
+    margin: 0;
+    text-transform: uppercase;
+}
+
+.head-tag-white {
+    color: var(--color-primary); /* Replaced var(--light-blue) with Cyan Accent */
+    font-weight: bold;
+}
+
+.hero-name.head-name-white {
+    font-size: 28px;
+    font-weight: 900;
+    margin: 5px 0 0 0;
+    color: var(--color-text); /* Replaced var(--white) */
+}
+
+.staff-role-subtle {
+    color: var(--color-primary); /* Replaced var(--light-blue) with Cyan Accent */
+}
+
+.staff-name-white {
+    font-size: 16px;
+    color: var(--color-text); /* Replaced var(--white) */
+    font-weight: 700;
+}
+
+/* Customizing the Department Head's Graphic */
+.head-card .ranking-overlay.large-overlay {
+    width: 200px;
+    height: 200px;
+    top: 0;
+    right: 0;
+    bottom: auto;
+    transform: skewX(-10deg);
+}
+
+.head-card .ranking-overlay.large-overlay::before {
+    background: var(--color-card-bg); /* Replaced var(--dark-card-base) */
+    opacity: 1;
+}
+
+.head-card .ranking-overlay.large-overlay .rank-number {
+    display: block; 
+    font-size: 80px;
+    bottom: 5px;
+    right: 20px;
+    color: var(--color-primary); /* Replaced var(--light-blue) with Cyan Accent */
+    transform: skewX(10deg); 
+}
+
+/* =============================== */
+/*  MAYORS GRID & CARD STYLING     */
+/* =============================== */
+
+.mayors-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+/* Mayor cards are visually between the head and staff */
+.mayor-card {
+    width: 240px;
+    padding: 0;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(
+        90deg,
+        var(--background-light) 60%,
+        rgba(0, 123, 255, 0.05) 100%
+    );
+    border: 1px solid rgba(0, 123, 255, 0.25);
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.15);
+    transition: all 0.3s ease;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Decorative angle overlay similar to professors but slightly more defined */
+.mayor-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40%;
+    height: 100%;
+    background: linear-gradient(
+        -135deg,
+        rgba(0, 123, 255, 0.08) 0%,
+        transparent 70%
+    );
+    pointer-events: none;
+}
+
+.mayor-card .profile-image {
+    width: 100%;
+    height: 190px;
+    background-size: cover;
+    background-position: center top;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 85%, 0% 100%);
+    border-bottom: 2px solid rgba(0, 123, 255, 0.25);
+    filter: brightness(1);
+    transition: all 0.3s ease;
+}
+
+.mayor-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 14px rgba(0, 123, 255, 0.3);
+}
+
+.mayor-card:hover .profile-image {
+    filter: brightness(1.05) saturate(1.1);
+}
+
+/* Text styling inherits from your current structure */
+.mayor-card .staff-name-white {
+    color: var(--text-color);
+    font-weight: 700;
+}
+
+.mayor-card .staff-role-subtle {
+    color: var(--primary-color);
+}
+
+/* Subtle glow to set mayors apart visually */
+.mayor-card:hover::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    box-shadow: 0 0 25px rgba(0, 123, 255, 0.25);
+    border-radius: 6px;
+    pointer-events: none;
+}
+
+/* Button styling for the 'See Our Club Officers' link - HIGH CONTRAST */
+
+.officials-link-container {
+    text-align: center; 
+    margin: 40px 0 60px 0;
+}
+
+.officials-link-button {
+    display: inline-block;
+    padding: 12px 25px;
+    
+    /* BACKGROUND: Use Primary Accent Color */
+    background-color: var(--color-primary); /* #00c6ff */
+    
+    /* TEXT: Use Darkest BG Color for high contrast text on the Cyan BG */
+    color: var(--color-background); /* #0d121c */
+    
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    box-shadow: var(--shadow-subtle); 
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.officials-link-button:hover {
+    background-color: var(--color-primary-hover); /* #00a0e6 - Darker Cyan */
+    
+    /* 🔑 KEY CHANGE: Explicitly keep the text color dark on hover for contrast */
+    color: var(--color-background); /* Ensures text stays dark */
+    
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+}
+
+.officials-link-button:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-subtle);
+}

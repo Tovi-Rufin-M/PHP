@@ -1,0 +1,204 @@
+/* ===================================================================
+   COMPLETE OFFICERS.CSS - Fixed Image Display + Your Cyan Theme
+   =================================================================== */
+
+:root {
+    --color-club-accent: #00b8d9;
+    --club-card-bg: #1a2032;
+    --club-card-glow: rgba(0, 184, 217, 0.3);
+    --color-text: #e6e9f0;
+    --color-text-muted: #aab0ba;
+    --color-bg: #0f172a;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: 'Inter', sans-serif;
+}
+
+.org-chart-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.department-title {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 50px;
+    text-transform: uppercase;
+}
+
+/* =============================== */
+/* CRITICAL FIX: Image Containers  */
+/* =============================== */
+
+/* President Card Image */
+.head-image {
+    width: 200px;
+    height: 100%; /* Fill card height */
+    min-height: 300px; /* Minimum visible height */
+    background-size: cover;
+    background-position: center;
+    flex-shrink: 0;
+}
+
+/* Grid Card Images */
+.prof-image {
+    width: 100%;
+    height: 250px; /* Fixed height for grid */
+    background-size: cover;
+    background-position: center;
+}
+
+/* =============================== */
+/* PRESIDENT CARD                  */
+/* =============================== */
+.head-container { display: flex; justify-content: center; margin-bottom: 60px; }
+
+.head-card {
+    width: 500px;
+    max-width: 90%;
+    display: flex;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.head-card.club-president-gradient {
+    background: linear-gradient(100deg, var(--club-card-bg) 45%, rgba(0, 184, 217, 0.1) 100%);
+    box-shadow: 0 0 18px var(--club-card-glow);
+    border: 1px solid rgba(0, 184, 217, 0.15);
+}
+
+.text-info {
+    flex: 1;
+    padding: 30px;
+}
+
+.role-tag {
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.hero-name {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 10px 0;
+}
+
+.contact-links {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.details-button {
+    background: white;
+    color: var(--color-club-accent);
+    border: none;
+    padding: 8px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-left: auto;
+}
+
+/* =============================== */
+/* OFFICERS GRID                   */
+/* =============================== */
+.professors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-bottom: 60px;
+}
+
+.prof-card {
+    background: var(--club-card-bg);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.prof-card.club-officer-card {
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 0 10px rgba(0, 184, 217, 0.08);
+}
+
+.staff-text-bottom {
+    padding: 20px;
+}
+
+/* =============================== */
+/* MODAL STYLES                    */
+/* =============================== */
+.bio-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8);
+}
+
+.bio-modal.active {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: var(--club-card-bg);
+    border-radius: 20px;
+    width: 90%;
+    max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-profile-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    border: 4px solid var(--color-club-accent);
+}
+
+/* =============================== */
+/* FOOTER BUTTON                   */
+/* =============================== */
+.officials-link-container {
+    text-align: center;
+    margin-top: 60px;
+}
+
+.officials-link-button {
+    display: inline-block;
+    padding: 15px 40px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.officials-link-button.club-officers-style {
+    background-color: var(--color-club-accent);
+    color: var(--color-text);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .head-card { flex-direction: column; }
+    .head-image { width: 100%; height: 300px; }
+    .professors-grid { grid-template-columns: 1fr; }
+}

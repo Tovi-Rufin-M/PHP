@@ -1,0 +1,103 @@
+/* ==================================== */
+/* 6. Dark Mode Variables */
+/* ==================================== */
+
+body.dark-theme {
+    /* Redefine Root Variables for Dark Theme */
+    --text-color: #f8f9fa; /* Light text */
+    --text-color-light: #333;
+    --background-color: #212529; /* Darker primary background for navbar/boxes */
+    --background-light: #343a40; /* Main body background color */
+    --border-color: #495057;
+    --box-shadow: 0 4px 6px rgba(255, 255, 255, 0.1); /* Subtle light shadow */
+}
+
+/* ==================================== */
+/* 7. Dark Mode Element Styling */
+/* ==================================== */
+
+/* Apply the main dark background and text colors to the body */
+body.dark-theme {
+    color: var(--text-color);
+    background-color: var(--background-light); 
+}
+
+/* Apply dark background to elements that use --background-color */
+body.dark-theme .navbar,
+body.dark-theme .dropdown-menu,
+body.dark-theme .dropdown-menu li a:hover,
+body.dark-theme .update-box {
+    background-color: var(--background-color);
+    border-color: var(--border-color);
+    box-shadow: var(--box-shadow);
+}
+
+body.dark-theme .updates h2 {
+    color: var(--text-color-dark);
+}
+/* Ensure all links and text within the navbar are visible (using --text-color) */
+body.dark-theme .nav-links li a,
+body.dark-theme .dropdown-menu li a,
+body.dark-theme .nav-title h2,
+body.dark-theme .nav-title p {
+    color: var(--text-color);
+}
+
+/* Highlight active/hover links using the primary color */
+body.dark-theme .nav-links li a:hover,
+body.dark-theme .nav-links li a.active {
+    color: var(--primary-color);
+}
+
+/* Footer typically remains dark for contrast, but ensure its text is visible */
+body.dark-theme .footer {
+    color: var(--text-color); /* Light text on the dark footer background */
+}
+
+/* Ensure the dark mode toggle switch itself looks good */
+body.dark-theme .darkmode-toggle span {
+    color: var(--text-color);
+}
+
+/* Dark Mode Adaptation for Footer */
+body.dark-theme .footer {
+    /* In dark mode, we invert the colors of the footer to maintain contrast */
+    background-color: var(--background-color); /* Use the overall dark bg color */
+    color: var(--text-color); /* Use the light text color */
+    border-top: 1px solid var(--border-color);
+}
+.darkmode-toggle span {
+  transition: color 0.3s ease, transform 0.3s ease;
+  font-weight: 500;
+}
+
+.darkmode-toggle input:checked + span {
+  color: #facc15; /* sun-yellow for dark mode on */
+  transform: scale(1.1);
+}
+
+.darkmode-toggle input:not(:checked) + span {
+  color: #0b4da1; /* blue for light mode */
+}
+
+/* Footer dark mode adjust (keeps palette but ensures contrast) */
+body.dark-theme .site-footer {
+  background: linear-gradient(180deg, rgba(6,30,50,1) 0%, rgba(6,30,50,0.95) 100%);
+  color: #e8f7fb;
+}
+
+body.dark-theme .footer-col a { color: rgba(255,255,255,0.9); }
+body.dark-theme .brand-tag { color: rgba(180,214,227,0.9); }
+body.dark-theme .newsletter-form input[type="email"] {
+  background: rgba(255,255,255,0.04);
+  color: #fff;
+}
+
+body.dark-theme .social-icon {
+  filter: brightness(0) invert(0.9);
+}
+
+body.dark-theme .socials .social:hover .social-icon {
+  filter: brightness(1.1) saturate(150%) hue-rotate(170deg);
+}
+
