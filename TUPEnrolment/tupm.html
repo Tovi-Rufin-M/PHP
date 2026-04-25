@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<title>TUP-Visayas | Enrollment</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --maroon:#7B1128;--maroon-d:#540B1A;--maroon-l:#9E1F36;
+  --gold:#C8922A;--gold-l:#F0B93A;
+  --bg:#F4F1ED;--surface:#fff;--surface2:#FAF8F5;
+  --ink:#1C1008;--muted:#7A6C5D;--border:#E8E0D5;
+  --green:#2D7D46;--red:#C0392B;--orange:#D4720A;--blue:#1A6FA8;
+  --nav-h:68px;--top-h:56px;
+  --r:14px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;font-size:15px;background:var(--bg);color:var(--ink)}
+button{font-family:inherit;cursor:pointer;border:none;outline:none;background:none}
+input,select{font-family:inherit;font-size:16px;/* prevent iOS zoom */}
+.hidden{display:none!important}
+
+/* ─── LOGIN ─── */
+#login-screen{
+  position:fixed;inset:0;
+  background:linear-gradient(160deg,var(--maroon-d) 0%,var(--maroon) 55%,var(--maroon-l) 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
+  z-index:1000;
+  overflow:hidden;
+}
+.login-hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px 0;text-align:center}
+.login-seal{width:72px;height:72px;background:var(--gold);border-radius:18px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:2rem;color:var(--maroon-d);font-weight:700;margin-bottom:16px;box-shadow:0 8px 32px rgba(0,0,0,.3)}
+.login-hero h1{font-family:'Playfair Display',serif;font-size:1.7rem;color:#fff;margin-bottom:6px;line-height:1.2}
+.login-hero p{font-size:.82rem;color:rgba(255,255,255,.55);letter-spacing:.04em}
+.login-sheet{
+  background:#fff;border-radius:24px 24px 0 0;
+  padding:28px 24px 40px;width:100%;
+  box-shadow:0 -8px 40px rgba(0,0,0,.2);
+}
+.login-sheet h2{font-size:1.1rem;font-weight:700;color:var(--ink);margin-bottom:20px}
+.fg{margin-bottom:16px}
+.fg label{display:block;font-size:.75rem;font-weight:600;color:var(--muted);margin-bottom:6px;letter-spacing:.04em;text-transform:uppercase}
+.fg input,.fg select{
+  width:100%;padding:13px 14px;
+  border:1.5px solid var(--border);border-radius:10px;
+  font-size:16px;color:var(--ink);background:#fff;
+  transition:border-color .2s;
+  -webkit-appearance:none;
+}
+.fg input:focus,.fg select:focus{outline:none;border-color:var(--maroon)}
+.login-btn{
+  width:100%;padding:15px;margin-top:6px;
+  background:var(--maroon);color:#fff;
+  border-radius:12px;font-size:1rem;font-weight:700;
+  letter-spacing:.02em;
+  box-shadow:0 4px 16px rgba(123,17,40,.35);
+  transition:opacity .15s,transform .1s;
+}
+.login-btn:active{opacity:.85;transform:scale(.98)}
+.demo-row{display:flex;gap:8px;margin-top:20px;flex-wrap:wrap}
+.demo-chip{
+  flex:1;min-width:0;padding:9px 6px;
+  border:1.5px solid var(--border);border-radius:8px;
+  font-size:.72rem;font-weight:600;color:var(--muted);
+  text-align:center;transition:.2s;white-space:nowrap;
+}
+.demo-chip:active{border-color:var(--maroon);color:var(--maroon);background:rgba(123,17,40,.05)}
+.demo-label{font-size:.72rem;color:var(--muted);text-align:center;margin-top:12px}
+
+/* ─── APP SHELL ─── */
+#app{position:fixed;inset:0;display:none;flex-direction:column}
+#app.active{display:flex}
+
+/* TOP BAR */
+.topbar{
+  height:var(--top-h);flex-shrink:0;
+  background:var(--maroon-d);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 16px;
+  padding-top:env(safe-area-inset-top);
+}
+.topbar-left{display:flex;align-items:center;gap:10px}
+.topbar-icon{width:32px;height:32px;background:var(--gold);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:700;color:var(--maroon-d);font-size:.85rem}
+.topbar-title{font-size:.9rem;font-weight:700;color:#fff;line-height:1.2}
+.topbar-sub{font-size:.65rem;color:rgba(255,255,255,.5);margin-top:1px}
+.topbar-right{display:flex;align-items:center;gap:8px}
+.tb-btn{position:relative;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:rgba(255,255,255,.7)}
+.tb-btn:active{background:rgba(255,255,255,.1)}
+.notif-dot{position:absolute;top:4px;right:4px;width:8px;height:8px;background:var(--red);border-radius:50%;border:2px solid var(--maroon-d)}
+
+/* SCROLL AREA */
+.scroll-area{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:calc(var(--nav-h) + 8px)}
+
+/* BOTTOM NAV */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;
+  height:var(--nav-h);padding-bottom:env(safe-area-inset-bottom);
+  background:#fff;border-top:1px solid var(--border);
+  display:flex;align-items:stretch;
+  z-index:90;
+}
+.bn-item{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:3px;cursor:pointer;position:relative;
+  padding-bottom:4px;
+  transition:background .15s;
+}
+.bn-item:active{background:var(--bg)}
+.bn-icon{font-size:1.3rem;line-height:1;transition:transform .2s}
+.bn-label{font-size:.6rem;font-weight:600;letter-spacing:.02em;color:var(--muted);transition:.2s}
+.bn-item.active .bn-icon{transform:scale(1.15)}
+.bn-item.active .bn-label{color:var(--maroon);font-weight:700}
+.bn-item.active::before{content:'';position:absolute;top:0;left:20%;right:20%;height:2px;background:var(--maroon);border-radius:0 0 2px 2px}
+.bn-badge{position:absolute;top:6px;right:calc(50% - 18px);min-width:16px;height:16px;background:var(--red);color:#fff;font-size:.58rem;font-weight:700;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0 4px;border:2px solid #fff}
+
+/* ─── PAGE SYSTEM ─── */
+.page{display:none;animation:slideUp .22s ease}
+.page.active{display:block}
+@keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+.page-pad{padding:16px}
+
+/* Section heading inside page */
+.pg-head{padding:16px 16px 0}
+.pg-head h2{font-family:'Playfair Display',serif;font-size:1.25rem;color:var(--ink)}
+.pg-head p{font-size:.78rem;color:var(--muted);margin-top:4px;line-height:1.5}
+
+/* ─── CARDS ─── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:12px}
+.card-hd{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.card-hd h3{font-size:.88rem;font-weight:700;color:var(--ink)}
+.card-bd{padding:14px 16px}
+
+/* ─── STAT CARDS (dashboard) ─── */
+.stats-2{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px 16px 4px}
+.scard{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px;position:relative;overflow:hidden}
+.scard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--maroon))}
+.scard .slabel{font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:600}
+.scard .sval{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;color:var(--ink);line-height:1.1;margin-top:4px}
+.scard .ssub{font-size:.68rem;color:var(--muted);margin-top:2px}
+.scard .sicon{position:absolute;right:12px;top:12px;font-size:1.4rem;opacity:.12}
+
+/* Unit bar */
+.ubar-wrap{margin:8px 0}
+.ubar-info{display:flex;justify-content:space-between;font-size:.75rem;margin-bottom:5px}
+.ubar{height:8px;background:var(--bg);border-radius:4px;overflow:hidden}
+.ufill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--maroon),var(--gold));transition:width .5s ease}
+
+/* ─── SUBJECT CARD (enlistment) ─── */
+.subj-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);margin:0 16px 10px;overflow:hidden;transition:box-shadow .2s}
+.subj-card.locked{opacity:.65}
+.subj-card.enlisted{border-color:rgba(45,125,70,.3);background:rgba(45,125,70,.02)}
+.subj-card-top{padding:12px 14px;display:flex;align-items:flex-start;gap:10px}
+.subj-meta{flex:1;min-width:0}
+.subj-code{font-size:.72rem;font-weight:700;color:var(--maroon);letter-spacing:.04em}
+.subj-name{font-size:.9rem;font-weight:600;color:var(--ink);margin-top:2px;line-height:1.3}
+.subj-units{font-size:.72rem;color:var(--muted);margin-top:3px}
+.subj-pill{flex-shrink:0;margin-top:2px}
+.subj-card-bot{padding:0 14px 12px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.subj-sched{font-size:.72rem;color:var(--muted);display:flex;align-items:center;gap:4px;flex:1}
+.subj-prereq{font-size:.68rem;padding:2px 8px;border-radius:5px;border:1px solid rgba(192,57,43,.2);background:rgba(192,57,43,.06);color:var(--red);margin-right:auto}
+.subj-action{flex-shrink:0}
+
+/* Pills */
+.pill{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:.68rem;font-weight:700}
+.pill-avail{background:rgba(45,125,70,.1);color:var(--green)}
+.pill-locked{background:rgba(192,57,43,.1);color:var(--red)}
+.pill-enlisted{background:rgba(26,111,168,.1);color:var(--blue)}
+.pill-failed{background:rgba(192,57,43,.12);color:var(--red)}
+.pill-passed{background:rgba(45,125,70,.08);color:var(--green)}
+
+/* Action buttons inside cards */
+.act-btn{padding:7px 14px;border-radius:8px;font-size:.78rem;font-weight:700;transition:.15s}
+.act-btn:active{opacity:.75;transform:scale(.96)}
+.btn-add{background:var(--maroon);color:#fff}
+.btn-drop{background:rgba(192,57,43,.1);color:var(--red);border:1px solid rgba(192,57,43,.2)}
+.btn-req{background:rgba(26,111,168,.1);color:var(--blue);border:1px solid rgba(26,111,168,.2)}
+.btn-dis{background:var(--bg);color:var(--muted);cursor:not-allowed}
+
+/* ─── FILTER ROW ─── */
+.filter-scroll{display:flex;gap:8px;overflow-x:auto;padding:10px 16px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.filter-scroll::-webkit-scrollbar{display:none}
+.fchip{
+  flex-shrink:0;padding:7px 14px;border-radius:20px;
+  font-size:.75rem;font-weight:600;white-space:nowrap;
+  border:1.5px solid var(--border);color:var(--muted);background:#fff;
+  transition:.15s;
+}
+.fchip.active,.fchip:active{border-color:var(--maroon);color:var(--maroon);background:rgba(123,17,40,.06)}
+.search-bar{margin:0 16px 4px;display:flex;gap:8px;align-items:center}
+.search-bar input{
+  flex:1;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;
+  font-size:16px;color:var(--ink);background:#fff;
+}
+.search-bar input:focus{outline:none;border-color:var(--maroon)}
+
+/* ─── NOTIFICATION ITEMS ─── */
+.nitem{display:flex;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border);transition:.15s}
+.nitem:last-child{border-bottom:none}
+.nitem:active{background:var(--surface2)}
+.nicon{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.nicon.warn{background:rgba(212,114,10,.12)}
+.nicon.danger{background:rgba(192,57,43,.1)}
+.nicon.info{background:rgba(26,111,168,.1)}
+.nicon.success{background:rgba(45,125,70,.1)}
+.ntext{flex:1;min-width:0}
+.ntext .ntitle{font-size:.85rem;font-weight:600;color:var(--ink);margin-bottom:2px}
+.ntext .nbody{font-size:.75rem;color:var(--muted);line-height:1.4}
+.ntext .ntime{font-size:.68rem;color:var(--muted);margin-top:4px;display:block}
+
+/* ─── MY SUBJECTS ─── */
+.my-subj-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);margin:0 16px 10px;padding:14px;display:flex;gap:12px;align-items:center}
+.ms-left{flex:1;min-width:0}
+.ms-code{font-size:.72rem;font-weight:700;color:var(--maroon)}
+.ms-name{font-size:.88rem;font-weight:600;color:var(--ink);margin-top:2px}
+.ms-info{font-size:.72rem;color:var(--muted);margin-top:3px;display:flex;gap:8px;flex-wrap:wrap}
+.ms-right{flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+
+/* ─── CROSS PROGRAM ─── */
+.cp-result{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);margin:0 16px 12px;overflow:hidden}
+.cp-head{padding:12px 14px;background:var(--surface2);border-bottom:1px solid var(--border)}
+.cp-head h4{font-size:.88rem;font-weight:700;color:var(--ink)}
+.cp-head .cprog{font-size:.7rem;color:var(--muted);margin-top:2px}
+.cp-sec{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.cp-sec:last-child{border-bottom:none}
+.cp-sec-left{flex:1;min-width:0}
+.cp-sec-code{font-size:.78rem;font-weight:700;color:var(--maroon)}
+.cp-sec-info{font-size:.72rem;color:var(--muted);margin-top:2px}
+.cp-slots{font-size:.72rem;font-weight:700;color:var(--green);white-space:nowrap}
+
+/* ─── TUTORIAL / SUMMER ─── */
+.ts-type-hd{
+  margin:16px 16px 8px;padding:14px;
+  background:linear-gradient(130deg,var(--maroon-d),var(--maroon));
+  border-radius:var(--r);color:#fff;
+}
+.ts-type-hd h3{font-family:'Playfair Display',serif;font-size:1.05rem}
+.ts-type-hd p{font-size:.73rem;opacity:.7;margin-top:3px}
+.ts-cap{display:inline-block;margin-top:8px;padding:3px 10px;border-radius:20px;background:rgba(255,255,255,.15);font-size:.7rem;font-weight:700}
+.ts-subj{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);margin:0 16px 8px;padding:14px;display:flex;align-items:center;gap:12px}
+.ts-subj-info{flex:1;min-width:0}
+.ts-code{font-size:.72rem;font-weight:700;color:var(--maroon)}
+.ts-name{font-size:.85rem;font-weight:600;color:var(--ink);margin-top:2px}
+.ts-slots{font-size:.7rem;color:var(--muted);margin-top:2px}
+
+/* ─── INFO BOX ─── */
+.info-box{margin:0 16px 12px;padding:12px 14px;border-radius:10px;display:flex;gap:10px;align-items:flex-start;font-size:.78rem;line-height:1.5}
+.info-box.warn{background:rgba(212,114,10,.08);border:1px solid rgba(212,114,10,.22);color:#8a4a00}
+.info-box.danger{background:rgba(192,57,43,.07);border:1px solid rgba(192,57,43,.2);color:#8a0000}
+.info-box .ib-icon{font-size:1rem;flex-shrink:0}
+
+/* ─── BOTTOM SHEET MODAL ─── */
+.sheet-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;
+  display:flex;align-items:flex-end;
+  opacity:0;pointer-events:none;transition:opacity .25s;
+}
+.sheet-overlay.open{opacity:1;pointer-events:all}
+.sheet{
+  background:#fff;border-radius:20px 20px 0 0;
+  width:100%;padding:20px 20px 40px;
+  transform:translateY(100%);transition:transform .3s cubic-bezier(.34,1.56,.64,1);
+  padding-bottom:calc(40px + env(safe-area-inset-bottom));
+}
+.sheet-overlay.open .sheet{transform:translateY(0)}
+.sheet-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 20px}
+.sheet h2{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--ink);margin-bottom:6px}
+.sheet p{font-size:.83rem;color:var(--muted);margin-bottom:16px;line-height:1.55}
+.sheet-detail{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:18px}
+.sheet-detail .row{display:flex;justify-content:space-between;padding:4px 0;font-size:.82rem}
+.sheet-detail .row .lbl{color:var(--muted)}
+.sheet-detail .row .val{font-weight:700;color:var(--ink);text-align:right;flex:1;margin-left:8px}
+.sheet-btns{display:flex;flex-direction:column;gap:10px}
+.sheet-btn{width:100%;padding:14px;border-radius:12px;font-size:.95rem;font-weight:700;transition:.15s;text-align:center}
+.sheet-btn:active{opacity:.8;transform:scale(.98)}
+.sheet-btn.primary{background:var(--maroon);color:#fff;box-shadow:0 4px 14px rgba(123,17,40,.3)}
+.sheet-btn.danger-btn{background:var(--red);color:#fff}
+.sheet-btn.blue-btn{background:var(--blue);color:#fff}
+.sheet-btn.cancel{background:var(--bg);color:var(--muted);border:1px solid var(--border)}
+
+/* ─── TOAST ─── */
+.toast-wrap{position:fixed;bottom:calc(var(--nav-h) + 10px);left:12px;right:12px;z-index:999;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+.toast{
+  background:var(--ink);color:#fff;padding:12px 16px;border-radius:12px;
+  font-size:.83rem;display:flex;align-items:center;gap:8px;
+  box-shadow:0 4px 20px rgba(0,0,0,.2);
+  animation:toastUp .3s ease;
+}
+.toast.success{background:var(--green)}
+.toast.error{background:var(--red)}
+.toast.warn{background:var(--orange)}
+@keyframes toastUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* ─── EMPTY STATE ─── */
+.empty{text-align:center;padding:48px 24px;color:var(--muted)}
+.empty .ei{font-size:2.5rem;margin-bottom:12px}
+.empty p{font-size:.88rem;line-height:1.5}
+
+/* Enrolled mini list on dashboard */
+.enl-mini{display:flex;flex-direction:column;gap:6px}
+.enl-row{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--surface2);border-radius:9px;border:1px solid var(--border)}
+.enl-row .ec{font-size:.7rem;font-weight:700;color:var(--maroon);min-width:70px}
+.enl-row .en{font-size:.8rem;color:var(--ink);flex:1}
+.enl-row .eu{font-size:.7rem;font-weight:600;color:var(--muted)}
+
+/* Search page header */
+.cp-search-card{margin:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px}
+.cp-search-card h3{font-size:.92rem;font-weight:700;margin-bottom:4px}
+.cp-search-card p{font-size:.76rem;color:var(--muted);margin-bottom:12px;line-height:1.4}
+.cp-row{display:flex;gap:8px}
+.cp-row input{flex:1;padding:11px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:16px}
+.cp-row input:focus{outline:none;border-color:var(--maroon)}
+.cp-row button{padding:11px 16px;background:var(--maroon);color:#fff;border-radius:10px;font-size:.85rem;font-weight:700}
+.cp-row button:active{opacity:.8}
+</style>
+</head>
+<body>
+
+<!-- ─── LOGIN SCREEN ─── -->
+<div id="login-screen">
+  <div class="login-hero">
+    <div class="login-seal">T</div>
+    <h1>TUP-Visayas<br/>Enrollment</h1>
+    <p>Online Enrollment System</p>
+  </div>
+  <div class="login-sheet">
+    <h2>Student Sign In</h2>
+    <div class="fg">
+      <label>Student Number</label>
+      <input type="text" id="l-sn" placeholder="e.g. TUPCV-22-0001" value="TUPCV-23-0045" autocomplete="off"/>
+    </div>
+    <div class="fg">
+      <label>Password</label>
+      <input type="password" id="l-pw" placeholder="Enter password" value="password123"/>
+    </div>
+    <div class="fg">
+      <label>Program</label>
+      <select id="l-prog">
+        <option value="BSIT">BS Information Technology</option>
+        <option value="BSCS">BS Computer Science</option>
+        <option value="BSCpE">BS Computer Engineering</option>
+        <option value="BSECE">BS Electronics Engineering</option>
+      </select>
+    </div>
+    <button class="login-btn" onclick="doLogin()">Sign In</button>
+    <p class="demo-label">Quick demo accounts:</p>
+    <div class="demo-row">
+      <button class="demo-chip" onclick="loadDemo('1st')">1st Year</button>
+      <button class="demo-chip" onclick="loadDemo('2nd')">2nd Year</button>
+      <button class="demo-chip" onclick="loadDemo('returning')">With Fails</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── APP SHELL ─── -->
+<div id="app">
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-icon">T</div>
+      <div>
+        <div class="topbar-title" id="tb-title">Dashboard</div>
+        <div class="topbar-sub" id="tb-sem">A.Y. 2024–2025 | 1st Sem</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <button class="tb-btn" onclick="goPage('notifs')">
+        🔔<span class="notif-dot" id="ndot"></span>
+      </button>
+      <button class="tb-btn" onclick="logout()">⏻</button>
+    </div>
+  </div>
+
+  <!-- SCROLL AREA -->
+  <div class="scroll-area" id="scroll-area">
+
+    <!-- PAGE: DASHBOARD -->
+    <div class="page active" id="pg-home">
+      <div class="stats-2">
+        <div class="scard" style="--c:var(--maroon)">
+          <div class="slabel">Units</div>
+          <div class="sval" id="d-units">0</div>
+          <div class="ssub" id="d-units-s">of 24 max</div>
+          <div class="sicon">📦</div>
+        </div>
+        <div class="scard" style="--c:var(--gold)">
+          <div class="slabel">Subjects</div>
+          <div class="sval" id="d-sc">0</div>
+          <div class="ssub">enlisted</div>
+          <div class="sicon">📋</div>
+        </div>
+        <div class="scard" style="--c:var(--red)">
+          <div class="slabel">Failed</div>
+          <div class="sval" id="d-fail">0</div>
+          <div class="ssub">to resolve</div>
+          <div class="sicon">⚠️</div>
+        </div>
+        <div class="scard" style="--c:var(--blue)">
+          <div class="slabel">Locked</div>
+          <div class="sval" id="d-lock">0</div>
+          <div class="ssub">by prereq.</div>
+          <div class="sicon">🔒</div>
+        </div>
+      </div>
+
+      <div style="padding:8px 16px 0">
+        <div class="card">
+          <div class="card-hd"><h3>Unit Load</h3><span id="ul-lbl" style="font-size:.75rem;color:var(--muted)"></span></div>
+          <div class="card-bd">
+            <div class="ubar-wrap">
+              <div class="ubar-info">
+                <span style="color:var(--muted)">0</span>
+                <span id="ul-txt" style="font-weight:700;color:var(--maroon)">0 / 24</span>
+                <span style="color:var(--muted)">24</span>
+              </div>
+              <div class="ubar"><div class="ufill" id="ufill" style="width:0%"></div></div>
+            </div>
+            <div id="d-enl-list" class="enl-mini" style="margin-top:12px"></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding:8px 16px 0">
+        <div class="card">
+          <div class="card-hd"><h3>🔔 Recent Alerts</h3></div>
+          <div id="d-notif-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE: ENLISTMENT -->
+    <div class="page hidden" id="pg-enlist">
+      <div class="pg-head">
+        <h2>Subject Enlistment</h2>
+        <p>Tap a subject to enlist. Locked subjects need their prerequisites passed first.</p>
+      </div>
+      <div class="search-bar" style="margin-top:10px">
+        <input type="search" id="enl-search" placeholder="🔍 Search subjects…" oninput="renderEnlist()"/>
+      </div>
+      <div class="filter-scroll" id="enl-filter-row">
+        <button class="fchip active" data-f="all" onclick="setFilter('all',this)">All</button>
+        <button class="fchip" data-f="available" onclick="setFilter('available',this)">Available</button>
+        <button class="fchip" data-f="enlisted" onclick="setFilter('enlisted',this)">Enlisted</button>
+        <button class="fchip" data-f="locked" onclick="setFilter('locked',this)">Locked 🔒</button>
+        <button class="fchip" data-f="failed" onclick="setFilter('failed',this)">Failed ✗</button>
+        <button class="fchip" data-f="yr1" onclick="setFilter('yr1',this)">Year 1</button>
+        <button class="fchip" data-f="yr2" onclick="setFilter('yr2',this)">Year 2</button>
+      </div>
+      <div id="enl-list"></div>
+    </div>
+
+    <!-- PAGE: MY SUBJECTS -->
+    <div class="page hidden" id="pg-mine">
+      <div class="pg-head">
+        <h2>My Subjects</h2>
+        <p>Your enlisted subjects this semester. Drop to free up units.</p>
+      </div>
+      <div id="mine-warn" class="info-box warn hidden" style="margin-top:10px">
+        <span class="ib-icon">⚠️</span>
+        <div><strong>Unit Load at Maximum!</strong><br/>Drop a subject to make room for a failed or required subject.</div>
+      </div>
+      <div style="height:8px"></div>
+      <div id="mine-list"></div>
+      <div id="mine-empty" class="empty hidden"><div class="ei">📭</div><p>No subjects enlisted yet.<br/>Head to Enlistment to add subjects.</p></div>
+    </div>
+
+    <!-- PAGE: CROSS PROGRAM -->
+    <div class="page hidden" id="pg-cross">
+      <div class="pg-head">
+        <h2>Cross-Program</h2>
+        <p>Find your failed subject in another program's section. Subject to faculty approval.</p>
+      </div>
+      <div class="cp-search-card" style="margin-top:10px">
+        <h3>Search Across Programs</h3>
+        <p>Enter the subject code or name of your failed subject to find available sections.</p>
+        <div class="cp-row">
+          <input type="text" id="cp-in" placeholder="e.g. MATH111"/>
+          <button onclick="doCrossSearch()">Search</button>
+        </div>
+      </div>
+      <div id="cp-results"></div>
+    </div>
+
+    <!-- PAGE: TUTORIAL / SUMMER -->
+    <div class="page hidden" id="pg-ts">
+      <div class="pg-head">
+        <h2>Tutorial & Summer</h2>
+        <p>When no cross-program section exists, enroll in a tutorial or summer class.</p>
+      </div>
+      <div id="ts-content" style="margin-top:8px"></div>
+    </div>
+
+    <!-- PAGE: NOTIFICATIONS -->
+    <div class="page hidden" id="pg-notifs">
+      <div class="pg-head">
+        <h2>Notifications</h2>
+        <p>Prerequisite alerts, enrollment updates, and system messages.</p>
+      </div>
+      <div style="margin:10px 0">
+        <div class="card" style="margin:0 16px">
+          <div id="notif-full-list"></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /scroll-area -->
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <div class="bn-item active" id="bn-home" onclick="goPage('home')">
+      <span class="bn-icon">🏠</span>
+      <span class="bn-label">Home</span>
+    </div>
+    <div class="bn-item" id="bn-enlist" onclick="goPage('enlist')">
+      <span class="bn-icon">📋</span>
+      <span class="bn-label">Enlist</span>
+    </div>
+    <div class="bn-item" id="bn-mine" onclick="goPage('mine')">
+      <span class="bn-icon">📚</span>
+      <span class="bn-label">My Subj.</span>
+      <span class="bn-badge hidden" id="mine-badge">0</span>
+    </div>
+    <div class="bn-item" id="bn-cross" onclick="goPage('cross')">
+      <span class="bn-icon">🔄</span>
+      <span class="bn-label">Cross</span>
+    </div>
+    <div class="bn-item" id="bn-ts" onclick="goPage('ts')">
+      <span class="bn-icon">🌞</span>
+      <span class="bn-label">Tutorial</span>
+    </div>
+  </nav>
+
+</div><!-- /app -->
+
+<!-- ─── BOTTOM SHEET ─── -->
+<div class="sheet-overlay" id="sheet-ov">
+  <div class="sheet" id="sheet">
+    <div class="sheet-handle"></div>
+    <h2 id="sh-title"></h2>
+    <p id="sh-body"></p>
+    <div class="sheet-detail" id="sh-detail"></div>
+    <div class="sheet-btns">
+      <button class="sheet-btn primary" id="sh-confirm">Confirm</button>
+      <button class="sheet-btn cancel" onclick="closeSheet()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── TOAST ─── -->
+<div class="toast-wrap" id="tw"></div>
+
+<script>
+// ─────────────────────────────────────────
+// DATA
+// ─────────────────────────────────────────
+const MAX_UNITS = 24;
+
+const STUDENTS = {
+  '1st':{name:'Maria Santos',sn:'TUPCV-24-0012',program:'BSIT',yearLevel:1,semester:1,passed:[],failed:[],enrolled:[]},
+  '2nd':{name:'Jose Reyes',sn:'TUPCV-23-0045',program:'BSIT',yearLevel:2,semester:1,
+    passed:['GNED01','GNED02','MATH111','COMP101','COMP102','ENGL01','PE01','NSTP01'],
+    failed:[],enrolled:['MATH211','COMP201','COMP202','ENGL02']},
+  'returning':{name:'Ana Cruz',sn:'TUPCV-23-0089',program:'BSIT',yearLevel:2,semester:1,
+    passed:['GNED01','GNED02','COMP101','COMP102','ENGL01','PE01','NSTP01'],
+    failed:['MATH111'],enrolled:['COMP201','ENGL02','PE02']}
+};
+
+const SUBJECTS=[
+  {code:'GNED01',name:'Understanding the Self',units:3,year:1,sem:1,prereq:null,schedule:'MWF 7:30–8:30AM'},
+  {code:'GNED02',name:'Readings in Phil. History',units:3,year:1,sem:1,prereq:null,schedule:'TTh 7:30–9:00AM'},
+  {code:'MATH111',name:'Calculus I',units:3,year:1,sem:1,prereq:null,schedule:'MWF 9:00–10:00AM'},
+  {code:'COMP101',name:'Introduction to Computing',units:3,year:1,sem:1,prereq:null,schedule:'TTh 1:00–2:30PM'},
+  {code:'COMP102',name:'Computer Programming 1',units:3,year:1,sem:1,prereq:null,schedule:'MWF 1:00–2:00PM'},
+  {code:'ENGL01',name:'Purposive Communication',units:3,year:1,sem:1,prereq:null,schedule:'TTh 10:00–11:30AM'},
+  {code:'PE01',name:'Physical Education 1',units:2,year:1,sem:1,prereq:null,schedule:'Fri 3:00–5:00PM'},
+  {code:'NSTP01',name:'NSTP 1',units:3,year:1,sem:1,prereq:null,schedule:'Sat 7:30–10:30AM'},
+  {code:'MATH112',name:'Calculus II',units:3,year:1,sem:2,prereq:'MATH111',schedule:'MWF 7:30–8:30AM'},
+  {code:'COMP103',name:'Computer Programming 2',units:3,year:1,sem:2,prereq:'COMP102',schedule:'MWF 10:00–11:00AM'},
+  {code:'COMP104',name:'Data Structures & Algorithms',units:3,year:1,sem:2,prereq:'COMP102',schedule:'TTh 1:00–2:30PM'},
+  {code:'ENGL02',name:'Technical Writing',units:3,year:1,sem:2,prereq:'ENGL01',schedule:'TTh 7:30–9:00AM'},
+  {code:'PE02',name:'Physical Education 2',units:2,year:1,sem:2,prereq:'PE01',schedule:'Fri 3:00–5:00PM'},
+  {code:'NSTP02',name:'NSTP 2',units:3,year:1,sem:2,prereq:'NSTP01',schedule:'Sat 7:30–10:30AM'},
+  {code:'GNED03',name:'The Contemporary World',units:3,year:1,sem:2,prereq:null,schedule:'MWF 1:00–2:00PM'},
+  {code:'MATH211',name:'Discrete Mathematics',units:3,year:2,sem:1,prereq:'MATH111',schedule:'MWF 8:30–9:30AM'},
+  {code:'COMP201',name:'Object-Oriented Programming',units:3,year:2,sem:1,prereq:'COMP103',schedule:'MWF 11:00AM–12PM'},
+  {code:'COMP202',name:'Database Management Systems',units:3,year:2,sem:1,prereq:'COMP104',schedule:'TTh 10:00–11:30AM'},
+  {code:'COMP203',name:'Operating Systems',units:3,year:2,sem:1,prereq:'COMP104',schedule:'TTh 1:00–2:30PM'},
+  {code:'GNED04',name:'Science, Technology & Society',units:3,year:2,sem:1,prereq:null,schedule:'MWF 1:00–2:00PM'},
+  {code:'COMP204',name:'Web Development 1',units:3,year:2,sem:1,prereq:'COMP103',schedule:'TTh 3:00–4:30PM'},
+  {code:'PE03',name:'Physical Education 3',units:2,year:2,sem:1,prereq:'PE02',schedule:'Fri 3:00–5:00PM'},
+  {code:'COMP211',name:'Computer Networks',units:3,year:2,sem:2,prereq:'COMP203',schedule:'MWF 7:30–8:30AM'},
+  {code:'COMP212',name:'Software Engineering',units:3,year:2,sem:2,prereq:'COMP201',schedule:'TTh 9:00–10:30AM'},
+  {code:'MATH212',name:'Probability & Statistics',units:3,year:2,sem:2,prereq:'MATH211',schedule:'MWF 10:00–11:00AM'},
+];
+
+const CROSS_SECTIONS={
+  'MATH111':[
+    {prog:'BSCS',section:'CS-1A',sched:'MWF 7:30–8:30AM',instructor:'Prof. Reyes',slots:5},
+    {prog:'BSCpE',section:'CPE-1B',sched:'TTh 10:00–11:30AM',instructor:'Prof. Lim',slots:2},
+  ],
+  'MATH112':[{prog:'BSCS',section:'CS-1C',sched:'MWF 9:00–10:00AM',instructor:'Prof. Santos',slots:8}],
+  'COMP102':[{prog:'BSCpE',section:'CPE-1A',sched:'TTh 1:00–2:30PM',instructor:'Prof. Garcia',slots:3}],
+  'COMP103':[
+    {prog:'BSCS',section:'CS-1B',sched:'MWF 10:00–11:00AM',instructor:'Prof. Torres',slots:6},
+    {prog:'BSECE',section:'ECE-1A',sched:'TTh 3:00–4:30PM',instructor:'Prof. Villanueva',slots:0},
+  ],
+};
+
+let CS = null;        // current student
+let filterMode = 'all';
+let pendingCb = null;
+
+// ─────────────────────────────────────────
+// AUTH
+// ─────────────────────────────────────────
+function doLogin(){
+  const sn = document.getElementById('l-sn').value.trim();
+  if(!sn){toast('Enter your student number','error');return;}
+  CS = JSON.parse(JSON.stringify(STUDENTS['2nd']));
+  CS.sn = sn;
+  CS.program = document.getElementById('l-prog').value;
+  boot();
+}
+function loadDemo(t){CS=JSON.parse(JSON.stringify(STUDENTS[t]));boot();}
+function logout(){CS=null;document.getElementById('app').classList.remove('active');document.getElementById('login-screen').style.display='flex';}
+function boot(){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app').classList.add('active');
+  document.getElementById('tb-sem').textContent=`A.Y. 2024–2025 | ${CS.semester===1?'1st':'2nd'} Sem`;
+  updateCounts();
+  renderDashboard();
+}
+
+// ─────────────────────────────────────────
+// HELPERS
+// ─────────────────────────────────────────
+function getStatus(code){
+  if(CS.enrolled.includes(code)) return 'enlisted';
+  if(CS.passed.includes(code)) return 'passed';
+  if(CS.failed.includes(code)) return 'failed';
+  const s=SUBJECTS.find(x=>x.code===code);
+  if(!s) return 'unknown';
+  if(s.prereq && !CS.passed.includes(s.prereq)) return 'locked';
+  return 'available';
+}
+function getEnrolledUnits(){return CS.enrolled.reduce((a,c)=>{const s=SUBJECTS.find(x=>x.code===c);return a+(s?s.units:0);},0);}
+function getLockedCount(){return SUBJECTS.filter(s=>s.year<=CS.yearLevel&&getStatus(s.code)==='locked').length;}
+function getFailedSubjects(){return CS.failed.map(c=>SUBJECTS.find(x=>x.code===c)).filter(Boolean);}
+function ordinal(n){return n===1?'1st':n===2?'2nd':'3rd';}
+
+function buildNotifs(){
+  const ns=[];
+  CS.failed.forEach(c=>{const s=SUBJECTS.find(x=>x.code===c);if(s)ns.push({type:'danger',icon:'❌',title:`Failed: ${s.name}`,body:`${c} must be retaken to proceed.`,time:'Today'});});
+  SUBJECTS.filter(s=>s.year<=CS.yearLevel).forEach(s=>{
+    if(s.prereq&&CS.failed.includes(s.prereq)){
+      ns.push({type:'warn',icon:'🔒',title:`${s.name} is Locked`,body:`Requires passing ${s.prereq} first.`,time:'Today'});
+    }
+  });
+  const u=getEnrolledUnits();
+  if(u>=MAX_UNITS) ns.push({type:'warn',icon:'⚠️',title:'Unit Load at Maximum',body:`You've reached the ${MAX_UNITS}-unit limit. Drop a subject to add more.`,time:'Today'});
+  ns.push({type:'success',icon:'✅',title:'Enrollment Period Open',body:`${ordinal(CS.yearLevel)} Year ${CS.semester===1?'1st':'2nd'} Sem enrollment is active.`,time:'2 days ago'});
+  return ns;
+}
+
+function updateCounts(){
+  const n=buildNotifs();
+  document.getElementById('ndot').style.display=CS.failed.length>0?'block':'none';
+  const mb=document.getElementById('mine-badge');
+  const ec=CS.enrolled.length;
+  mb.textContent=ec;
+  mb.classList.toggle('hidden',ec===0);
+}
+
+// ─────────────────────────────────────────
+// NAVIGATION
+// ─────────────────────────────────────────
+const PAGE_MAP={home:'pg-home',enlist:'pg-enlist',mine:'pg-mine',cross:'pg-cross',ts:'pg-ts',notifs:'pg-notifs'};
+const TITLES={home:'Dashboard',enlist:'Enlistment',mine:'My Subjects',cross:'Cross-Program',ts:'Tutorial & Summer',notifs:'Notifications'};
+let curPage='home';
+
+function goPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));
+  document.getElementById(PAGE_MAP[id]).classList.remove('hidden');
+  document.querySelectorAll('.bn-item').forEach(b=>b.classList.remove('active'));
+  const bn=document.getElementById('bn-'+id);
+  if(bn) bn.classList.add('active');
+  document.getElementById('tb-title').textContent=TITLES[id]||id;
+  document.getElementById('scroll-area').scrollTop=0;
+  curPage=id;
+  if(id==='home') renderDashboard();
+  if(id==='enlist') renderEnlist();
+  if(id==='mine') renderMine();
+  if(id==='cross'){document.getElementById('cp-results').innerHTML='';document.getElementById('cp-in').value='';}
+  if(id==='ts') renderTS();
+  if(id==='notifs') renderNotifs();
+}
+
+// ─────────────────────────────────────────
+// DASHBOARD
+// ─────────────────────────────────────────
+function renderDashboard(){
+  const u=getEnrolledUnits();
+  const pct=Math.min(100,(u/MAX_UNITS)*100);
+  document.getElementById('d-units').textContent=u;
+  document.getElementById('d-sc').textContent=CS.enrolled.length;
+  document.getElementById('d-fail').textContent=CS.failed.length;
+  document.getElementById('d-lock').textContent=getLockedCount();
+  document.getElementById('ufill').style.width=pct+'%';
+  document.getElementById('ul-txt').textContent=`${u} / ${MAX_UNITS}`;
+  document.getElementById('ul-lbl').textContent=pct>=100?'⛔ Full':pct>=75?'⚠️ Near limit':'✅ OK';
+
+  // Enlisted list
+  const el=document.getElementById('d-enl-list');
+  el.innerHTML=CS.enrolled.length===0
+    ?'<p style="font-size:.78rem;color:var(--muted);text-align:center;padding:8px">No subjects enlisted yet.</p>'
+    :CS.enrolled.map(c=>{const s=SUBJECTS.find(x=>x.code===c);return`<div class="enl-row"><span class="ec">${c}</span><span class="en">${s?.name||'—'}</span><span class="eu">${s?.units||0}u</span></div>`;}).join('');
+
+  // Notifications preview (3)
+  const nl=document.getElementById('d-notif-list');
+  const notifs=buildNotifs().slice(0,3);
+  nl.innerHTML=notifs.length===0
+    ?'<div style="padding:20px;text-align:center;font-size:.8rem;color:var(--muted)">No alerts.</div>'
+    :notifs.map(n=>`<div class="nitem"><div class="nicon ${n.type}">${n.icon}</div><div class="ntext"><div class="ntitle">${n.title}</div><div class="nbody">${n.body}</div><span class="ntime">${n.time}</span></div></div>`).join('');
+}
+
+// ─────────────────────────────────────────
+// ENLISTMENT
+// ─────────────────────────────────────────
+function setFilter(f,el){
+  filterMode=f;
+  document.querySelectorAll('.fchip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  renderEnlist();
+}
+
+function renderEnlist(){
+  const q=document.getElementById('enl-search').value.toLowerCase();
+  const f=filterMode;
+  let subjects=SUBJECTS.filter(s=>s.year<=CS.yearLevel);
+  if(q) subjects=subjects.filter(s=>s.code.toLowerCase().includes(q)||s.name.toLowerCase().includes(q));
+  if(f==='yr1') subjects=subjects.filter(s=>s.year===1);
+  else if(f==='yr2') subjects=subjects.filter(s=>s.year===2);
+  else if(f!=='all') subjects=subjects.filter(s=>getStatus(s.code)===f);
+
+  const container=document.getElementById('enl-list');
+  if(subjects.length===0){container.innerHTML='<div class="empty"><div class="ei">🔍</div><p>No subjects match your filter.</p></div>';return;}
+
+  container.innerHTML=subjects.map(subj=>{
+    const st=getStatus(subj.code);
+    let pillHtml='',actionHtml='',prereqHtml='';
+
+    if(st==='enlisted')      pillHtml='<span class="pill pill-enlisted">● Enlisted</span>';
+    else if(st==='locked')   pillHtml='<span class="pill pill-locked">🔒 Locked</span>';
+    else if(st==='passed')   pillHtml='<span class="pill pill-passed">✓ Passed</span>';
+    else if(st==='failed')   pillHtml='<span class="pill pill-failed">✗ Failed</span>';
+    else                     pillHtml='<span class="pill pill-avail">● Available</span>';
+
+    if(subj.prereq && st==='locked'){
+      const pSt=getStatus(subj.prereq);
+      prereqHtml=`<span class="subj-prereq">🔒 Needs ${subj.prereq}${pSt==='failed'?' (Failed)':''}</span>`;
+    } else if(subj.prereq){
+      prereqHtml=`<span style="font-size:.68rem;color:var(--muted)">Req: ${subj.prereq}</span>`;
+    }
+
+    const u=getEnrolledUnits();
+    const wouldExceed=u+subj.units>MAX_UNITS;
+
+    if(st==='enlisted') actionHtml=`<button class="act-btn btn-drop" onclick="confirmDrop('${subj.code}')">Drop</button>`;
+    else if(st==='locked') actionHtml=`<button class="act-btn btn-dis" disabled>Locked</button>`;
+    else if(st==='passed') actionHtml=`<button class="act-btn btn-dis" disabled>Passed</button>`;
+    else if(wouldExceed) actionHtml=`<button class="act-btn btn-dis" disabled>Full</button>`;
+    else actionHtml=`<button class="act-btn btn-add" onclick="confirmEnlist('${subj.code}')">Enlist</button>`;
+
+    return`<div class="subj-card ${st==='locked'?'locked':''} ${st==='enlisted'?'enlisted':''}">
+      <div class="subj-card-top">
+        <div class="subj-meta">
+          <div class="subj-code">${subj.code} &nbsp;·&nbsp; Year ${subj.year}</div>
+          <div class="subj-name">${subj.name}</div>
+          <div class="subj-units">${subj.units} units</div>
+        </div>
+        <div class="subj-pill">${pillHtml}</div>
+      </div>
+      <div class="subj-card-bot">
+        <span class="subj-sched">🕐 ${subj.schedule}</span>
+        ${prereqHtml}
+        <div class="subj-action">${actionHtml}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ─────────────────────────────────────────
+// MY SUBJECTS
+// ─────────────────────────────────────────
+function renderMine(){
+  const u=getEnrolledUnits();
+  document.getElementById('mine-warn').classList.toggle('hidden',u<MAX_UNITS);
+  const list=document.getElementById('mine-list');
+  const empty=document.getElementById('mine-empty');
+  if(CS.enrolled.length===0){list.innerHTML='';empty.classList.remove('hidden');return;}
+  empty.classList.add('hidden');
+  list.innerHTML=CS.enrolled.map(c=>{
+    const s=SUBJECTS.find(x=>x.code===c);
+    const isRetake=CS.failed.includes(c);
+    return`<div class="my-subj-card">
+      <div class="ms-left">
+        <div class="ms-code">${c}</div>
+        <div class="ms-name">${s?.name||'Unknown'}</div>
+        <div class="ms-info"><span>📦 ${s?.units||0} units</span><span>🕐 ${s?.schedule||'TBA'}</span></div>
+      </div>
+      <div class="ms-right">
+        ${isRetake?'<span class="pill pill-failed">Retake</span>':'<span class="pill pill-avail">Regular</span>'}
+        <button class="act-btn btn-drop" onclick="confirmDrop('${c}')">Drop</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ─────────────────────────────────────────
+// CROSS PROGRAM
+// ─────────────────────────────────────────
+function doCrossSearch(){
+  const q=document.getElementById('cp-in').value.trim().toUpperCase();
+  const cont=document.getElementById('cp-results');
+  if(!q){toast('Enter a subject code or name','warn');return;}
+  const matches=SUBJECTS.filter(s=>s.code.includes(q)||s.name.toUpperCase().includes(q));
+  if(matches.length===0){cont.innerHTML='<div class="empty"><div class="ei">🔍</div><p>No subjects found.</p></div>';return;}
+  let html='';
+  matches.forEach(subj=>{
+    const secs=CROSS_SECTIONS[subj.code];
+    if(!secs||!secs.length) return;
+    html+=`<div class="cp-result">
+      <div class="cp-head">
+        <h4>${subj.code} — ${subj.name}</h4>
+        <div class="cprog">${subj.units} units &nbsp;·&nbsp; Year ${subj.year}</div>
+      </div>`;
+    secs.forEach(sec=>{
+      const full=sec.slots<=0;
+      html+=`<div class="cp-sec">
+        <div class="cp-sec-left">
+          <div class="cp-sec-code">${sec.section} <span style="font-size:.68rem;font-weight:500;color:var(--blue);margin-left:4px">${sec.prog}</span></div>
+          <div class="cp-sec-info">📅 ${sec.sched} &nbsp; 👤 ${sec.instructor}</div>
+        </div>
+        <span class="cp-slots" style="color:${full?'var(--red)':'var(--green)'}">${full?'Full':`${sec.slots} slots`}</span>
+        <button class="act-btn ${full?'btn-dis btn-req':'btn-req'}" ${full?'disabled':''} onclick="confirmCP('${subj.code}','${sec.section}','${sec.prog}')">
+          ${full?'Full':'Request'}
+        </button>
+      </div>`;
+    });
+    html+='</div>';
+  });
+  cont.innerHTML=html||'<div class="empty"><div class="ei">📭</div><p>No cross-program sections found.<br/>Try Tutorial or Summer classes instead.</p></div>';
+}
+
+// ─────────────────────────────────────────
+// TUTORIAL / SUMMER
+// ─────────────────────────────────────────
+function renderTS(){
+  const failed=getFailedSubjects();
+  const cont=document.getElementById('ts-content');
+  if(failed.length===0){
+    cont.innerHTML='<div class="empty"><div class="ei">✅</div><p>No failed subjects.<br/>No tutorial or summer classes needed.</p></div>';
+    return;
+  }
+  let html='';
+
+  // Tutorial
+  html+=`<div class="ts-type-hd"><h3>📖 Tutorial Class</h3><p>Small-group intensive instruction for failed subjects.</p><span class="ts-cap">Max 9 Students</span></div>`;
+  html+=failed.map((s,i)=>{
+    const slots=9-(i*2);
+    const u=getEnrolledUnits();
+    const ok=u+s.units<=MAX_UNITS&&!CS.enrolled.includes(s.code);
+    return`<div class="ts-subj">
+      <div class="ts-subj-info">
+        <div class="ts-code">${s.code}</div>
+        <div class="ts-name">${s.name}</div>
+        <div class="ts-slots">${slots}/9 slots available</div>
+      </div>
+      <button class="act-btn ${ok?'btn-add':'btn-dis'}" ${ok?'':'disabled'} onclick="confirmTS('${s.code}','tutorial')">${ok?'Enroll':'Full'}</button>
+    </div>`;
+  }).join('');
+
+  // Summer
+  html+=`<div class="ts-type-hd" style="margin-top:8px"><h3>☀️ Summer Class</h3><p>Offered during summer term with demand.</p><span class="ts-cap">~30 Students</span></div>`;
+  html+=failed.map((s,i)=>{
+    const slots=28-(i*7);
+    const u=getEnrolledUnits();
+    const ok=u+s.units<=MAX_UNITS&&!CS.enrolled.includes(s.code);
+    return`<div class="ts-subj">
+      <div class="ts-subj-info">
+        <div class="ts-code">${s.code}</div>
+        <div class="ts-name">${s.name}</div>
+        <div class="ts-slots">${slots}/30 slots available</div>
+      </div>
+      <button class="act-btn ${ok?'btn-add':'btn-dis'}" ${ok?'':'disabled'} onclick="confirmTS('${s.code}','summer')">${ok?'Enroll':'Full'}</button>
+    </div>`;
+  }).join('');
+
+  cont.innerHTML=html;
+}
+
+// ─────────────────────────────────────────
+// NOTIFICATIONS
+// ─────────────────────────────────────────
+function renderNotifs(){
+  const ns=buildNotifs();
+  const cont=document.getElementById('notif-full-list');
+  cont.innerHTML=ns.length===0
+    ?'<div style="padding:32px;text-align:center;color:var(--muted);font-size:.85rem">No notifications.</div>'
+    :ns.map(n=>`<div class="nitem"><div class="nicon ${n.type}">${n.icon}</div><div class="ntext"><div class="ntitle">${n.title}</div><div class="nbody">${n.body}</div><span class="ntime">${n.time}</span></div></div>`).join('');
+}
+
+// ─────────────────────────────────────────
+// CONFIRM ACTIONS
+// ─────────────────────────────────────────
+function confirmEnlist(code){
+  const s=SUBJECTS.find(x=>x.code===code);
+  const u=getEnrolledUnits();
+  if(u+s.units>MAX_UNITS){toast(`Unit load limit reached (${u}/${MAX_UNITS})`,'error');return;}
+  openSheet('Confirm Enlistment','You are about to enlist in this subject.',
+    [{l:'Code',v:s.code},{l:'Subject',v:s.name},{l:'Units',v:s.units},{l:'Schedule',v:s.schedule},{l:'New Load',v:`${u+s.units} / ${MAX_UNITS}`}],
+    'primary','Enlist Now',()=>{
+      CS.enrolled.push(code);
+      updateCounts();renderDashboard();
+      toast(`Enlisted in ${code}`,'success');
+      if(curPage==='enlist')renderEnlist();
+    });
+}
+
+function confirmDrop(code){
+  const s=SUBJECTS.find(x=>x.code===code);
+  openSheet('Drop Subject','Are you sure you want to drop this subject?',
+    [{l:'Code',v:s.code},{l:'Subject',v:s.name},{l:'Units',v:s.units}],
+    'danger-btn','Drop Subject',()=>{
+      CS.enrolled=CS.enrolled.filter(c=>c!==code);
+      updateCounts();renderDashboard();
+      toast(`${code} has been dropped`,'warn');
+      if(curPage==='mine')renderMine();
+      if(curPage==='enlist')renderEnlist();
+    });
+}
+
+function confirmCP(code,section,prog){
+  const s=SUBJECTS.find(x=>x.code===code);
+  const u=getEnrolledUnits();
+  if(u+s.units>MAX_UNITS){toast('Unit load at maximum. Drop a subject first.','error');return;}
+  openSheet('Request Cross-Program Enlistment','Your request will be sent for faculty/department approval.',
+    [{l:'Subject',v:`${code} — ${s.name}`},{l:'Section',v:`${prog} — ${section}`},{l:'Status',v:'Pending Approval'}],
+    'blue-btn','Submit Request',()=>{toast(`Request submitted for ${code} in ${prog} ${section}`,'success');});
+}
+
+function confirmTS(code,type){
+  const s=SUBJECTS.find(x=>x.code===code);
+  const u=getEnrolledUnits();
+  if(u+s.units>MAX_UNITS){toast('Unit load at maximum. Drop a subject first.','error');return;}
+  const lbl=type==='tutorial'?'Tutorial Class (max 9)':'Summer Class (~30 students)';
+  openSheet(`Enroll in ${type==='tutorial'?'Tutorial':'Summer'} Class`,
+    `You are enrolling in a ${type==='tutorial'?'tutorial (max 9 students)':'summer (~30 students)'} class.`,
+    [{l:'Subject',v:`${code} — ${s.name}`},{l:'Type',v:lbl},{l:'Units',v:s.units}],
+    'primary','Confirm Enrollment',()=>{
+      CS.enrolled.push(code);
+      updateCounts();renderDashboard();
+      toast(`Enrolled in ${type} class for ${code}`,'success');
+      renderTS();
+    });
+}
+
+// ─────────────────────────────────────────
+// BOTTOM SHEET
+// ─────────────────────────────────────────
+function openSheet(title,body,details,btnCls,btnTxt,cb){
+  document.getElementById('sh-title').textContent=title;
+  document.getElementById('sh-body').textContent=body;
+  document.getElementById('sh-detail').innerHTML=details.map(d=>`<div class="row"><span class="lbl">${d.l}</span><span class="val">${d.v}</span></div>`).join('');
+  const btn=document.getElementById('sh-confirm');
+  btn.textContent=btnTxt;
+  btn.className=`sheet-btn ${btnCls}`;
+  pendingCb=cb;
+  document.getElementById('sheet-ov').classList.add('open');
+}
+
+document.getElementById('sh-confirm').addEventListener('click',()=>{
+  if(pendingCb){pendingCb();pendingCb=null;}
+  closeSheet();
+});
+
+function closeSheet(){document.getElementById('sheet-ov').classList.remove('open');}
+document.getElementById('sheet-ov').addEventListener('click',e=>{if(e.target===document.getElementById('sheet-ov'))closeSheet();});
+
+// ─────────────────────────────────────────
+// TOAST
+// ─────────────────────────────────────────
+function toast(msg,type=''){
+  const tw=document.getElementById('tw');
+  const t=document.createElement('div');
+  t.className=`toast ${type}`;
+  t.textContent=msg;
+  tw.appendChild(t);
+  setTimeout(()=>{t.style.opacity='0';t.style.transform='translateY(8px)';t.style.transition='.25s';setTimeout(()=>t.remove(),250);},2800);
+}
+</script>
+</body>
+</html>
