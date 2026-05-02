@@ -1,0 +1,13 @@
+/* RESET */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  font-size: 12px;
+  font-family: 'Open Sans', sans-serif, helvetica, arial;
+  height: 100%;
+  margin: 0;
+  overflow-x: hidden;
+  padding: 0;
+}

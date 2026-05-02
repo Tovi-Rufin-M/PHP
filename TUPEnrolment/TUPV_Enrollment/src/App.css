@@ -1,0 +1,113 @@
+
+/* BANNER */
+.aims-banner {
+  background: #830001;
+  background-image: radial-gradient(circle, #ffffff, #830001);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: contain;
+  max-height: 85px;
+  padding: 5px 0;
+}
+
+.aims-banner > .image {
+  max-height: 75px;
+  width: 800px;
+}
+
+/* LAYOUT */
+.aims-container {
+  width: 100%;
+  padding: 0 5vw;
+  
+}
+
+.aims-content {
+  min-height: calc(100vh - 85px);
+  margin-bottom: -8.75em;
+}
+
+/* BACKGROUND */
+.aims-background {
+  background: #E1888C;
+  background-image: linear-gradient(to bottom, #ffffff, #C7232B);
+  background-attachment: fixed;
+}
+
+/* FOOTER */
+.aims-footer,
+.pusher {
+  clear: both;
+  width: 100%;
+  padding: 1em 0;
+  height: 8.75em;
+  font-size: 12px;
+}
+
+.aims-footer hr {
+  margin: 1em 0;
+  border: 1px dashed #777;
+}
+
+.aims-footer p {
+  margin: 0;
+}
+
+/* UTILITIES */
+.text-center {
+  text-align: center;
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-button {
+  background-color: #b71921;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #b71921;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .aims-banner > .image {
+    width: 100%;
+  }
+
+  .aims-loginpanel {
+    width: 90%;
+    float: none;
+    margin: 0 auto;
+  }
+
+  .aims-container.space-between {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .aims-loginpanel {
+    width: 100%;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0.5em 1em;
+  }
+  html, body {
+    height: 100%;
+  }
+  .aims-content {
+    min-height: calc(100vh);
+}
+
+  .aims-button {
+    min-width: 0;
+    width: 48%;
+  }
+}
