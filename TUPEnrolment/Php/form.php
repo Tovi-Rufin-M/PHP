@@ -71,11 +71,10 @@
 
 <link rel="stylesheet" href="Style/form.css">
 <div class="form-container">
-    <?php 
-    include 'failed.php'; 
-    include 'drop.php'; 
+    <?php
+    include 'procces.php';
+    include 'failed.php';
+    include 'drop.php';
+    include 'summary.php';
     ?>
 </div>
-
-<?php include 'summary.php'; ?>
-

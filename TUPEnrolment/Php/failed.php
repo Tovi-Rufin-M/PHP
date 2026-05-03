@@ -27,38 +27,17 @@
                 <th>Grade</th>
             </tr>
         </thead>
-        <tbody id="failed-table-body"></tbody>
+        <tbody>
+            <?php foreach ($subjecttoRetake as $i => $s) { ?>
+                <tr id="retake-row-<?php echo $i; ?>">
+                    <td><input type="checkbox" name="select" class="retake-check"></td>
+                    <td><?php echo htmlspecialchars($s['name']); ?></td>
+                    <td><?php echo $s['units']; ?></td>
+                    <td><?php echo htmlspecialchars($s['room']); ?></td>
+                    <td><?php echo htmlspecialchars($s['instructor']); ?></td>
+                    <td><?php echo htmlspecialchars($s['grade']); ?></td>
+                </tr>
+            <?php } ?>
+        </tbody>
     </table>
 </div>
-
-<script>
-// 1. Pass the PHP array to JavaScript using json_encode
-const subjecttoRetake = <?php echo json_encode($subjecttoRetake); ?>;
-
-// 2. Now JavaScript knows what `subjecttoRetake` is and can map over it
-document.getElementById('failed-table-body').innerHTML = subjecttoRetake.map(s => `
-    <tr>
-      <td><input type="checkbox" name="select"></td>
-      <td>${s.name}</td>
-      <td>${s.units}</td>
-      <td>${s.room}</td>
-      <td>${s.instructor}</td>
-      <td><span class="grade-badge">${s.grade}</span></td>
-    </tr>
-`).join('');
-
-// 3. Add event listener for "Select All" checkbox
-document.getElementById('selectAll-failed').addEventListener('change', function() {
-    const checkboxes = document.querySelectorAll('#failed-table-body input[type="checkbox"]');
-    checkboxes.forEach(cb => cb.checked = this.checked);
-    return true;
-});
-
-// 4. Add event listeners for individual checkboxes
-document.querySelectorAll('#failed-table-body input[type="checkbox"]').forEach(checkbox => {
-    checkbox.addEventListener('change', function() {
-        const allCheckboxes = document.querySelectorAll('#failed-table-body input[type="checkbox"]');
-        const checkedCheckboxes = document.querySelectorAll('#failed-table-body input[type="checkbox"]:checked');
-        document.getElementById('selectAll-failed').checked = checkedCheckboxes.length === allCheckboxes.length;
-    });
-});
