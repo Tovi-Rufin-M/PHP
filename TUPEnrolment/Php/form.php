@@ -23,7 +23,7 @@
         color: <?php echo $isEnrolled ? '#15803d' : '#b91c1c'; ?>;
     }
 </style>
-<link rel="stylesheet" href="statusbar.css">
+<link rel="stylesheet" href="Style/statusbar.css">
 <div class="statusbar">
     <!-- Grid Item 1 -->
     <div class="stat-group">
@@ -49,7 +49,7 @@
     </div>
 </div>
 <br>
-<link rel="stylesheet" href="nav.css">
+<link rel="stylesheet" href="Style/nav.css">
 <div class="stepper-wrapper">
   <div class="stepper-item active">
     <div class="step-counter">1</div>
@@ -69,7 +69,7 @@
   </div>
 </div>
 
-<link rel="stylesheet" href="form.css">
+<link rel="stylesheet" href="Style/form.css">
 <div class="form-container">
     <?php 
     include 'failed.php'; 

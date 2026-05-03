@@ -27,66 +27,38 @@
                 <th>Grade</th>
             </tr>
         </thead>
-        <tbody>
-            <?php foreach ($subjecttoRetake as $i => $s) { ?>
-                <tr id="failed-row-<?php echo $i; ?>">
-                    <td><input type="checkbox" name="select" class="failed-check"></td>
-                    <td><?php echo htmlspecialchars($s['name']); ?></td>
-                    <td><?php echo $s['units']; ?></td>
-                    <td><?php echo htmlspecialchars($s['room']); ?></td>
-                    <td><?php echo htmlspecialchars($s['instructor']); ?></td>
-                    <td><span class="grade-badge"><?php echo htmlspecialchars($s['grade']); ?></span></td>
-                </tr>
-            <?php } ?>
-        </tbody>
+        <tbody id="failed-table-body"></tbody>
     </table>
 </div>
+
 <script>
-const checkboxesFailed = document.querySelectorAll('.failed-check');
-const selectAllFailed = document.getElementById('selectAll-failed');
-let listItems = [];
+// 1. Pass the PHP array to JavaScript using json_encode
+const subjecttoRetake = <?php echo json_encode($subjecttoRetake); ?>;
 
-// Get selected values
-function updateSelectedList() {
-    listItems = [];
+// 2. Now JavaScript knows what `subjecttoRetake` is and can map over it
+document.getElementById('failed-table-body').innerHTML = subjecttoRetake.map(s => `
+    <tr>
+      <td><input type="checkbox" name="select"></td>
+      <td>${s.name}</td>
+      <td>${s.units}</td>
+      <td>${s.room}</td>
+      <td>${s.instructor}</td>
+      <td><span class="grade-badge">${s.grade}</span></td>
+    </tr>
+`).join('');
 
-    checkboxesFailed.forEach(cb => {
-        if (cb.checked) {
-            listItems.push(cb.value);
-        }
-    });
-
-    console.log("Selected:", listItems);
-}
-
-// Reusable handler
-function handleCheckboxChange(cb) {
-    updateRowStyle(cb);
-
-    // If one is unchecked → uncheck select all
-    if (!cb.checked) {
-        selectAllFailed.checked = false;
-    } else {
-        // If ALL are checked → check select all
-        const allChecked = Array.from(checkboxesFailed).every(c => c.checked);
-        selectAllFailed.checked = allChecked;
-    }
-
-    updateSelectedList();
-}
-
-// Individual checkboxes
-checkboxesFailed.forEach(cb => {
-    cb.addEventListener('change', () => handleCheckboxChange(cb));
+// 3. Add event listener for "Select All" checkbox
+document.getElementById('selectAll-failed').addEventListener('change', function() {
+    const checkboxes = document.querySelectorAll('#failed-table-body input[type="checkbox"]');
+    checkboxes.forEach(cb => cb.checked = this.checked);
+    return true;
 });
 
-// Select all checkbox
-selectAllFailed.addEventListener('change', function () {
-    checkboxesFailed.forEach(cb => {
-        cb.checked = this.checked;
-        updateRowStyle(cb);
+// 4. Add event listeners for individual checkboxes
+document.querySelectorAll('#failed-table-body input[type="checkbox"]').forEach(checkbox => {
+    checkbox.addEventListener('change', function() {
+        const allCheckboxes = document.querySelectorAll('#failed-table-body input[type="checkbox"]');
+        const checkedCheckboxes = document.querySelectorAll('#failed-table-body input[type="checkbox"]:checked');
+        document.getElementById('selectAll-failed').checked = checkedCheckboxes.length === allCheckboxes.length;
     });
-
-    updateSelectedList();
 });
-</script>

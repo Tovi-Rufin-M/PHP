@@ -21,4 +21,3 @@
         </tfoot>
     </table>
 </div>
-<script src="summary.js"></script>
