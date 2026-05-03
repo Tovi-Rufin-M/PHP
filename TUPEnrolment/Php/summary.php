@@ -16,7 +16,7 @@
             <tr>
                 <th>Total Units</th>
                 <th id="summary-total"></th>
-                <th colspan="2"><h3>Max Units: 24</h3></th>
+                <th id="Max" colspan="2"></th>
             </tr>
         </tfoot>
     </table>
@@ -28,7 +28,7 @@
         --primary-hover: #e43838;
     }
 
-    .nextpagebtn {
+    #nextpagebtn {
         display: flex;
         justify-content: flex-end; /* Aligns button to the right */
         padding: 20px 0;
@@ -67,11 +67,6 @@
         box-shadow: 0 2px 10px rgba(59, 130, 246, 0.2);
     }
 
-    /* Adding an arrow icon via CSS */
-    #nextBtn::after {
-        content: '→';
-        transition: transform 0.3s ease;
-    }
 
     #nextBtn:hover::after {
         transform: translateX(4px); /* Moves arrow slightly on hover */
@@ -86,7 +81,7 @@
     }
 </style>
 
-<div class="nextpagebtn">
-    <button id="nextBtn">Next Step</button>
+<div id="nextpagebtn">
+    
 </div>
 

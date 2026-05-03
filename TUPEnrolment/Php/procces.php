@@ -142,8 +142,10 @@ function updateSummary(array) {
 
     const summaryrows = document.getElementById('summary-rows');
     const totalUnitsCell = document.getElementById('summary-total');
-
+    const max = document.getElementById('Max');
+    const button = document.getElementById('nextpagebtn');
     summaryrows.innerHTML = '';
+    let Max = 24;
     let totalUnits = 0;
 
     subjects.forEach(subject => {
@@ -157,11 +159,15 @@ function updateSummary(array) {
         summaryrows.appendChild(row);
         totalUnits += subject.units;
     });
-    if (totalUnits > 24){
-        totalUnitsCell.innerHTML = `<h1 id="error">${"error"}</h1>`;
+    if (totalUnits > Max){
+        totalUnitsCell.innerHTML = `<h1 style="color: red;">${totalUnits}</h1>`;
+        max.innerHTML = `<h1 style="color: red;">Max Units:${Max}</h1>`;
+        button.innerHTML = ` `;
         return;
     }else{
         totalUnitsCell.innerHTML = `<h3>${totalUnits}</h3>`;
+        max.innerHTML = `<h3>Max Units:${Max}</h3>`;
+        button.innerHTML = `<button id="nextBtn" onclick="pagetwo()">Next Step</button>`;
     }
 
     // ✅ fetch is now INSIDE the function, runs only when called

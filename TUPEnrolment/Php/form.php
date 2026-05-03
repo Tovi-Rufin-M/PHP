@@ -70,7 +70,8 @@
 </div>
 
 <link rel="stylesheet" href="Style/form.css">
-<div class="form-container">
+
+<div class="form-container active">
     <?php
     include 'procces.php';
     include 'failed.php';
