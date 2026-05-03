@@ -1,0 +1,56 @@
+
+/* 1. Base Grid (Mobile: 2 Columns) */
+.statusbar {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Creates the 2x2 effect */
+    gap: 20px;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    font-family: 'Inter', sans-serif;
+    max-width: 1000px;
+    margin: 10px auto;
+}
+
+/* 2. Desktop Layout (Single Row) */
+@media (min-width: 768px) {
+    .statusbar {
+        grid-template-columns: 2fr 1fr 1.5fr 1fr; /* Adjusts width based on content importance */
+        align-items: center;
+        padding: 15px 30px;
+        border-radius: 50px;
+    }
+}
+
+.stat-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #64748b;
+    font-weight: 700;
+    margin-bottom: 2px;
+}
+
+.stat-value {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #0f172a;
+    overflow-wrap: break-word;
+}
+
+/* Visual dot for status */
+.status-pill::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: currentColor;
+    margin-right: 6px;
+}

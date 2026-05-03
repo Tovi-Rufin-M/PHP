@@ -1,0 +1,137 @@
+:root {
+    --danger-red: #ef4444;
+    --border-color: #e2e8f0;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+}
+.Failed-subjects-card, .Drop-subjects-card, .Summary-subjects-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    font-family: 'Inter', system-ui, sans-serif;
+    margin: 20px 0;
+}
+
+/* Table Header Styling */
+.table-header {
+    padding: 16px 20px;
+    background-color: #fff1f2; /* Light red tint */
+    border-bottom: 1px solid #fecaca;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.table-header h3 {
+    margin: 0;
+    color: #991b1b;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.Summary-subjects-card .table-header {
+    padding: 16px 20px;
+    background-color: #fff1f2; /* Light red tint */
+    border-bottom: 1px solid #fecaca;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.Summary-subjects-card .table-header h3 {
+    margin: 0;
+    color: #1b4799;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+/* Modern Table Reset */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+th {
+    background-color: #f8fafc;
+    padding: 12px 20px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #64748b;
+    font-weight: 700;
+}
+
+td {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.9rem;
+    color: #334155;
+}
+
+/* Hover & Selected Row effect */
+tr:hover { background-color: #fffbfb; }
+tr.selected-row { background-color: #fef2f2; }
+
+/* Grade Badge */
+.grade-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 6px;
+    background: #fee2e2;
+    color: #b91c1c;
+    font-weight: 700;
+    font-size: 0.8rem;
+}
+
+/* Checkbox Styling */
+input[type="checkbox"] {
+    cursor: pointer;
+    accent-color: var(--danger-red);
+    width: 16px;
+    height: 16px;
+}
+
+/* Responsive Table Wrapper */
+.Failed-subjects-card .select-subject,
+.Drop-subjects-card .select-subject {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Stack header on small screens */
+@media (max-width: 640px) {
+    .table-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+        padding: 12px 16px;
+    }
+
+    .table-header h3 {
+        font-size: 0.9rem;
+    }
+
+    /* Tighten cell padding */
+    th {
+        padding: 10px 12px;
+        font-size: 0.7rem;
+    }
+
+    td {
+        padding: 10px 12px;
+        font-size: 0.8rem;
+    }
+
+    /* Hide less important columns on mobile */
+    th:nth-child(4), td:nth-child(4),   /* Room */
+    th:nth-child(5), td:nth-child(5) {  /* Instructor */
+        display: none;
+    }
+}
