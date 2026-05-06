@@ -68,14 +68,14 @@
     <div class="step-name">Forth</div>
   </div>
 </div>
-
 <link rel="stylesheet" href="Style/form.css">
-
 <div class="form-container active">
     <?php
     include 'procces.php';
     include 'failed.php';
+    include 'course.php';
     include 'drop.php';
     include 'summary.php';
+    
     ?>
 </div>

@@ -7,11 +7,7 @@
     $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8", $user, $pass);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $stmt = $pdo->query("
-        SELECT fs.name, c.course_name, fs.units, fs.room, fs.instructor, fs.grade
-        FROM failed_subjects fs
-        JOIN courses c ON fs.course_id = c.id
-    ");
+    $stmt = $pdo->query("SELECT name, course, units, room, instructor, grade FROM failed_subjects");
     $subjecttoRetake = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <div class="Failed-subjects-card">
@@ -32,19 +28,19 @@
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($subjecttoRetake as $i => $s) { ?>
-                <tr id="retake-row-<?php echo $i; ?>">
-                    <td><input type="checkbox" name="select" class="retake-check"></td>
-                    <td>
-                        <?php echo htmlspecialchars($s['name']); ?>
-                        <span><?php echo htmlspecialchars($s['course_name']); ?></span>
-                    </td>
-                    <td><?php echo $s['units']; ?></td>
-                    <td><?php echo htmlspecialchars($s['room']); ?></td>
-                    <td><?php echo htmlspecialchars($s['instructor']); ?></td>
-                    <td><?php echo htmlspecialchars($s['grade']); ?></td>
-                </tr>
-            <?php } ?>
+        <?php foreach ($subjecttoRetake as $i => $s) { ?>
+            <tr id="retake-row-<?php echo $i; ?>">
+                <td><input type="checkbox" name="select" class="retake-check"></td>
+                <td>
+                    <strong><?php echo htmlspecialchars($s['name']); ?></strong><br>
+                    <?php echo htmlspecialchars($s['course']); ?>
+                </td>
+                <td><?php echo $s['units']; ?></td>
+                <td><?php echo htmlspecialchars($s['room']); ?></td>
+                <td><?php echo htmlspecialchars($s['instructor']); ?></td>
+                <td><?php echo htmlspecialchars($s['grade']); ?></td>
+            </tr>
+        <?php } ?>
         </tbody>
     </table>
 </div>

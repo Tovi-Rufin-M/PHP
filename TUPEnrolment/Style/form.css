@@ -8,7 +8,7 @@
     flex-direction: column;
     margin: 0 auto;
 }
-.Failed-subjects-card, .Drop-subjects-card, .Summary-subjects-card {
+.Failed-subjects-card , .Drop-subjects-card , .Summary-subjects-card, .Course-subjects-card {
     background-color: #ffffff;
     border-radius: 12px;
     border: 1px solid var(--border-color);
@@ -35,20 +35,6 @@
     display: flex;
     align-items: center;
     gap: 8px;
-}
-.Summary-subjects-card .table-header {
-    padding: 16px 20px;
-    background-color: #fff1f2; /* Light red tint */
-    border-bottom: 1px solid #fecaca;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.Summary-subjects-card .table-header h3 {
-    margin: 0;
-    color: #1b4799;
-    font-size: 1.25rem;
-    font-weight: 700;
 }
 
 /* Modern Table Reset */

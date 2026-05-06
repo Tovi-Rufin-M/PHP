@@ -1,31 +1,16 @@
-<?php
-    $host = 'localhost';
-    $db   = 'enrollment_db';
-    $user = 'root';
-    $pass = '';
 
-    $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8", $user, $pass);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $stmt = $pdo->query("SELECT name, units, room, instructor FROM subjects");
-    $subjecttoDrop = $stmt->fetchAll(PDO::FETCH_ASSOC);
-?>
-
-<div class="Drop-subjects-card">
+<div class="Course-subjects-card">
     <div class="table-header">
-        <h3>⚠️ Subjects To Drop</h3>
-        <h3> 2nd Semester</h3>
+        <h3>⚠️ Select Coarse</h3>
+        <h3>Coarse Section</h3>
         <span style="font-size: 0.8rem; color: #7f1d1d;">Select items to add to current load</span>
     </div>
-
     <table>
         <thead>
             <tr>
-                <th><input type="checkbox" id="selectAll-drop"></th>
-                <th>Subject</th>
-                <th>Units</th>
-                <th>Room</th>
-                <th>Instructor</th>
+                <th style="width: 20%;">Subjects</th>
+                <th>Course</th>
             </tr>
         </thead>
         <tbody>
@@ -41,3 +26,5 @@
         </tbody>
     </table>
 </div>
+
+ 
