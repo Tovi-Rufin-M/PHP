@@ -1,5 +1,6 @@
 <script>
 const storedSubjects = [];
+const selectedfailedSubjects = [];
 function dropSubjects() {
     // 1. Find the "Select All" checkbox by its ID
     const selectAllBox = document.getElementById('selectAll-drop');
@@ -83,15 +84,20 @@ function failedSubjects() {
             const key = JSON.stringify(getname);
             if (box.checked) {
                 if (!storedSubjects.some(item => JSON.stringify(item) === key)) {
+                    selectedfailedSubjects.push(getname);
                     storedSubjects.push(getname);
                 }
             } else {
                 const index = storedSubjects.findIndex(item => JSON.stringify(item) === key);
+                const index1 =  selectedfailedSubjects.findIndex(item => JSON.stringify(item)=== key)
                 if (index > -1) {
+                    selectedfailedSubjects.splice(index1, 1);
                     storedSubjects.splice(index, 1);
+                    
                 }
             }
         });
+        senttocourse(selectedfailedSubjects);
         updateSummary(storedSubjects);
         
     });
@@ -107,20 +113,48 @@ function failedSubjects() {
             const key = JSON.stringify(getname);
             if (box.checked) {
                 if (!storedSubjects.some(item => JSON.stringify(item) === key)) {
+                    selectedfailedSubjects.push(getname);
                     storedSubjects.push(getname);
                 }
             } else {
                 const index = storedSubjects.findIndex(item => JSON.stringify(item) === key);
+                const index1 =  selectedfailedSubjects.findIndex(item => JSON.stringify(item)=== key)
                 if (index > -1) {
+                    selectedfailedSubjects.splice(index1, 1);
                     storedSubjects.splice(index, 1);
+                    
                 }
             }
+            senttocourse(selectedfailedSubjects);
             updateSummary(storedSubjects);
         });
     });
 }
 // Run the function when the page finishes loading
 document.addEventListener('DOMContentLoaded', failedSubjects());
+
+function senttocourse(array){
+    const subjects = [];
+
+    for (let i = 0; i < array.length; i++) {
+        const row = array[i];
+        if (row.length < 5) continue;
+        const subjectObj = {
+            code: row[1]
+        };
+        subjects.push(subjectObj);
+    }
+    const subjectsrows = document.getElementById('subjects-rows');
+    subjectsrows.innerHTML = '';
+    subjects.forEach(subject => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td style="border-right: 2px solid black;">${subject.code}</td>
+        `;
+        subjectsrows.appendChild(row);
+    });
+
+}
 
 function updateSummary(array) {
     const subjects = [];
@@ -186,6 +220,7 @@ function updateSummary(array) {
 
 document.addEventListener('DOMContentLoaded', () => {
     console.log("Page loaded, initializing summary...");
+    senttocourse(storedSubjects);
     updateSummary(storedSubjects);
 });
 </script>

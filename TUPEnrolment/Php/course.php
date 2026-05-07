@@ -1,28 +1,32 @@
+<?php
 
+?>
 
+<style>
+.Course-subjects-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    font-family: 'Inter', system-ui, sans-serif;
+    margin: 20px 0;
+}
+</style>
 <div class="Course-subjects-card">
     <div class="table-header">
         <h3>⚠️ Select Coarse</h3>
         <h3>Coarse Section</h3>
         <span style="font-size: 0.8rem; color: #7f1d1d;">Select items to add to current load</span>
     </div>
-    <table>
+    <table border-collapse: collapse;>
         <thead>
             <tr>
                 <th style="width: 20%;">Subjects</th>
                 <th>Course</th>
             </tr>
         </thead>
-        <tbody>
-            <?php foreach ($subjecttoDrop as $i => $s) { ?>
-                <tr id="drop-row-<?php echo $i; ?>">
-                    <td><input type="checkbox" name="select" class="drop-check"></td>
-                    <td><?php echo htmlspecialchars($s['name']); ?></td>
-                    <td><?php echo $s['units']; ?></td>
-                    <td><?php echo htmlspecialchars($s['room']); ?></td>
-                    <td><?php echo htmlspecialchars($s['instructor']); ?></td>
-                </tr>
-            <?php } ?>
+        <tbody id="subjects-rows">
         </tbody>
     </table>
 </div>

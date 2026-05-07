@@ -8,7 +8,7 @@
     flex-direction: column;
     margin: 0 auto;
 }
-.Failed-subjects-card , .Drop-subjects-card , .Summary-subjects-card, .Course-subjects-card {
+.Failed-subjects-card , .Drop-subjects-card , .Summary-subjects-card {
     background-color: #ffffff;
     border-radius: 12px;
     border: 1px solid var(--border-color);
@@ -85,6 +85,8 @@ input[type="checkbox"] {
 }
 
 /* Responsive Table Wrapper */
+.Summary-subjects-card,
+.Course-subjects-card,
 .Failed-subjects-card .select-subject,
 .Drop-subjects-card .select-subject {
     overflow-x: auto;

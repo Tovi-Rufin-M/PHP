@@ -81,7 +81,5 @@
     }
 </style>
 
-<div id="nextpagebtn">
-    
-</div>
+<div id="nextpagebtn"></div>
 
