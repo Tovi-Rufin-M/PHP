@@ -149,7 +149,9 @@ function senttocourse(array){
     subjects.forEach(subject => {
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td style="border-right: 2px solid black;">${subject.code}</td>
+            <td style="border-right: 2px solid black; cursor: pointer;" 
+                onclick="handleClick('${subject.code}')">${subject.code}
+            </td>
         `;
         subjectsrows.appendChild(row);
     });

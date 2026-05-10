@@ -28,7 +28,18 @@
         </thead>
         <tbody id="subjects-rows">
         </tbody>
+        <tfoot>
+            <tr>
+                <td style="height: 20vh; border-right: 2px solid black;"></td>
+            </tr>
+        </tfoot>
     </table>
 </div>
 
+<script>
+    function handleClick(code) {
+        console.log('Clicked:', code);
+        // do whatever you need here
+    }
+</script>
  
