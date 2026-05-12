@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* RESET */
+        *, *::before, *::after {
+        box-sizing: border-box;
+        }
+
+        html, body {
+        font-size: 12px;
+        font-family: 'Open Sans', sans-serif, helvetica, arial;
+        height: 100%;
+        margin: 0;
+        overflow-x: hidden;
+        padding: 0;
+        }
+
+        /* BANNER */
+        .aims-banner {
+        background: #830001;
+        background-image: radial-gradient(circle, #ffffff, #830001);
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        background-size: contain;
+        max-height: 85px;
+        padding: 5px 0;
+        }
+
+        .aims-banner > .image {
+        max-height: 75px;
+        width: 800px;
+        }
+
+        /* LAYOUT */
+        .aims-container {
+        width: 100%;
+        padding: 0 5vw;
+        }
+
+        .aims-content {
+        min-height: calc(100% - 85px);
+        margin-bottom: -8.75em;
+        }
+
+        /* BACKGROUND */
+        .aims-background {
+        background: #E1888C;
+        background-image: linear-gradient(to bottom, #ffffff, #C7232B);
+        background-attachment: fixed;
+        }
+
+        /* FOOTER */
+        .aims-footer,
+        .pusher {
+        clear: both;
+        width: 100%;
+        padding: 1em 0;
+        height: 8.75em;
+        font-size: 12px;
+        }
+
+        .aims-footer hr {
+        margin: 1em 0;
+        border: 1px dashed #777;
+        }
+
+        .aims-footer p {
+        margin: 0;
+        }
+
+        /* UTILITIES */
+        .text-center {
+        text-align: center;
+        }
+
+        /* SCROLLBAR */
+        ::-webkit-scrollbar {
+        width: 10px;
+        }
+
+        ::-webkit-scrollbar-button {
+        background-color: #b71921;
+        }
+
+        ::-webkit-scrollbar-track {
+        background-color: #b71921;
+        }
+
+        ::-webkit-scrollbar-thumb {
+        background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+        .aims-banner > .image {
+            width: 100%;
+        }
+
+        .aims-loginpanel {
+            width: 90%;
+            float: none;
+            margin: 0 auto;
+        }
+
+        .aims-container.space-between {
+            flex-direction: column;
+        }
+        }
+
+        @media (max-width: 480px) {
+        .aims-loginpanel {
+            width: 100%;
+            border-radius: 0;
+            box-shadow: none;
+            padding: 0.5em 1em;
+        }
+        html, body {
+            height: 100%;
+        }
+        .aims-content {
+            min-height: calc(100vh);
+        }
+
+        .aims-button {
+            min-width: 0;
+            width: 48%;
+            
+        }
+        }
+    </style>
+    <title>enrollment module</title>
+</head>
+<body>
+    <div class="aims-banner">
+        <img class="image" src="assets/des_UIPEN.png">
+    </div>
+    <div class="aims-content aims-container aims-background">
+        
+        <div class="root"></div>
+        <div class="pusher"></div>
+    </div>
+    <div class="aims-footer text-center">
+        <hr>
+        <p>Powered by <img src="assets/logo_AIMS.png" alt="AIMS"> from <img src="assets/logo_Pinnacle.png" alt="Pinnacle Technologies, Inc."></p>
+        <p>For questions and comments, email us at</p>
+        <p><a href="mailto:web.ers@tup.edu.ph">web.ers@tup.edu.ph</a></p>
+    </div>
+<script>
+    fetch('Php/form.php')
+        .then(response => response.text())
+        .then(html => {
+            const root = document.querySelector('.root');
+            root.innerHTML = html;
+
+            root.querySelectorAll('script').forEach(oldScript => {
+                const newScript = document.createElement('script');
+                newScript.textContent = oldScript.textContent;
+                document.body.appendChild(newScript);
+                oldScript.remove();
+            });
+        });
+</script>
+</body>
+</html>

@@ -1,0 +1,237 @@
+/* RESET */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  font-size: 12px;
+  font-family: 'Open Sans', sans-serif, helvetica, arial;
+  height: 100vh;
+  margin: 0;
+  overflow-x: hidden;
+  padding: 0;
+}
+
+/* BANNER */
+.aims-banner {
+  background: #830001;
+  background-image: radial-gradient(circle, #ffffff, #830001);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: contain;
+  max-height: 85px;
+  padding: 5px 0;
+}
+
+.aims-banner > .image {
+  max-height: 75px;
+  width: 800px;
+}
+
+/* BACKGROUND */
+.aims-background {
+  background: #E1888C;
+  background-image: linear-gradient(to bottom, #ffffff, #C7232B);
+  background-attachment: fixed;
+}
+
+/* LAYOUT */
+.aims-container {
+  width: 100%;
+  padding: 0 5vw;
+}
+
+.aims-content {
+  min-height: calc(100% - 85px);
+  margin-bottom: -8.75em;
+}
+
+.aims-loginpanel {
+  padding: 0.5em 2em;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 4px;
+  box-shadow: 2px 2px 14px 7px #000;
+  width: 40%;
+  color: #fff;
+  float: left;
+}
+
+/* FORM */
+.aims-textfield {
+  font-size: 1em;
+  margin: 1em 0;
+  color: #fff;
+  position: relative;
+}
+
+.aims-textfield > input {
+  width: 100%;
+  padding: 0.5em;
+  font-size: 1em;
+  font-family: 'Open Sans', sans-serif, helvetica, arial;
+  outline: none;
+  border: 1px solid transparent;
+  transition: all 250ms ease-out;
+  margin-bottom: 1.5em;
+}
+
+.aims-textfield > input:focus,
+.aims-textfield > input:hover {
+  border: 1px solid #b71921;
+  box-shadow: 0 0 1px #eee;
+}
+
+.aims-textfield > label {
+  font-size: 1em;
+  display: block;
+  position: absolute;
+  top: -1.5em;
+  transition: all 250ms ease-in-out;
+}
+
+.aims-textfield > input:focus + label {
+  color: #EB5D5E;
+}
+
+/* BUTTONS */
+.aims-button {
+  font-size: 1em;
+  font-family: 'Open Sans', sans-serif, helvetica, arial;
+  padding: 0.5em;
+  border: 1px solid #333;
+  min-width: 6em;
+  position: relative;
+  outline: none;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.aims-button > span {
+  z-index: 1;
+}
+
+.aims-button.red {
+  background: #b71921;
+  color: #eee;
+  border-color: #eee;
+}
+
+.aims-button::after {
+  content: "";
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: all 250ms ease-out;
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+.aims-button.disabled,
+.aims-button[disabled] {
+  pointer-events: none;
+}
+
+.aims-button.disabled::after,
+.aims-button[disabled]::after {
+  background-color: rgba(255, 255, 255, 0.25);
+  transform: scaleX(1);
+}
+
+.aims-button:hover::after,
+.aims-button:active::after {
+  transform: scaleX(1);
+}
+
+/* UTILITIES */
+.flex {
+  display: flex;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+.margin-center {
+  float: none;
+  margin: 0 auto;
+}
+
+.text-center {
+  text-align: center;
+}
+
+/* FOOTER */
+.aims-footer,
+.pusher {
+  clear: both;
+  width: 100%;
+  padding: 1em 0;
+  height: 8.75em;
+  font-size: 12px;
+}
+
+.aims-footer hr {
+  margin: 1em 0;
+  border: 1px dashed #777;
+}
+
+.aims-footer p {
+  margin: 0;
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-button {
+  background-color: #b71921;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #b71921;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .aims-banner > .image {
+    width: 100%;
+  }
+
+  .aims-loginpanel {
+    width: 90%;
+    float: none;
+    margin: 0 auto;
+  }
+
+  .aims-container.space-between {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .aims-loginpanel {
+    width: 100%;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0.5em 1em;
+  }
+  html, body {
+    height: 100%;
+  }
+  .aims-content {
+    min-height: calc(100vh);
+}
+
+  .aims-button {
+    min-width: 0;
+    width: 48%;
+  }
+}

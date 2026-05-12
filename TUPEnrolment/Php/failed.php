@@ -31,9 +31,13 @@
         <?php foreach ($subjecttoRetake as $i => $s) { ?>
             <tr id="retake-row-<?php echo $i; ?>">
                 <td><input type="checkbox" name="select" class="retake-check"></td>
-                <td>
-                    <strong><?php echo htmlspecialchars($s['name']); ?></strong><br>
-                    <?php echo htmlspecialchars($s['course']); ?>
+                <td style="display: flex; flex-direction: column; gap: 2px; padding: 8px 6px;">
+                    <strong style="font-size: 0.95rem; color: #1e1e2e; font-weight: 600; line-height: 1.2;">
+                        <?php echo htmlspecialchars($s['name']); ?>
+                    </strong>
+                    <p style="font-size: 0.75rem; color: #6b7280; font-weight: 400; margin: 0;">
+                        <?php echo htmlspecialchars($s['course']); ?>
+                    </p>
                 </td>
                 <td><?php echo $s['units']; ?></td>
                 <td><?php echo htmlspecialchars($s['room']); ?></td>

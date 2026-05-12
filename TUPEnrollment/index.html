@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="Style/style.css">
+    </head>
+    <body>
+        <div class="aims-banner"> 
+            <img class="image" src="assets/des_UIPEN.png">
+        </div>
+        <div class="aims-content aims-container aims-background">
+            <br>
+            <h1 class="text-center">Students Access Module</h1>
+            <div class="aims-container space-between">
+                <div class="aims-loginpanel margin-center">
+                    <h3>User Authentication</h3>
+                    <hr>
+                    <br>
+                    <form name="frmLogin" onsubmit="return goToPage()" autocomplete="off">
+                        <input type="hidden" name="_token" value="1c086593e41634500612feba817b78eb63b129e5582e2c091a8d8170b2542f96">
+                        <input type="hidden" name="usertype" value="1">
+                        <div class="aims-textfield">
+                            <input type="text" name="username" placeholder="Username" autofocus="" required="">
+                            <label>Username:</label>
+                        </div>
+                        <div class="aims-textfield">
+                            <input type="password" name="password" placeholder="Password" required="">
+                            <label>Password:</label>
+                        </div>
+                        <div class="aims-textfield">
+                            <input type="date" name="bdate" required>
+                            <label>Birthdate:</label>
+                        </div>
+                        <div class="aims-textfield flex space-between">
+                            <button type="reset" class="aims-button red"><span>Clear Entries</span></button>
+                            <button type="submit" class="aims-button red"><a href="index1.html"></a><span>Login</span></button>
+                        </div>
+                        <p style="color:#ddd">Forgot your password? <a href="forgot.php" style="color:#fff">Click here</a></p>
+                        <br>
+                    </form>
+                </div>
+            </div>
+            <div class="pusher"></div>
+        </div>
+        
+        <div class="aims-footer text-center">
+            <hr>
+            <p>Powered by <img src="assets/logo_AIMS.png" alt="AIMS"> from <img src="assets/logo_Pinnacle.png" alt="Pinnacle Technologies, Inc."></p>
+            <p>For questions and comments, email us at</p>
+            <p><a href="mailto:web.ers@tup.edu.ph">web.ers@tup.edu.ph</a></p>
+        </div>
+        <div id="ui-datepicker-div" class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all"></div>
+    <script>
+        function goToPage() {
+            window.location.href = "index1.html";
+            return false; // prevent actual form submission
+        }
+    </script>
+    </body>
+</html>

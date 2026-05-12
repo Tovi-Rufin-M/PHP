@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>enrollment module</title>
+    <link rel="stylesheet" href="styles/index.css">
+</head>
+<body>
+    <div class="aims-banner">
+        <img class="image" src="assets/des_UIPEN.png">
+    </div>
+
+    <div class="aims-content aims-container aims-background">
+        <div id="root"></div>
+        <div class="pusher"></div>
+    </div>
+
+    <div class="aims-footer text-center">
+        <hr>
+        <p>Powered by <img src="assets/logo_AIMS.png" alt="AIMS"> from <img src="assets/logo_Pinnacle.png" alt="Pinnacle Technologies, Inc."></p>
+        <p>For questions and comments, email us at</p>
+        <p><a href="mailto:web.ers@tup.edu.ph">web.ers@tup.edu.ph</a></p>
+    </div>
+    <div id="ui-datepicker-div" class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all"></div>
+<!--<script src="index.js"></script>-->
+<script>
+const root = document.getElementById('root');
+
+async function loadPage(file) {
+    // update active nav link
+    try {
+        const res  = await fetch(file);
+        const html = await res.text();
+
+        // force re-trigger animation
+        root.innerHTML = html;
+
+        // run any <script> tags inside the loaded content
+        root.querySelectorAll('script').forEach(old => {
+            const s = document.createElement('script');
+            s.textContent = old.textContent;
+            old.replaceWith(s);
+        });
+    } catch (err) {
+        root.innerHTML = `<p style="color:#ff6b6b">Failed to load <strong>${file}</strong>. Make sure a PHP server is running.</p>`;
+    }
+}
+loadPage('php/login.php');
+
+</script>
+</body>
+</html>
