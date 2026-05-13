@@ -75,5 +75,5 @@ $studentInfo = [
 ?>
 
 <div class="form-container">
-    
+    <?php include 'get_failed.php' ?>
 </div>

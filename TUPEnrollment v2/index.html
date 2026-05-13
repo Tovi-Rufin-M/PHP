@@ -24,30 +24,6 @@
     </div>
     <div id="ui-datepicker-div" class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all"></div>
 <!--<script src="index.js"></script>-->
-<script>
-const root = document.getElementById('root');
-
-async function loadPage(file) {
-    // update active nav link
-    try {
-        const res  = await fetch(file);
-        const html = await res.text();
-
-        // force re-trigger animation
-        root.innerHTML = html;
-
-        // run any <script> tags inside the loaded content
-        root.querySelectorAll('script').forEach(old => {
-            const s = document.createElement('script');
-            s.textContent = old.textContent;
-            old.replaceWith(s);
-        });
-    } catch (err) {
-        root.innerHTML = `<p style="color:#ff6b6b">Failed to load <strong>${file}</strong>. Make sure a PHP server is running.</p>`;
-    }
-}
-loadPage('php/login.php');
-
-</script>
+<script src="index.js"></script>
 </body>
 </html>

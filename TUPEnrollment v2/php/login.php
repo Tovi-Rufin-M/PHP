@@ -5,7 +5,7 @@
         <h3>User Authentication</h3>
         <hr>
         <br>
-        <form name="frmLogin" method="POST" onsubmit="return goToPage()" autocomplete="off">
+        <form name="frmLogin" method="POST" onsubmit="return goToPage()" autocomplete="on">
             <input type="hidden" name="_token" value="1c086593e41634500612feba817b78eb63b129e5582e2c091a8d8170b2542f96">
             <input type="hidden" name="usertype" value="1">
             <div class="aims-textfield">
