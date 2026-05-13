@@ -49,33 +49,25 @@
 </div>
 
 <script>
-    /** 
-     * Stores the currently selected retake subjects as an array of objects.
-     * Each entry mirrors the row data captured from the DOM.
-     */
     let selectedRetakeSubjects = [];
 
     /**
      * Safely retrieves the text content of a cell by column index.
-     * Uses optional chaining to prevent null reference errors.
-     * 
-     * @param {HTMLTableRowElement} row  - The table row element to extract data from
-     * @param {number}             index - The zero-based cell (td) index
-     * @returns {string} Trimmed cell text or empty string if not found
+     * @param {HTMLTableRowElement} row
+     * @param {number} index
+     * @returns {string}
      */
     const getCellText = (row, index) =>
         row.cells[index]?.innerText?.trim() ?? '';
 
     /**
      * Builds a structured subject object from a given table row.
-     * Skips the checkbox cell (index 0) and reads the remaining columns.
-     * 
-     * @param {HTMLTableRowElement} row - A <tr> element from the retake table
-     * @returns {{ name: string, course: string, units: string, room: string, instructor: string, grade: string }}
+     * @param {HTMLTableRowElement} row
+     * @returns {object}
      */
     const extractRowData = (row) => ({
-        name:       getCellText(row, 1).split('\n')[0].trim(),   // First line is the subject name
-        course:     getCellText(row, 1).split('\n')[1]?.trim() ?? '', // Second line is the course
+        name:       getCellText(row, 1).split('\n')[0].trim(),
+        course:     getCellText(row, 1).split('\n')[1]?.trim() ?? '',
         units:      getCellText(row, 2),
         room:       getCellText(row, 3),
         instructor: getCellText(row, 4),
@@ -83,97 +75,74 @@
     });
 
     /**
-     * Asynchronously scans all checked retake rows and
-     * rebuilds the `selectedRetakeSubjects` array from scratch.
-     * Awaits a microtask tick to keep the UI responsive.
-     * 
+     * Scans all checked retake rows and rebuilds the selectedRetakeSubjects array.
      * @returns {Promise<void>}
      */
     const collectSelectedSubjects = async () => {
-        // Yield to the event loop so the checkbox state is fully settled
         await Promise.resolve();
 
-        // Reset the array before repopulating
         selectedRetakeSubjects = [];
 
-        // Gather every individual retake checkbox that is currently checked
-        const checkedBoxes = document.querySelectorAll('.retake-check:checked');
-
-        checkedBoxes.forEach((checkbox) => {
-            const row = checkbox.closest('tr'); // Safe upward DOM traversal
-            if (!row) return;                   // Guard against detached nodes
-
-            const subjectData = extractRowData(row);
-            selectedRetakeSubjects.push(subjectData);
+        document.querySelectorAll('.retake-check:checked').forEach((checkbox) => {
+            const row = checkbox.closest('tr');
+            if (!row) return;
+            selectedRetakeSubjects.push(extractRowData(row));
         });
-
-        // Log the current selection for debugging / downstream consumption
+        
+        
+        console.clear();
         console.table(selectedRetakeSubjects);
         console.log('Selected retake subjects array:', selectedRetakeSubjects);
     };
 
     /**
-     * Asynchronously toggles all individual retake checkboxes to match
-     * the state of the "Select All" master checkbox, then re-collects data.
-     * 
-     * @param {Event} event - The change event fired by the #selectAll-failed checkbox
+     * Toggles all retake checkboxes to match the master checkbox state.
+     * @param {Event} event
      * @returns {Promise<void>}
      */
     const handleSelectAll = async (event) => {
-        // Yield so the browser paints the master checkbox state first
         await Promise.resolve();
 
-        const isChecked        = event.target.checked;
-        const allRetakeBoxes   = document.querySelectorAll('.retake-check');
-
-        // Apply the master state to every individual checkbox safely
-        allRetakeBoxes.forEach((checkbox) => {
-            checkbox.checked = isChecked;
+        document.querySelectorAll('.retake-check').forEach((checkbox) => {
+            checkbox.checked = event.target.checked;
         });
 
-        // Rebuild the array to reflect the new selection state
         await collectSelectedSubjects();
     };
 
     /**
-     * Asynchronously handles a change on any individual retake checkbox.
-     * Keeps the "Select All" checkbox in sync and refreshes the array.
-     * 
+     * Syncs the master checkbox state and refreshes the selected array.
      * @returns {Promise<void>}
      */
     const handleIndividualCheck = async () => {
-        await Promise.resolve(); // Yield for consistent state reads
+        await Promise.resolve();
 
         const allBoxes     = document.querySelectorAll('.retake-check');
         const checkedBoxes = document.querySelectorAll('.retake-check:checked');
         const selectAllEl  = document.getElementById('selectAll-failed');
 
         if (selectAllEl) {
-            // Reflect partial / full selection on the master checkbox
             selectAllEl.indeterminate = checkedBoxes.length > 0 && checkedBoxes.length < allBoxes.length;
             selectAllEl.checked       = checkedBoxes.length === allBoxes.length && allBoxes.length > 0;
         }
 
-        // Rebuild the selected subjects array
         await collectSelectedSubjects();
     };
 
     /**
-     * Registers all event listeners once the DOM is fully loaded.
-     * Uses event delegation where possible to avoid attaching
-     * many listeners to individual checkboxes.
+     * Attaches all event listeners to the retake table.
+     * Called directly (no DOMContentLoaded) because this script
+     * runs AFTER the content is already injected into the DOM by loadPage().
      *
      * @returns {void}
      */
     const initRetakeTable = () => {
         const selectAllCheckbox = document.getElementById('selectAll-failed');
 
-        // Wire the "Select All" master checkbox
         if (selectAllCheckbox) {
             selectAllCheckbox.addEventListener('change', handleSelectAll);
         }
 
-        // Use delegation on the <tbody> for individual checkboxes
         const tableBody = document.querySelector('.subjects-card tbody');
         if (tableBody) {
             tableBody.addEventListener('change', async (event) => {
@@ -183,25 +152,11 @@
             });
         }
 
-        return true; // Signal that init completed successfully
+        console.log('Retake table initialized ✅');
     };
 
-    /**
-     * Entry point — waits for the DOM to be ready, then boots the
-     * retake table and verifies the initializer actually ran.
-     * Checking `run` here is valid because we are INSIDE the
-     * DOMContentLoaded callback, not outside it.
-     *
-     * @returns {void}
-     */
-    document.addEventListener('DOMContentLoaded', () => {
-        const run = initRetakeTable(); // run = true only AFTER initRetakeTable finishes
-
-        // ✅ Safe to check here — we are inside the same callback scope
-        if (run) {
-            console.log('Retake table initialized and running.');
-        } else {
-            console.log('Initialization failed.');
-        }
-    });
+    // ✅ Call directly — DOMContentLoaded is NOT used here
+    // because loadPage() in index.js injects this script AFTER
+    // the DOM is already fully loaded and ready.
+    initRetakeTable();
 </script>

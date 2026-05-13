@@ -1,38 +1,47 @@
 const root = document.getElementById('root');
 
-function loadPage(page) {
-    console.log(page, "");
-    fetch(page)
-        .then(response => response.text())
-        .then(data => {
-            document.querySelector('.root').innerHTML = data;
-        });
-}
-
+/**
+ * Fetches a PHP-rendered page and mounts it into the #root element.
+ * credentials: 'same-origin' ensures session cookies are sent and
+ * stored on every fetch — required for CSRF tokens to work correctly.
+ *
+ * @param {string} file - Relative path to the PHP file to load
+ * @returns {Promise<void>}
+ */
 async function loadPage(file) {
-    // update active nav link
     try {
-        const res  = await fetch(file);
+        const res  = await fetch(file, {
+            credentials: 'same-origin' // ✅ Send & receive session cookies
+        });
         const html = await res.text();
 
-        // force re-trigger animation
         root.innerHTML = html;
 
-        // run any <script> tags inside the loaded content
+        // Re-execute inline <script> blocks against the live DOM
         root.querySelectorAll('script').forEach(old => {
             const s = document.createElement('script');
             s.textContent = old.textContent;
             old.replaceWith(s);
         });
+
     } catch (err) {
-        root.innerHTML = `<p style="color:#ff6b6b">Failed to load <strong>${file}</strong>. Make sure a PHP server is running.</p>`;
+        root.innerHTML = `
+            <p style="color:#ff6b6b">
+                Failed to load <strong>${file}</strong>.
+                Make sure a PHP server is running.
+            </p>`;
     }
 }
 
-if (sessionStorage.getItem("page")) {
-    loadPage(sessionStorage.getItem("page"));
-} else {
-    loadPage("php/login.php");
+/**
+ * Resolves the startup page from sessionStorage, falling back
+ * to the login page if no session entry is found.
+ *
+ * @returns {void}
+ */
+function bootApp() {
+    const savedPage = sessionStorage.getItem('page');
+    loadPage('php/login.php'); // ?? keeps it null-safe savedPage ?? savedPage ?? 
 }
 
-loadPage('php/from.php'); // original is loadPage('php/login.php'); temporary debuging 
+bootApp();
