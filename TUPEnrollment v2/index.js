@@ -41,7 +41,6 @@ async function loadPage(file) {
  */
 function bootApp() {
     const savedPage = sessionStorage.getItem('page');
-    loadPage('php/login.php'); // ?? keeps it null-safe savedPage ?? savedPage ?? 
+    loadPage(savedPage ?? 'php/form.php'); // ?? keeps it null-safe savedPage ?? savedPage ?? 
 }
-
 bootApp();

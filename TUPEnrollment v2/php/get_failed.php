@@ -47,7 +47,7 @@
         </tbody>
     </table>
 </div>
-
+<?php ?>
 <script>
     let selectedRetakeSubjects = [];
 
@@ -88,8 +88,8 @@
             if (!row) return;
             selectedRetakeSubjects.push(extractRowData(row));
         });
-        
-        
+        // send to php
+
         console.clear();
         console.table(selectedRetakeSubjects);
         console.log('Selected retake subjects array:', selectedRetakeSubjects);
