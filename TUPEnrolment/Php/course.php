@@ -1,6 +1,3 @@
-<?php
-
-?>
 <div class="subjects-card">
     <div class="table-header">
         <h3>⚠️ Select Coarse</h3>

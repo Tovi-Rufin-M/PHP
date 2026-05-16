@@ -1,14 +1,5 @@
 <?php
-    $host = 'localhost';
-    $db   = 'enrollment_db';
-    $user = 'root';
-    $pass = '';
-
-    $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8", $user, $pass);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-    $stmt = $pdo->query("SELECT name, course, units, room, instructor, grade FROM failed_subjects");
-    $subjecttoRetake = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    include 'process.php';
 ?>
 <div class="subjects-card">
     <div class="table-header">
@@ -27,7 +18,7 @@
             </tr>
         </thead>
         <tbody>
-        <?php foreach ($subjecttoRetake as $i => $s) { ?>
+        <?php foreach ($subjectToRetake as $i => $s) { ?>
             <tr id="retake-row-<?php echo $i; ?>">
                 <td><input type="checkbox" name="select" class="retake-check"></td>
                 <td>
@@ -47,24 +38,12 @@
         </tbody>
     </table>
 </div>
-<?php ?>
+
 <script>
     let selectedRetakeSubjects = [];
 
-    /**
-     * Safely retrieves the text content of a cell by column index.
-     * @param {HTMLTableRowElement} row
-     * @param {number} index
-     * @returns {string}
-     */
-    const getCellText = (row, index) =>
-        row.cells[index]?.innerText?.trim() ?? '';
+    const getCellText = (row, index) => row.cells[index]?.innerText?.trim() ?? '';
 
-    /**
-     * Builds a structured subject object from a given table row.
-     * @param {HTMLTableRowElement} row
-     * @returns {object}
-     */
     const extractRowData = (row) => ({
         name:       getCellText(row, 1).split('\n')[0].trim(),
         course:     getCellText(row, 1).split('\n')[1]?.trim() ?? '',
@@ -74,10 +53,6 @@
         grade:      getCellText(row, 5),
     });
 
-    /**
-     * Scans all checked retake rows and rebuilds the selectedRetakeSubjects array.
-     * @returns {Promise<void>}
-     */
     const collectSelectedSubjects = async () => {
         await Promise.resolve();
 
@@ -88,18 +63,12 @@
             if (!row) return;
             selectedRetakeSubjects.push(extractRowData(row));
         });
-        // send to php
 
         console.clear();
         console.table(selectedRetakeSubjects);
         console.log('Selected retake subjects array:', selectedRetakeSubjects);
     };
 
-    /**
-     * Toggles all retake checkboxes to match the master checkbox state.
-     * @param {Event} event
-     * @returns {Promise<void>}
-     */
     const handleSelectAll = async (event) => {
         await Promise.resolve();
 
@@ -110,10 +79,6 @@
         await collectSelectedSubjects();
     };
 
-    /**
-     * Syncs the master checkbox state and refreshes the selected array.
-     * @returns {Promise<void>}
-     */
     const handleIndividualCheck = async () => {
         await Promise.resolve();
 
@@ -129,13 +94,6 @@
         await collectSelectedSubjects();
     };
 
-    /**
-     * Attaches all event listeners to the retake table.
-     * Called directly (no DOMContentLoaded) because this script
-     * runs AFTER the content is already injected into the DOM by loadPage().
-     *
-     * @returns {void}
-     */
     const initRetakeTable = () => {
         const selectAllCheckbox = document.getElementById('selectAll-failed');
 
@@ -155,8 +113,5 @@
         console.log('Retake table initialized ✅');
     };
 
-    // ✅ Call directly — DOMContentLoaded is NOT used here
-    // because loadPage() in index.js injects this script AFTER
-    // the DOM is already fully loaded and ready.
     initRetakeTable();
 </script>
