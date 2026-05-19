@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TUPEnrollmentSystem</title>
+
+  <style>
+    /* RESET */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      font-size: 12px;
+      font-family: 'Open Sans', sans-serif, helvetica, arial;
+      height: 100vh;
+      margin: 0;
+      overflow-x: hidden;
+      padding: 0;
+    }
+
+    /* BANNER */
+    .aims-banner {
+      background: #830001;
+      background-image: radial-gradient(circle, #ffffff, #830001);
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      background-size: contain;
+      max-height: 85px;
+      padding: 5px 0;
+    }
+    .aims-banner > .image { max-height: 75px; width: 800px; }
+
+    /* BACKGROUND */
+    .aims-background {
+      background: #E1888C;
+      background-image: linear-gradient(to bottom, #ffffff, #C7232B);
+      background-attachment: fixed;
+    }
+
+    /* LAYOUT */
+    .aims-container { width: 100%; padding: 0 5vw; }
+    .aims-content { min-height: calc(100% - 85px); margin-bottom: -8.75em; }
+
+    /* FORM */
+    .aims-textfield { font-size: 1em; margin: 1em 0; color: #fff; position: relative; }
+    .aims-textfield > input {
+      width: 100%; padding: 0.5em; font-size: 1em;
+      font-family: 'Open Sans', sans-serif, helvetica, arial;
+      outline: none; border: 1px solid transparent;
+      transition: all 250ms ease-out; margin-bottom: 1.5em;
+    }
+    .aims-textfield > input:focus, .aims-textfield > input:hover {
+      border: 1px solid #b71921; box-shadow: 0 0 1px #eee;
+    }
+    .aims-textfield > label {
+      font-size: 1em; display: block; position: absolute;
+      top: -1.5em; transition: all 250ms ease-in-out;
+    }
+    .aims-textfield > input:focus + label { color: #EB5D5E; }
+
+    /* BUTTONS */
+    .aims-button {
+      font-size: 1em; font-family: 'Open Sans', sans-serif, helvetica, arial;
+      padding: 0.5em; border: 1px solid #333; min-width: 6em;
+      position: relative; outline: none; cursor: pointer; overflow: hidden;
+    }
+    .aims-button > span { z-index: 1; }
+    .aims-button.red { background: #b71921; color: #eee; border-color: #eee; }
+    .aims-button::after {
+      content: ""; width: 100%; position: absolute; top: 0; left: 0; height: 100%;
+      transform: scaleX(0); transform-origin: left; transition: all 250ms ease-out;
+      background-color: rgba(255,255,255,0.25);
+    }
+    .aims-button.disabled, .aims-button[disabled] { pointer-events: none; }
+    .aims-button.disabled::after, .aims-button[disabled]::after { background-color: rgba(255,255,255,0.25); transform: scaleX(1); }
+    .aims-button:hover::after, .aims-button:active::after { transform: scaleX(1); }
+
+    /* UTILITIES */
+    .flex { display: flex; }
+    .space-between { justify-content: space-between; }
+    .margin-center { float: none; margin: 0 auto; }
+    .text-center { text-align: center; }
+
+    /* FOOTER */
+    .aims-footer, .pusher { clear: both; width: 100%; padding: 1em 0; height: 8.75em; font-size: 12px; }
+    .aims-footer hr { margin: 1em 0; border: 1px dashed #777; }
+    .aims-footer p { margin: 0; }
+
+    /* SCROLLBAR */
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-button { background-color: #b71921; }
+    ::-webkit-scrollbar-track { background-color: #b71921; }
+    ::-webkit-scrollbar-thumb { background-color: rgba(255,255,255,0.2); }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .aims-banner > .image { width: 100%; }
+      .aims-loginpanel { width: 90%; float: none; margin: 0 auto; }
+      .aims-container.space-between { flex-direction: column; }
+    }
+    @media (max-width: 480px) {
+      .aims-loginpanel { width: 100%; border-radius: 0; box-shadow: none; padding: 0.5em 1em; }
+      html, body { height: 100%; }
+      .aims-content { min-height: calc(100vh); }
+      .aims-button { min-width: 0; width: 48%; }
+    }
+  </style>
+
+  <style>
+    /* STEPPER */
+    .stepper-wrapper {
+      margin-top: auto; display: flex;
+      justify-content: space-between; margin-bottom: 20px;
+    }
+    .stepper-item {
+      position: relative; display: flex;
+      flex-direction: column; align-items: center; flex: 1;
+    }
+    .stepper-item::before {
+      position: absolute; content: ""; border-bottom: 2px solid #ccc;
+      width: 100%; top: 20px; left: -50%; z-index: 2;
+    }
+    .stepper-item::after {
+      position: absolute; content: ""; border-bottom: 2px solid #ccc;
+      width: 100%; top: 20px; left: 50%; z-index: 2;
+    }
+    .stepper-item .step-counter {
+      position: relative; z-index: 5; display: flex;
+      justify-content: center; align-items: center;
+      width: 40px; height: 40px; border-radius: 50%;
+      background: #ccc; margin-bottom: 6px;
+    }
+    .stepper-item.active .step-counter { background-color: #b54343; color: #ffffff; font-weight: bold; }
+    .stepper-item.completed .step-counter { background-color: #b54343; }
+    .stepper-item.completed::after {
+      position: absolute; content: ""; border-bottom: 2px solid #b54343;
+      width: 100%; top: 20px; left: 50%; z-index: 3;
+    }
+    .stepper-item:first-child::before { content: none; }
+    .stepper-item:last-child::after { content: none; }
+  </style>
+
+  <style>
+    /* STATUS BAR */
+    .statusbar {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 20px;
+      background: #ffffff; border-radius: 16px; border: 1px solid #e2e8f0;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+      font-family: 'Inter', sans-serif; max-width: 1000px; margin: 10px auto;
+    }
+    @media (min-width: 768px) {
+      .statusbar {
+        grid-template-columns: 2fr 1fr 1.5fr 1fr;
+        align-items: center; padding: 15px 30px; border-radius: 50px;
+      }
+    }
+    .stat-group { display: flex; flex-direction: column; }
+    .stat-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; font-weight: 700; margin-bottom: 2px; }
+    .stat-value { font-size: 0.95rem; font-weight: 600; color: #0f172a; overflow-wrap: break-word; }
+    .status-pill {
+      display: flex; align-items: center; justify-content: center;
+      align-self: center; padding: 6px 12px; border-radius: 20px;
+      font-size: 0.8rem; font-weight: 700; background: #fee2e2; color: #b91c1c;
+    }
+    .status-pill::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background-color: currentColor; margin-right: 6px;
+    }
+  </style>
+
+  <style>
+    /* SUBJECTS CARD & RETAKE TABLE */
+    :root { --border-color: #e2e8f0; --danger-red: #ef4444; }
+
+    .form-container { display: flex; flex-direction: column; margin: 0 auto; }
+
+    .subjects-card {
+      background: #fff; border: 1px solid var(--border-color);
+      border-radius: 10px; overflow: hidden; margin-bottom: 1rem;
+      font-family: sans-serif;
+    }
+
+    .table-header {
+      background: #fff5f5; border-bottom: 1px solid #fecaca;
+      padding: 12px 16px; display: flex;
+      align-items: center; justify-content: space-between;
+    }
+    .table-header h3 { margin: 0; font-size: 0.9rem; color: #7f1d1d; }
+    .table-header span { font-size: 0.75rem; color: #7f1d1d; }
+
+    /* Retake table */
+    .retake-table { width: 100%; border-collapse: collapse; }
+    .retake-table thead th {
+      background: #f8fafc; padding: 10px 14px; font-size: 0.75rem;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      color: #64748b; font-weight: 700; text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .retake-table tbody tr { border-bottom: 1px solid var(--border-color); }
+    .retake-table tbody tr:last-child { border-bottom: none; }
+    .retake-table tbody tr:hover { background-color: #fffbfb; }
+    .retake-table tbody tr.selected-row { background-color: #fef2f2; }
+    .retake-table tbody td { padding: 10px 14px; font-size: 0.82rem; color: #334155; vertical-align: middle; }
+
+    input[type="checkbox"] { cursor: pointer; accent-color: var(--danger-red); width: 16px; height: 16px; }
+
+    /* Course selector layout */
+    .course-layout {
+      display: grid; grid-template-columns: 220px 1fr;
+      min-height: 220px; gap: 0;
+    }
+
+    .selected-panel-wrap {
+      border-right: 1px solid var(--border-color);
+      background: #fafafa; overflow-y: auto;
+    }
+    .selected-panel-wrap table { width: 100%; border-collapse: collapse; }
+    .selected-panel-wrap thead th {
+      background: #f1f5f9; padding: 10px 14px; font-size: 0.78rem;
+      font-weight: 600; color: #475569; text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    #selected-panel div {
+      padding: 10px 14px; font-size: 0.82rem; color: #1e293b;
+      cursor: pointer; border-bottom: 1px solid var(--border-color);
+      transition: background 0.15s;
+    }
+    #selected-panel div:hover { background: #fee2e2; color: #b91c1c; }
+    #selected-panel .empty-msg {
+      padding: 14px; color: #94a3b8; font-size: 0.78rem;
+      font-style: italic; cursor: default;
+    }
+    #selected-panel .empty-msg:hover { background: transparent; color: #94a3b8; }
+
+    .course-panel-wrap { overflow-y: auto; }
+    .course-panel-wrap table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+    .course-panel-wrap thead th {
+      background: #f1f5f9; padding: 10px 14px; font-size: 0.78rem;
+      font-weight: 600; color: #475569; text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    #course-panel tr { border-bottom: 1px solid var(--border-color); }
+    #course-panel tr:last-child { border-bottom: none; }
+    #course-panel td { padding: 10px 14px; font-size: 0.82rem; color: #334155; vertical-align: middle; }
+
+    .empty-course {
+      display: flex; align-items: center; justify-content: center;
+      height: 160px; color: #94a3b8; font-size: 0.82rem;
+      font-style: italic; padding: 1rem; text-align: center;
+    }
+
+    /* Responsive: hide room/instructor on small screens */
+    @media (max-width: 640px) {
+      .table-header { flex-direction: column; align-items: flex-start; gap: 4px; padding: 12px 16px; }
+      .table-header h3 { font-size: 0.9rem; }
+      .retake-table thead th { padding: 10px 12px; font-size: 0.7rem; }
+      .retake-table tbody td { padding: 10px 12px; font-size: 0.8rem; }
+      .retake-table th:nth-child(4), .retake-table td:nth-child(4),
+      .retake-table th:nth-child(5), .retake-table td:nth-child(5) { display: none; }
+      .course-layout { grid-template-columns: 1fr; }
+      .selected-panel-wrap { border-right: none; border-bottom: 1px solid var(--border-color); }
+    }
+  </style>
+</head>
+<body>
+  <div class="aims-banner">
+    <img class="image" src="assets/des_UIPEN.png">
+  </div>
+
+  <div class="aims-content aims-container aims-background">
+    <div id="formpage">
+      <br>
+      <h1 class="text-center">Enrollment Module</h1>
+      <br>
+
+      <div class="statusbar">
+        <div class="stat-group">
+          <span class="stat-label">Student Name</span>
+          <span class="stat-value">Guest</span>
+        </div>
+        <div class="stat-group">
+          <span class="stat-label">ID Number</span>
+          <span class="stat-value">N/A</span>
+        </div>
+        <div class="stat-group">
+          <span class="stat-label">Course</span>
+          <span class="stat-value">General Education</span>
+        </div>
+        <div class="status-pill">Not Enrolled</div>
+      </div>
+
+      <div class="stepper-wrapper">
+        <div class="stepper-item active">
+          <div class="step-counter">1</div>
+          <div class="step-name">first</div>
+        </div>
+        <div class="stepper-item">
+          <div class="step-counter">2</div>
+          <div class="step-name">secund</div>
+        </div>
+        <div class="stepper-item">
+          <div class="step-counter">3</div>
+          <div class="step-name">third</div>
+        </div>
+        <div class="stepper-item">
+          <div class="step-counter">4</div>
+          <div class="step-name">forth</div>
+        </div>
+      </div>
+
+      <div class="form-container">
+
+        <!-- Subjects for Retake -->
+        <div class="subjects-card">
+          <div class="table-header">
+            <h3>⚠️ Subjects for intake</h3>
+            <span>Select items to add to current load</span>
+          </div>
+          <table class="retake-table">
+            <thead>
+              <tr>
+                <th style="width:36px;"><input type="checkbox" id="selectAll-failed"></th>
+                <th>Subject</th>
+                <th style="width:60px;">Units</th>
+                <th style="width:70px;">Room</th>
+                <th>Instructor</th>
+                <th style="width:60px;">Grade</th>
+              </tr>
+            </thead>
+            <tbody id="failedsubjectslist"></tbody>
+          </table>
+        </div>
+
+        <!-- Select Course -->
+        <div class="subjects-card">
+          <div class="table-header">
+            <h3>📋 Select Course</h3>
+            <span>Choose a subject on the left to view available courses</span>
+          </div>
+          <div class="course-layout">
+            <div class="selected-panel-wrap">
+              <table>
+                <thead><tr><th>Selected Subjects</th></tr></thead>
+              </table>
+              <div id="selected-panel">
+                <div class="empty-msg">No subjects selected yet</div>
+              </div>
+            </div>
+            <div class="course-panel-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="width: 15%;">Subject</th>
+                    <th style="width: 17%;">Course</th>
+                    <th style="width: 17%;">Schedule</th>
+                    <th style="width: 19%;">Instructor</th>
+                    <th style="width: 12%;">Room</th>
+                    <th style="width: 20%;">Select</th>
+                  </tr>
+                </thead>
+                <tbody id="course-panel">
+                  <tr><td colspan="5"><div class="empty-course">Select a subject on the left to view available courses</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Select drop -->
+        <div class="subjects-card">
+          <div class="table-header">
+            <h3>⚠️ Subjects for Drop</h3>
+            <span>Select items to add to current load</span>
+          </div>
+          <table class="retake-table">
+            <thead>
+              <tr>
+                <th style="width:36px;"><input type="checkbox" id="selectAll-failed"></th>
+                <th>Subject</th>
+                <th style="width:60px;">Units</th>
+                <th style="width:70px;">Room</th>
+                <th>Instructor</th>
+              </tr>
+            </thead>
+            <tbody id="failedsubjectslist"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="pusher"></div>
+  </div>
+
+  <div class="aims-footer text-center">
+    <hr>
+    <p>Powered by <img src="assets/logo_AIMS.png" alt="AIMS"> from <img src="assets/logo_Pinnacle.png" alt="Pinnacle Technologies, Inc."></p>
+    <p>For questions and comments, email us at</p>
+    <p><a href="mailto:web.ers@tup.edu.ph">web.ers@tup.edu.ph</a></p>
+  </div>
+
+  <script>
+    const failedsubjectslist = document.getElementById("failedsubjectslist");
+    const selectedPanel = document.getElementById("selected-panel");
+    const coursePanel = document.getElementById("course-panel");
+
+    const courseData = {
+      chem: [
+        { course: "BSIT",  instructor: "Sir Irs",  room: "32" },
+        { course: "BSCS",  instructor: "Sir Mark", room: "12" },
+        { course: "BSECE", instructor: "Sir Rey",  room: "21" }
+      ],
+      math: [
+        { course: "BSIT", instructor: "Mr. John",  room: "45" },
+        { course: "BSBA", instructor: "Maam Anna", room: "22" }
+      ],
+      FL: [
+        { course: "BSHM", instructor: "Sir Paul", room: "14" },
+        { course: "BSIT", instructor: "Sir Leo",  room: "18" }
+      ]
+    };
+
+    function addRow(subject, description, units, schedule, instructor, grade) {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td><input type="checkbox" name="select" class="retake-check"></td>
+        <td>
+          <strong style="font-size:0.85rem;color:#1e1e2e;font-weight:600;">${subject}</strong>
+          <p style="font-size:0.73rem;color:#6b7280;margin:2px 0 0;">${description}</p>
+        </td>
+        <td>${units}</td>
+        <td>${schedule}</td>
+        <td>${instructor}</td>
+        <td><span class="grade-badge">${grade}</span></td>
+      `;
+      failedsubjectslist.appendChild(row);
+      const checkbox = row.querySelector(".retake-check");
+      checkbox.addEventListener("change", () => {
+        row.classList.toggle("selected-row", checkbox.checked);
+        updateSelectedSubjects();
+      });
+    }
+
+    function updateSelectedSubjects() {
+      selectedPanel.innerHTML = "";
+      const checked = document.querySelectorAll(".retake-check:checked");
+      if (checked.length === 0) {
+        selectedPanel.innerHTML = '<div class="empty-msg">No subjects selected yet</div>';
+        coursePanel.innerHTML = '<tr><td colspan="4"><div class="empty-course">Select a subject on the left to view available courses</div></td></tr>';
+        return;
+      }
+      checked.forEach(box => {
+        const subject = box.closest("tr").querySelector("strong").textContent.trim();
+        const item = document.createElement("div");
+        item.textContent = subject;
+        item.addEventListener("click", () => showCourses(subject));
+        selectedPanel.appendChild(item);
+      });
+    }
+
+    function showCourses(subject) {
+      coursePanel.innerHTML = "";
+      const data = courseData[subject];
+      if (!data || data.length === 0) {
+        coursePanel.innerHTML = '<tr><td colspan="4"><div class="empty-course">No courses available for this subject</div></td></tr>';
+        return;
+      }
+      data.forEach(d => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><strong style="font-size:0.82rem;color:#1e293b;">${subject}</strong></td>
+          <td>${d.course}</td>
+          <td>${d.instructor}</td>
+          <td>${d.room}</td>
+        `;
+        coursePanel.appendChild(tr);
+      });
+    }
+
+    // Select All checkbox
+    document.getElementById("selectAll-failed").addEventListener("change", function () {
+      document.querySelectorAll(".retake-check").forEach(cb => {
+        cb.checked = this.checked;
+        cb.closest("tr").classList.toggle("selected-row", this.checked);
+      });
+      updateSelectedSubjects();
+    });
+
+    // Populate rows
+    addRow("chem", "SO2", 3, 32, "Sir Irs", 3);
+    addRow("math", "BET", 4, 45, "Mr. John", 2);
+    addRow("FL",   "SO9", 4, 45, "Mr. John", "NaN");
+  </script>
+</body>
+</html>

@@ -1,7 +1,13 @@
 <?php
-    include 'process.php';
+$data = file_get_contents("php://input");
 
-    echo '<pre>';
-    print_r($subjectToRetake); // ✅ use this, not $subjects
-    echo '</pre>';
+// Convert JSON into PHP array
+$decoded = json_decode($data, true);
+
+// Access subjects array
+$subjects = $decoded['subjects'] ?? [];
+
+$get_selected_subjects = $subjects
+
+echo $get_selected_subjects;
 ?>

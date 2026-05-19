@@ -53,6 +53,23 @@
         grade:      getCellText(row, 5),
     });
 
+    const sendSelectedSubjects = async () => {
+        try {
+            const response = await fetch('print.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ subjects: selectedRetakeSubjects }),
+            });
+
+            const result = await response.text();
+            console.log('get_course.php response:', result);
+        } catch (error) {
+            console.error('Error sending selected retake subjects:', error);
+        }
+    };
+
     const collectSelectedSubjects = async () => {
         await Promise.resolve();
 
@@ -67,6 +84,8 @@
         console.clear();
         console.table(selectedRetakeSubjects);
         console.log('Selected retake subjects array:', selectedRetakeSubjects);
+
+        await sendSelectedSubjects();
     };
 
     const handleSelectAll = async (event) => {
