@@ -1,5 +1,5 @@
 <?php
-    include 'process.php';
+    require_once 'process.php';
 ?>
 <div class="subjects-card">
     <div class="table-header">

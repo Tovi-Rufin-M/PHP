@@ -205,7 +205,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Dynamically build the redirect URL — works on any machine/folder name
         $base = dirname(dirname($_SERVER['SCRIPT_NAME']));
-        header('Location: ' . rtrim($base, '/') . 'php/form.php');
+        header('Location: ' . rtrim($base, '/') . '/php/form.php');
         exit();
 
     } catch (PDOException $e) {

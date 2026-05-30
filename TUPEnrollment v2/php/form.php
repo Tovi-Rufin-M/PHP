@@ -75,6 +75,6 @@ $studentInfo = [
 ?>
 
 <div class="form-container">
-    <?php include 'process.php'?>
+    <?php require_once 'process.php'?>
     <?php include 'get_failed.php'?>
 </div>
