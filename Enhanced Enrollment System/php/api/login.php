@@ -88,6 +88,12 @@ try {
     }
 
     // Login successful
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    $_SESSION['student_id'] = $student['student_id'];
+    $_SESSION['student_name'] = $student['name'];
+
     echo json_encode([
         "success" => true,
         "message" => "Login successful!",

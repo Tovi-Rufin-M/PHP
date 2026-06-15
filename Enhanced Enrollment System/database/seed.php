@@ -15,6 +15,18 @@ try {
 
     echo "Connection established successfully.\n";
 
+    // Run dynamic migrations if they haven't been applied yet
+    try {
+        $db->exec("ALTER TABLE subjects ADD COLUMN is_tutorial TINYINT(1) DEFAULT 0");
+    } catch (PDOException $e) {
+        // Column might already exist
+    }
+    try {
+        $db->exec("ALTER TABLE section_schedules MODIFY COLUMN day_of_week ENUM('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday') NOT NULL");
+    } catch (PDOException $e) {
+        // ENUM might already be updated
+    }
+
     // Disable foreign key checks for truncation
     $db->exec("SET FOREIGN_KEY_CHECKS = 0");
     $db->exec("TRUNCATE TABLE section_schedules");
@@ -291,7 +303,7 @@ try {
     ];
 
     // Seed Subjects & Curriculums
-    $stmtSubject = $db->prepare("INSERT INTO subjects (subject_code, description, units, has_lab) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE description=VALUES(description), units=VALUES(units), has_lab=VALUES(has_lab)");
+    $stmtSubject = $db->prepare("INSERT INTO subjects (subject_code, description, units, has_lab, is_tutorial) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE description=VALUES(description), units=VALUES(units), has_lab=VALUES(has_lab), is_tutorial=VALUES(is_tutorial)");
     $stmtPrereq = $db->prepare("INSERT INTO subject_prerequisites (subject_code, prerequisite_code) VALUES (?, ?) ON DUPLICATE KEY UPDATE subject_code=subject_code");
     $stmtCurriculum = $db->prepare("INSERT INTO curriculums (program_code, year_level, term, subject_code) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE subject_code=subject_code");
 
@@ -307,7 +319,11 @@ try {
             foreach ($subjs as $s) {
                 // Rule: Has lab if units >= 4
                 $hasLab = ($s["units"] >= 4) ? 1 : 0;
-                $stmtSubject->execute([$s["code"], $s["description"], $s["units"], $hasLab]);
+                
+                // Offered as tutorial if units <= 2 or Math/Physics course
+                $isTutorial = ($s["units"] <= 2 || strpos($s["code"], 'MATH') !== false || strpos($s["code"], 'PHYTECH') !== false) ? 1 : 0;
+                
+                $stmtSubject->execute([$s["code"], $s["description"], $s["units"], $hasLab, $isTutorial]);
 
                 // Record curriculum link
                 $stmtCurriculum->execute([$programCode, $yearLevel, $termLabel, $s["code"]]);
@@ -383,6 +399,26 @@ try {
             "studentId" => "TUPV-00-0008", "name" => "First8, Last Mid.", "course" => "BET-09-V", "section" => "Section B", 
             "bday" => "2026-06-01", "term" => "Second Term", 
             "totakeSubject" => [["subject" => " ", "grade" => " "]]
+        ],
+        [
+            "studentId" => "TUPV-00-0009", "name" => "First9, Last Mid.", "course" => "BET-00-V", "section" => "Section D", 
+            "bday" => "2026-06-01", "term" => "First Term", 
+            "totakeSubject" => []
+        ],
+        [
+            "studentId" => "TUPV-00-0010", "name" => "First10, Last Mid.", "course" => "BET-00-V", "section" => "Section E", 
+            "bday" => "2026-06-01", "term" => "Second Term", 
+            "totakeSubject" => []
+        ],
+        [
+            "studentId" => "TUPV-00-0011", "name" => "First11, Last Mid.", "course" => "BET-00-V", "section" => "Section F", 
+            "bday" => "2026-06-01", "term" => "Third Term", 
+            "totakeSubject" => []
+        ],
+        [
+            "studentId" => "TUPV-00-0012", "name" => "First12, Last Mid.", "course" => "BET-00-V", "section" => "Section G", 
+            "bday" => "2026-06-01", "term" => "Third Term", 
+            "totakeSubject" => []
         ]
     ];
 
@@ -407,13 +443,13 @@ try {
             $grade = trim($history["grade"]);
 
             if (!empty($subjCode)) {
-                // Determine status based on grade (3.0 or better is passed)
+                // Determine status based on grade (3.0 or worse is failed)
                 $status = 'Ongoing';
                 if ($grade !== '') {
                     $numGrade = floatval($grade);
-                    if ($numGrade > 0 && $numGrade <= 3.0) {
+                    if ($numGrade > 0 && $numGrade < 3.0) {
                         $status = 'Passed';
-                    } elseif ($numGrade > 3.0) {
+                    } elseif ($numGrade >= 3.0) {
                         $status = 'Failed';
                     }
                 }
@@ -479,7 +515,10 @@ try {
         }
 
         foreach ($rawCurriculums[$programCode] as $termLabel => $termSubjects) {
-            foreach ($sections as $sectionIndex => $sectionName) {
+            $progSections = ($programCode === "BET-00-V")
+                ? ["Section A", "Section B", "Section C", "Section D", "Section E", "Section F", "Section G"]
+                : ["Section A", "Section B", "Section C"];
+            foreach ($progSections as $sectionIndex => $sectionName) {
                 
                 $maxAttempts = 300;
                 $success = false;

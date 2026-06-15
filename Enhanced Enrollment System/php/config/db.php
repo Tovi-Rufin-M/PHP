@@ -12,12 +12,18 @@ class Database {
     public function getConnection() {
         $this->conn = null;
 
+        // Enforce UTC timezone for PHP date/time functions
+        date_default_timezone_set('UTC');
+
         try {
             $this->conn = new PDO(
                 "mysql:host=" . $this->host . ";dbname=" . $this->db_name . ";charset=utf8mb4",
                 $this->username,
                 $this->password
             );
+            // Set session timezone to UTC for database queries
+            $this->conn->exec("SET time_zone = '+00:00'");
+            
             // Set error mode to exception
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             // Disable emulated prepared statements

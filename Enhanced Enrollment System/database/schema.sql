@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS subjects (
     description VARCHAR(150) NOT NULL,
     units INT NOT NULL,
     has_lab TINYINT(1) DEFAULT 0,
+    is_tutorial TINYINT(1) DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -73,7 +74,7 @@ CREATE TABLE IF NOT EXISTS section_schedules (
     program_code VARCHAR(20),
     subject_code VARCHAR(20),
     term VARCHAR(20) NOT NULL,
-    day_of_week ENUM('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday') NOT NULL,
+    day_of_week ENUM('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday') NOT NULL,
     start_time TIME NOT NULL,
     end_time TIME NOT NULL,
     room VARCHAR(50) NOT NULL,

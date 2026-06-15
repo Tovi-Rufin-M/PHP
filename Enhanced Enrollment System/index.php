@@ -396,6 +396,7 @@ if ($conn) {
             font-family: var(--font-sans);
             font-size: 1rem; /* Prevent auto-zooming on mobile iOS */
             min-width: 240px;
+            width: 100%;
             cursor: pointer;
             transition: all 0.3s ease;
         }
@@ -419,7 +420,8 @@ if ($conn) {
             border: 1px solid var(--card-border);
             border-radius: 16px;
             padding: 1.25rem;
-            height: 520px;
+            min-height: 520px;
+            height: auto;
             display: flex;
             flex-direction: column;
             gap: 1rem;
@@ -491,16 +493,17 @@ if ($conn) {
         .class-header {
             display: flex;
             justify-content: space-between;
-            flex-direction: column;
+            gap: 0.2rem;
             align-items: center;
             font-weight: 700;
-            font-size: 0.85rem;
+            font-size: 0.78rem;
             color: #ffffff;
             margin-bottom: 0.2rem;
+            flex-direction:column;
         }
 
         .class-header span.tag {
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             padding: 0.15rem 0.4rem;
             border-radius: 4px;
             font-weight: 600;
@@ -520,26 +523,27 @@ if ($conn) {
         }
 
         .class-desc {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: var(--text-muted);
             margin-top: 0.4rem;
             margin-bottom: 0.6rem;
-            align-content: center;
             flex-grow: 1;
             display: -webkit-box;
             -webkit-line-clamp: 3;
             -webkit-box-orient: vertical;
             overflow: hidden;
             text-overflow: ellipsis;
+
         }
 
         .class-footer {
             display: flex;
             justify-content: space-between;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: var(--text-muted);
             border-top: 1px solid rgba(255, 255, 255, 0.05);
             padding-top: 0.3rem;
+            flex-direction:column;
         }
 
         .class-footer i {
@@ -558,7 +562,7 @@ if ($conn) {
             border-radius: 8px;
             padding: 1.25rem 0.8rem;
             text-align: center;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: var(--text-muted);
             display: flex;
             align-items: center;
@@ -574,7 +578,7 @@ if ($conn) {
         }
 
         .vacant-card i {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             opacity: 0.6;
         }
 
@@ -609,12 +613,12 @@ if ($conn) {
         .student-name {
             font-family: var(--font-display);
             font-weight: 700;
-            font-size: 1.15rem;
+            font-size: 1.05rem;
             color: #ffffff;
         }
 
         .student-id {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: var(--text-muted);
             font-family: monospace;
             background: rgba(255,255,255,0.05);
@@ -625,7 +629,7 @@ if ($conn) {
         }
 
         .student-badge {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             padding: 0.25rem 0.6rem;
             border-radius: 50px;
             font-weight: 600;
@@ -638,7 +642,7 @@ if ($conn) {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 0.8rem;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             margin-bottom: 1.2rem;
             border-bottom: 1px solid rgba(255,255,255,0.05);
             padding-bottom: 1rem;
@@ -646,7 +650,7 @@ if ($conn) {
 
         .meta-item span.label {
             color: var(--text-muted);
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             display: block;
             margin-bottom: 0.15rem;
         }
@@ -657,7 +661,7 @@ if ($conn) {
         }
 
         .history-title {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 700;
             color: var(--text-muted);
             text-transform: uppercase;
@@ -675,7 +679,7 @@ if ($conn) {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             background: rgba(255,255,255,0.02);
             padding: 0.4rem 0.6rem;
             border-radius: 6px;
@@ -692,7 +696,7 @@ if ($conn) {
             padding: 0.1rem 0.4rem;
             border-radius: 4px;
             font-weight: 700;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
         }
 
         .empty-state {
@@ -829,6 +833,10 @@ if ($conn) {
                             <option value="Section A" selected>Section A</option>
                             <option value="Section B">Section B</option>
                             <option value="Section C">Section C</option>
+                            <option value="Section D">Section D</option>
+                            <option value="Section E">Section E</option>
+                            <option value="Section F">Section F</option>
+                            <option value="Section G">Section G</option>
                         </select>
                     </div>
                 </div>
@@ -945,6 +953,18 @@ if ($conn) {
         // Inject seeded schedules data
         const allSchedules = <?php echo $schedulesJson; ?>;
 
+        // Helper to format 24-hour time to 12-hour AM/PM format
+        function formatTime12Hour(timeStr) {
+            if (!timeStr) return '';
+            const parts = timeStr.split(':');
+            let hour = parseInt(parts[0], 10);
+            const minute = parts[1];
+            const ampm = hour >= 12 ? 'PM' : 'AM';
+            hour = hour % 12;
+            hour = hour ? hour : 12; // 0 hour should be 12
+            return `${hour}:${minute} ${ampm}`;
+        }
+
         // Switch panel tabs
         function switchTab(tabId, btn) {
             // Hide all contents
@@ -1030,6 +1050,9 @@ if ($conn) {
                     const endHour = parseInt(item.end_time.split(':')[0], 10);
                     const durationHours = endHour - startHour;
 
+                    const formattedStart = formatTime12Hour(item.start_time);
+                    const formattedEnd = formatTime12Hour(item.end_time);
+
                     return `
                         <div class="${cardClass}" style="flex-grow: ${durationHours}; flex-basis: 0;">
                             <div class="class-header">
@@ -1042,7 +1065,7 @@ if ($conn) {
                             <div class="class-desc" title="${item.description}">${item.description}</div>
                             <div class="class-footer">
                                 <span class="class-time">
-                                    <i class="fa-regular fa-clock"></i>${item.start_time.substring(0, 5)} - ${item.end_time.substring(0, 5)}
+                                    <i class="fa-regular fa-clock"></i>${formattedStart} - ${formattedEnd}
                                 </span>
                                 <span><i class="fa-solid fa-door-open"></i>${item.room}</span>
                             </div>

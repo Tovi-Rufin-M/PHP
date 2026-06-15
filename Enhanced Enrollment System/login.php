@@ -406,17 +406,9 @@
                 if (result.success) {
                     showToast('Success', result.message, 'success');
                     
-                    // Alert temporarily as explicitly requested
                     setTimeout(() => {
-                        alert(
-                            "🔑 LOGIN SUCCESSFUL!\n\n" +
-                            "Student: " + result.data.name + "\n" +
-                            "ID: " + result.data.student_id + "\n" +
-                            "Cohort: " + result.data.section + "\n" +
-                            "Program: " + result.data.program_code + "\n" +
-                            "Term: " + result.data.current_term
-                        );
-                    }, 500);
+                        window.location.href = 'enrollment.php';
+                    }, 800);
 
                 } else {
                     showToast('Authentication Failed', result.message, 'error');
