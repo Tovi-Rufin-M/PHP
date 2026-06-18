@@ -1365,7 +1365,7 @@ if ($conn) {
                 <div class="panel">
                     <div class="panel-title">
                         <i class="fa-solid fa-lock" style="color: #ef4444;"></i>
-                        <span>Locked subjects — blocked by failed prerequisite</span>
+                        <span>Locked & dropped subjects</span>
                     </div>
 
                     <div class="failed-table-container">
@@ -1503,6 +1503,7 @@ if ($conn) {
 
         // Keep track of enrolled subjects and chosen retakes
         let selectedRetakes = {}; // key: subject_code, value: { method: string, sectionDetails: string, scheduleId: int/null }
+        let droppedCoreSubjects = new Set(); // Set of subject_codes that have been dropped
 
         // Helper to format times to 12-hour AM/PM format
         function formatTime12Hour(timeStr) {
@@ -1530,10 +1531,10 @@ if ($conn) {
             return sA < eB && sB < eA;
         }
 
-        // Check if a Sit-in section conflicts with student's next-term active (non-disabled) schedule items
+        // Check if a Sit-in section conflicts with student's next-term active (non-disabled, non-dropped) schedule items
         function checkConflictWithNextTerm(optionSched) {
-            // Get student core schedule items that are not disabled by prerequisite fails
-            const activeScheduleItems = nextTermSchedule.filter(item => !disabledSubjectsMap[item.subject_code]);
+            // Get student core schedule items that are not disabled by prerequisite fails and not dropped
+            const activeScheduleItems = nextTermSchedule.filter(item => !disabledSubjectsMap[item.subject_code] && !droppedCoreSubjects.has(item.subject_code));
             
             for (const activeItem of activeScheduleItems) {
                 if (activeItem.day_of_week === optionSched.day_of_week) {
@@ -1588,9 +1589,10 @@ if ($conn) {
                     const code = item.subject_code;
                     const isLab = item.schedule_type === 'Laboratory';
                     const isDisabled = !!disabledSubjectsMap[code];
+                    const isDropped = droppedCoreSubjects.has(code);
                     
                     let cardClass = isLab ? 'class-card lab' : 'class-card';
-                    if (isDisabled) {
+                    if (isDisabled || isDropped) {
                         cardClass += ' disabled';
                     }
 
@@ -1598,7 +1600,7 @@ if ($conn) {
                     const tagLabel = isLab ? 'LAB' : 'LEC';
 
                     const isMajor = !['GEC', 'GEE', 'PATHFIT', 'NSTP', 'IP', 'BOSH'].some(prefix => 
-                        code.toUpperCase().startsWith(prefix)
+                         code.toUpperCase().startsWith(prefix)
                     );
                     
                     // Style matching index.php major badge
@@ -1616,6 +1618,12 @@ if ($conn) {
                         disabledOverlay = `
                             <div style="margin-top: 0.45rem;">
                                 <span class="prereq-badge">⚠️ Blocked: Fail ${disabledSubjectsMap[code]}</span>
+                            </div>
+                        `;
+                    } else if (isDropped) {
+                        disabledOverlay = `
+                            <div style="margin-top: 0.45rem;">
+                                <span class="prereq-badge" style="background: rgba(239, 68, 68, 0.15); color: #fca5a5; border-color: rgba(239, 68, 68, 0.25);">⚠️ Dropped from Load</span>
                             </div>
                         `;
                     }
@@ -1892,13 +1900,29 @@ if ($conn) {
             updateSummaryList();
         }
 
+        // Drop core regular subject
+        function dropCoreSubject(subjectCode) {
+            droppedCoreSubjects.add(subjectCode);
+            updateSummaryList();
+            drawEnrollmentSchedule();
+            showToast('Subject Dropped', `${subjectCode} has been dropped from your upcoming semester load.`, 'info');
+        }
+
+        // Restore dropped core subject
+        function undropCoreSubject(subjectCode) {
+            droppedCoreSubjects.delete(subjectCode);
+            updateSummaryList();
+            drawEnrollmentSchedule();
+            showToast('Subject Restored', `${subjectCode} has been restored to your upcoming semester load.`, 'success');
+        }
+
         // Render live enrollment summary items list
         function updateSummaryList() {
             const listContainer = document.getElementById('summary-items-list');
             listContainer.innerHTML = '';
 
             let hasItems = false;
-            let totalUnits = coreUnits;
+            let totalUnits = 0;
 
             // 1. Render core regular classes (active next term schedule)
             // Group next-term schedule items by subject code (avoid duplicates for lecture/lab)
@@ -1909,7 +1933,7 @@ if ($conn) {
                 if (!uniqueCoreSubjects[code] && !isDisabled) {
                     uniqueCoreSubjects[code] = {
                         description: item.description,
-                        units: item.units
+                        units: parseInt(item.units, 10)
                     };
                 }
             });
@@ -1917,16 +1941,36 @@ if ($conn) {
             Object.keys(uniqueCoreSubjects).forEach(code => {
                 hasItems = true;
                 const subject = uniqueCoreSubjects[code];
-                listContainer.innerHTML += `
-                    <div class="summary-row regular">
-                        <div>
-                            <span style="font-weight: 700; color: #ffffff;">${code}</span> - 
-                            <span style="color: var(--text-muted);">${subject.description}</span>
-                            <span style="color: var(--accent-primary); margin-left: 0.5rem; font-weight:600;">(Regular - ${subject.units} u)</span>
+                const isDropped = droppedCoreSubjects.has(code);
+
+                if (!isDropped) {
+                    totalUnits += subject.units;
+                    listContainer.innerHTML += `
+                        <div class="summary-row regular">
+                            <div>
+                                <span style="font-weight: 700; color: #ffffff;">${code}</span> - 
+                                <span style="color: var(--text-muted);">${subject.description}</span>
+                                <span style="color: var(--accent-primary); margin-left: 0.5rem; font-weight:600;">(Regular - ${subject.units} u)</span>
+                            </div>
+                            <div class="summary-actions">
+                                <button type="button" class="summary-btn remove-btn" onclick="dropCoreSubject('${code}')" aria-label="Drop ${code} from enrollment schedule"><i class="fa-solid fa-minus-circle"></i> Drop</button>
+                            </div>
                         </div>
-                        <span style="color: var(--text-muted); font-size: 0.75rem;">Cohort Core Class</span>
-                    </div>
-                `;
+                    `;
+                } else {
+                    listContainer.innerHTML += `
+                        <div class="summary-row regular dropped" style="opacity: 0.55; border-color: rgba(239, 68, 68, 0.2); background: rgba(239, 68, 68, 0.05); padding: 0.6rem 0.8rem; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; border: 1px solid rgba(239,68,68,0.2);">
+                            <div>
+                                <span style="font-weight: 700; color: #ffffff; text-decoration: line-through;">${code}</span> - 
+                                <span style="color: var(--text-muted); text-decoration: line-through;">${subject.description}</span>
+                                <span style="color: #ef4444; margin-left: 0.5rem; font-weight:600;">(Dropped - ${subject.units} u)</span>
+                            </div>
+                            <div class="summary-actions">
+                                <button type="button" class="summary-btn" onclick="undropCoreSubject('${code}')" style="border-color: var(--accent-secondary); color: var(--accent-secondary);" aria-label="Restore ${code}"><i class="fa-solid fa-plus-circle"></i> Restore</button>
+                            </div>
+                        </div>
+                    `;
+                }
             });
 
             // 2. Render chosen retakes
@@ -2098,8 +2142,28 @@ if ($conn) {
 
         // Proceed Step 2 Submission to dynamic Step 3 Panel
         function submitStep2() {
-            // Calculate total units using server-computed core units
-            let totalUnits = coreUnits;
+            // Calculate total units dynamically, excluding dropped core subjects and including selected retakes
+            let totalUnits = 0;
+            
+            // 1. Core regular subjects units (not blocked and not dropped)
+            const uniqueCoreSubjects = {};
+            nextTermSchedule.forEach(item => {
+                const code = item.subject_code;
+                const isDisabled = !!disabledSubjectsMap[code];
+                const isDropped = droppedCoreSubjects.has(code);
+                if (!uniqueCoreSubjects[code] && !isDisabled && !isDropped) {
+                    uniqueCoreSubjects[code] = {
+                        description: item.description,
+                        units: parseInt(item.units, 10)
+                    };
+                }
+            });
+            
+            Object.values(uniqueCoreSubjects).forEach(sub => {
+                totalUnits += sub.units;
+            });
+
+            // 2. Add retake subjects units
             Object.keys(selectedRetakes).forEach(code => {
                 const origSubject = failedSubjects.find(s => s.subject_code === code);
                 const units = origSubject ? origSubject.units : 2;
@@ -2107,7 +2171,7 @@ if ($conn) {
             });
 
             if (totalUnits > maxUnits) {
-                alert(`❌ Cannot proceed: Your registered load of ${totalUnits} units exceeds the maximum limit of ${maxUnits} units. Please remove some retake subjects.`);
+                alert(`❌ Cannot proceed: Your registered load of ${totalUnits} units exceeds the maximum limit of ${maxUnits} units. Please remove some retake subjects or drop regular subjects.`);
                 return;
             }
 
@@ -2138,25 +2202,26 @@ if ($conn) {
             const tableRegular = document.getElementById('table-regular-subjects');
             tableRegular.innerHTML = '';
             
-            // Get unique next-term core subject codes (not blocked)
-            const uniqueCoreSubjects = {};
+            // Get unique next-term core subject codes (not blocked, not dropped)
+            const activeCoreSubjects = {};
             nextTermSchedule.forEach(item => {
                 const code = item.subject_code;
                 const isDisabled = !!disabledSubjectsMap[code];
-                if (!uniqueCoreSubjects[code] && !isDisabled) {
-                    uniqueCoreSubjects[code] = {
+                const isDropped = droppedCoreSubjects.has(code);
+                if (!activeCoreSubjects[code] && !isDisabled && !isDropped) {
+                    activeCoreSubjects[code] = {
                         description: item.description,
                         units: item.units
                     };
                 }
             });
 
-            const uniqueCoreCodes = Object.keys(uniqueCoreSubjects);
+            const uniqueCoreCodes = Object.keys(activeCoreSubjects);
             if (uniqueCoreCodes.length === 0) {
                 tableRegular.innerHTML = '<tr><td colspan="4" style="text-align: center; font-style: italic; color: var(--text-muted);">No regular subjects scheduled.</td></tr>';
             } else {
                 uniqueCoreCodes.forEach(code => {
-                    const subject = uniqueCoreSubjects[code];
+                    const subject = activeCoreSubjects[code];
                     const schedStr = formatSubjectScheduleString(code);
                     const instructor = getInstructorForSubject(code);
                     tableRegular.innerHTML += `
@@ -2205,21 +2270,36 @@ if ($conn) {
                 });
             }
 
-            // Populate locked subjects table
+            // Populate locked / dropped subjects table
             const tableLocked = document.getElementById('table-locked-subjects');
             tableLocked.innerHTML = '';
-            const lockedKeys = Object.keys(disabledSubjectsMap);
             
-            if (lockedKeys.length === 0) {
-                tableLocked.innerHTML = '<tr><td colspan="2" style="text-align: center; font-style: italic; color: var(--text-muted);">No locked subjects. All core prerequisites are satisfied.</td></tr>';
+            const lockedKeys = Object.keys(disabledSubjectsMap);
+            const droppedKeys = Array.from(droppedCoreSubjects);
+            
+            if (lockedKeys.length === 0 && droppedKeys.length === 0) {
+                tableLocked.innerHTML = '<tr><td colspan="2" style="text-align: center; font-style: italic; color: var(--text-muted);">No locked or dropped subjects. All core prerequisites are satisfied.</td></tr>';
             } else {
+                // Show prerequisite locked subjects
                 lockedKeys.forEach(code => {
                     const schedItem = nextTermSchedule.find(item => item.subject_code === code);
                     const desc = schedItem ? schedItem.description : 'Prerequisite Requirement Blocked';
                     tableLocked.innerHTML += `
-                        <tr style="background: rgba(239, 68, 68, 0.02);">
-                            <td style="color: var(--text-muted);">${code} — ${desc}</td>
+                        <tr style="background: rgba(239, 68, 68, 0.02); border-left: 3px solid #ef4444;">
+                            <td style="color: var(--text-muted); font-weight: 600;">${code} — <span style="font-weight: 400;">${desc}</span></td>
                             <td style="color: #fca5a5; font-weight: 600;"><i class="fa-solid fa-triangle-exclamation"></i> Failed prerequisite: ${disabledSubjectsMap[code]}</td>
+                        </tr>
+                    `;
+                });
+
+                // Show student dropped subjects
+                droppedKeys.forEach(code => {
+                    const schedItem = nextTermSchedule.find(item => item.subject_code === code);
+                    const desc = schedItem ? schedItem.description : 'Dropped subject';
+                    tableLocked.innerHTML += `
+                        <tr style="background: rgba(239, 68, 68, 0.02); border-left: 3px solid #ef4444;">
+                            <td style="color: var(--text-muted); font-weight: 600;">${code} — <span style="font-weight: 400;">${desc}</span></td>
+                            <td style="color: #fca5a5; font-weight: 600;"><i class="fa-solid fa-minus-circle"></i> Dropped by student</td>
                         </tr>
                     `;
                 });

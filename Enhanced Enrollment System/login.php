@@ -316,6 +316,7 @@
 
         <div class="footer-note">
             <p>Looking for the architect board? <a href="index.php" aria-label="Navigate to Architect Dashboard">Go to Dashboard</a></p>
+            <p style="margin-top: 0.6rem;"><i class="fa-solid fa-user-plus" style="margin-right: 0.3rem; color: var(--accent-secondary);"></i><a href="add_student.php" style="color: var(--accent-secondary); font-weight: 700;" aria-label="Create test student profile">Create Test Student Profile</a></p>
         </div>
     </div>
 
@@ -329,6 +330,22 @@
     </div>
 
     <script>
+        // Prefill fields from URL query params for testing convenience
+        window.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const studentId = params.get('student_id');
+            const birthday = params.get('birthday');
+            if (studentId) {
+                document.getElementById('student_id').value = studentId;
+            }
+            if (birthday) {
+                document.getElementById('birthday').value = birthday;
+            }
+            if (studentId && birthday) {
+                document.getElementById('password').value = 'password123';
+            }
+        });
+
         function togglePasswordVisibility() {
             const passInput = document.getElementById('password');
             const icon = document.getElementById('toggle-password-icon');
