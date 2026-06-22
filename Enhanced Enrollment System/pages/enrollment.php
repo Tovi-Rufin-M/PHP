@@ -5,20 +5,22 @@
  * conflict validators, and a live auto-updating summary.
  */
 
-require_once __DIR__ . '/php/config/db.php';
+require_once dirname(__DIR__) . '/php/config/db.php';
 
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Handle Logout
 if (isset($_GET['logout'])) {
     session_destroy();
-    header("Location: login.php");
+    header("Location: index.php?page=login");
     exit;
 }
 
 // Check Session Authentication
 if (!isset($_SESSION['student_id'])) {
-    header("Location: login.php");
+    header("Location: index.php?page=login");
     exit;
 }
 
@@ -54,6 +56,36 @@ if ($conn) {
             $currentTerm = $student['current_term'];
             $programCode = $student['program_code'];
             $section = $student['section'];
+
+            // Check if student has submitted selections
+            $stmtCount = $conn->prepare("SELECT COUNT(*) FROM student_enrollment_selections WHERE student_id = :student_id");
+            $stmtCount->execute([':student_id' => $studentId]);
+            $hasSubmitted = $stmtCount->fetchColumn() > 0;
+
+            // Fetch selections if submitted
+            $submittedSelections = [];
+            if ($hasSubmitted) {
+                $stmtSelections = $conn->prepare("
+                    SELECT es.*, s.description, s.units 
+                    FROM student_enrollment_selections es
+                    JOIN subjects s ON es.subject_code = s.subject_code
+                    WHERE es.student_id = :student_id
+                ");
+                $stmtSelections->execute([':student_id' => $studentId]);
+                $submittedSelections = $stmtSelections->fetchAll();
+            }
+
+            // Fetch latest rejection reason if rejected
+            $rejectionReason = "";
+            if ($student['approval_status'] === 'Rejected') {
+                $stmtReject = $conn->prepare("
+                    SELECT details FROM audit_logs 
+                    WHERE student_id = :student_id AND action = 'Rejection' 
+                    ORDER BY timestamp DESC LIMIT 1
+                ");
+                $stmtReject->execute([':student_id' => $studentId]);
+                $rejectionReason = $stmtReject->fetchColumn();
+            }
 
             // Determine Upcoming Term
             if ($currentTerm === "First Term") {
@@ -175,7 +207,6 @@ if ($conn) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Enrollment - Step-by-Step Portal</title>
-    
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -183,49 +214,31 @@ if ($conn) {
     
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css?v=<?= time(); ?>">
 
     <style>
+        /* Enrollment page-specific variables (aliases to global design tokens) */
         :root {
-            --bg-color: #0b1120; /* Deep calm slate/navy */
-            --card-bg: rgba(22, 30, 49, 0.75);
-            --card-border: rgba(255, 255, 255, 0.08);
-            --accent-primary: #0ea5e9; /* Sky blue (high contrast) */
-            --accent-primary-glow: rgba(14, 165, 233, 0.25);
-            --accent-secondary: #10b981; /* Emerald green (calming) */
-            --text-main: #f1f5f9; /* Slate 100 - high contrast */
-            --text-muted: #cbd5e1; /* Slate 300 - high contrast */
-            --font-display: 'Outfit', sans-serif;
-            --font-sans: 'Inter', sans-serif;
+            --bg-color: var(--color-bg);
+            --card-bg: var(--color-card-bg);
+            --card-border: var(--color-card-border);
+            --accent-primary: var(--color-primary);
+            --accent-primary-glow: var(--color-primary-glow);
+            --accent-secondary: var(--color-secondary);
+            --accent-warning: var(--color-warning);
+            --text-main: var(--color-text-main);
+            --text-muted: var(--color-text-muted);
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
+        /* Enrollment-specific body overrides */
         body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: var(--font-sans);
-            min-height: 100vh;
             background-image: 
                 radial-gradient(at 10% 20%, rgba(14, 165, 233, 0.1) 0px, transparent 50%),
                 radial-gradient(at 90% 80%, rgba(16, 185, 129, 0.1) 0px, transparent 50%);
-            background-attachment: fixed;
             padding-bottom: 5rem;
         }
 
-        header {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--card-border);
-        }
-
+        /* Logo + branding (page-specific) */
         .logo-container {
             display: flex;
             align-items: center;
@@ -233,7 +246,7 @@ if ($conn) {
         }
 
         .logo-icon {
-            font-size: 2.2rem;
+            font-size: clamp(1.6rem, 5vw, 2.2rem);
             background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -242,86 +255,81 @@ if ($conn) {
 
         .logo-text h1 {
             font-family: var(--font-display);
-            font-size: 1.6rem;
+            font-size: clamp(1.2rem, 4vw, 1.6rem);
             font-weight: 800;
         }
 
         .logo-text p {
-            font-size: 0.8rem;
+            font-size: clamp(0.7rem, 2vw, 0.8rem);
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 2px;
         }
 
-        .student-chip {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--card-border);
-            padding: 0.5rem 1rem;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-        }
-
-        .student-chip strong {
-            color: #ffffff;
-        }
-
-        main {
-            max-width: 1400px;
-            margin: 2rem auto;
-            padding: 0 2rem;
-        }
-
-        /* Steps Indicator Progress Bar */
+        /* Step indicator styling (page-specific) */
         .steps-progress-bar {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 2rem;
-            margin-bottom: 3rem;
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+            background: rgba(15, 23, 42, 0.35);
+            border: 1px solid var(--card-border);
+            padding: 1rem 2rem;
+            border-radius: 16px;
+            backdrop-filter: blur(12px);
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: var(--shadow-sm);
         }
 
         .step-indicator {
             display: flex;
             align-items: center;
-            gap: 0.8rem;
-            opacity: 0.4;
-            transition: all 0.3s ease;
+            gap: 0.75rem;
+            color: var(--text-muted);
+            font-family: var(--font-display);
+            font-size: 0.95rem;
+            font-weight: 500;
+            opacity: 0.5;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .step-indicator.active {
             opacity: 1;
-            font-weight: 700;
-            color: var(--accent-primary);
+            color: #ffffff;
+            font-weight: 600;
         }
 
         .step-number {
-            width: 32px;
-            height: 32px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
-            background: rgba(255,255,255,0.05);
+            background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--card-border);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-family: var(--font-display);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 700;
+            color: var(--text-muted);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .step-indicator.active .step-number {
-            background: var(--accent-primary);
-            color: #0b1120;
-            border-color: var(--accent-primary);
-            box-shadow: 0 0 10px rgba(14, 165, 233, 0.4);
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: #ffffff;
+            border-color: transparent;
+            box-shadow: 0 0 12px var(--accent-primary-glow);
         }
 
         .step-line {
-            height: 1px;
+            height: 2px;
             background: var(--card-border);
-            width: 80px;
+            width: 40px;
+            border-radius: 1px;
+            opacity: 0.3;
         }
 
         /* Glassmorphism Panel Container */
@@ -337,7 +345,7 @@ if ($conn) {
 
         .panel-title {
             font-family: var(--font-display);
-            font-size: 1.4rem;
+            font-size: clamp(1.1rem, 3vw, 1.4rem);
             font-weight: 700;
             margin-bottom: 1.5rem;
             display: flex;
@@ -386,20 +394,20 @@ if ($conn) {
             align-items: center;
             justify-content: center;
             font-weight: 700;
-            font-size: 1.1rem;
+            font-size: clamp(0.95rem, 2vw, 1.1rem);
             font-style: normal;
             flex-shrink: 0;
         }
 
         .instruction-text h3 {
-            font-size: 1.05rem;
+            font-size: clamp(0.9rem, 2vw, 1.05rem);
             font-weight: 600;
             color: #ffffff;
             margin-bottom: 0.25rem;
         }
 
         .instruction-text p {
-            font-size: 0.9rem;
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
             color: var(--text-muted);
             line-height: 1.5;
         }
@@ -416,31 +424,25 @@ if ($conn) {
 
         .rule-card i {
             color: var(--accent-secondary);
-            font-size: 1.5rem;
+            font-size: clamp(1.15rem, 3vw, 1.5rem);
             margin-top: 0.1rem;
         }
 
         .rule-card h4 {
             color: #ffffff;
-            font-size: 1rem;
+            font-size: clamp(0.85rem, 2vw, 1rem);
             margin-bottom: 0.3rem;
             font-weight: 600;
         }
 
         .rule-card p {
-            font-size: 0.85rem;
+            font-size: clamp(0.75rem, 2vw, 0.85rem);
             color: var(--text-muted);
             line-height: 1.5;
         }
 
         /* Step 2 Schedule View Columns Grid */
-        .schedule-week-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 1.25rem;
-            margin-top: 1rem;
-            margin-bottom: 2.5rem;
-        }
+        /* schedule-week-grid layout now in css/style.css */
 
         .day-column {
             background: rgba(17, 24, 39, 0.4);
@@ -456,12 +458,7 @@ if ($conn) {
             transition: all 0.3s ease;
         }
 
-        @media (max-width: 1200px) {
-            .day-column {
-                height: auto;
-                min-height: 350px;
-            }
-        }
+        /* day-column responsive rules now in css/style.css */
 
         .day-column:hover {
             border-color: rgba(59, 130, 246, 0.2);
@@ -470,7 +467,7 @@ if ($conn) {
 
         .day-header {
             font-family: var(--font-display);
-            font-size: 1.15rem;
+            font-size: clamp(0.95rem, 2.5vw, 1.15rem);
             font-weight: 700;
             color: #ffffff;
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -490,32 +487,35 @@ if ($conn) {
         }
 
         .class-card {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(139, 92, 246, 0.15));
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            border-radius: 8px;
-            padding: 0.8rem;
+            background: rgba(30, 41, 59, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 1rem;
             text-align: left;
-            transition: all 0.3s ease;
+            transition: all 0.25s ease;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             display: flex;
             flex-direction: column;
             position: relative;
+            gap: 0.4rem;
         }
 
         .class-card:hover:not(.disabled) {
-            transform: scale(1.02);
-            box-shadow: 0 0 12px rgba(59, 130, 246, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px -5px rgba(14, 165, 233, 0.3);
             border-color: var(--accent-primary);
+            background: rgba(30, 41, 59, 0.65);
         }
 
         .class-card.lab {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(59, 130, 246, 0.15));
-            border-color: rgba(16, 185, 129, 0.3);
+            background: rgba(16, 185, 129, 0.04);
+            border-color: rgba(16, 185, 129, 0.2);
         }
 
         .class-card.lab:hover:not(.disabled) {
-            border-color: var(--accent-success);
-            box-shadow: 0 0 12px rgba(16, 185, 129, 0.3);
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.08);
+            box-shadow: 0 8px 20px -5px rgba(16, 185, 129, 0.3);
         }
 
         /* Disabled Card (Failed Prerequisite) */
@@ -531,7 +531,7 @@ if ($conn) {
             background: rgba(239, 68, 68, 0.15) !important;
             color: #fca5a5 !important;
             border: 1px solid rgba(239, 68, 68, 0.3) !important;
-            font-size: 0.58rem !important;
+            font-size: clamp(0.55rem, 1.2vw, 0.58rem) !important;
             padding: 0.15rem 0.35rem;
             border-radius: 4px;
             font-weight: 700;
@@ -542,18 +542,19 @@ if ($conn) {
 
         .class-header {
             display: flex;
+            flex-direction: row;
             justify-content: space-between;
-            gap: 0.2rem;
             align-items: center;
+            width: 100%;
             font-weight: 700;
-            font-size: 0.78rem;
+            font-size: clamp(0.75rem, 1.8vw, 0.85rem);
             color: #ffffff;
             margin-bottom: 0.2rem;
-            flex-direction: column;
+            gap: 0.5rem;
         }
 
         .class-header span.tag {
-            font-size: 0.6rem;
+            font-size: clamp(0.55rem, 1.2vw, 0.6rem);
             padding: 0.15rem 0.4rem;
             border-radius: 4px;
             font-weight: 600;
@@ -573,27 +574,31 @@ if ($conn) {
         }
 
         .class-desc {
-            font-size: 0.7rem;
+            font-size: clamp(0.7rem, 1.5vw, 0.75rem);
             color: var(--text-muted);
-            margin-top: 0.4rem;
-            margin-bottom: 0.6rem;
+            margin-top: 0.2rem;
+            margin-bottom: 0.5rem;
             flex-grow: 1;
             display: -webkit-box;
-            -webkit-line-clamp: 3;
+            -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
             text-overflow: ellipsis;
-            text-align: center;
+            text-align: left;
+            line-height: 1.4;
         }
 
         .class-footer {
             display: flex;
+            flex-direction: row;
             justify-content: space-between;
-            font-size: 0.65rem;
+            align-items: center;
+            font-size: clamp(0.7rem, 1.5vw, 0.75rem);
             color: var(--text-muted);
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            padding-top: 0.3rem;
-            flex-direction: column;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding-top: 0.5rem;
+            margin-top: auto;
+            width: 100%;
         }
 
         .class-footer i {
@@ -611,7 +616,7 @@ if ($conn) {
             border-radius: 8px;
             padding: 1.25rem 0.8rem;
             text-align: center;
-            font-size: 0.7rem;
+            font-size: clamp(0.65rem, 1.5vw, 0.7rem);
             color: var(--text-muted);
             display: flex;
             align-items: center;
@@ -627,14 +632,14 @@ if ($conn) {
         }
 
         .vacant-card i {
-            font-size: 0.8rem;
+            font-size: clamp(0.7rem, 2vw, 0.8rem);
             opacity: 0.6;
         }
 
         /* Failed Subjects Table Styles */
         .failed-section-header {
             font-family: var(--font-display);
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 3vw, 1.2rem);
             font-weight: 700;
             margin-top: 2rem;
             margin-bottom: 1rem;
@@ -657,7 +662,7 @@ if ($conn) {
             width: 100%;
             border-collapse: collapse;
             text-align: left;
-            font-size: 0.9rem;
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
         }
 
         table.failed-table th {
@@ -666,7 +671,7 @@ if ($conn) {
             font-weight: 600;
             padding: 1rem;
             border-bottom: 1px solid var(--card-border);
-            font-size: 0.8rem;
+            font-size: clamp(0.7rem, 2vw, 0.8rem);
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
@@ -689,7 +694,7 @@ if ($conn) {
             cursor: pointer;
             color: var(--text-muted);
             font-weight: 500;
-            font-size: 0.85rem;
+            font-size: clamp(0.75rem, 2vw, 0.85rem);
         }
 
         .retake-checkbox {
@@ -710,7 +715,7 @@ if ($conn) {
 
         .summary-header {
             font-family: var(--font-display);
-            font-size: 1.15rem;
+            font-size: clamp(0.95rem, 2.5vw, 1.15rem);
             font-weight: 700;
             color: #ffffff;
             margin-bottom: 1rem;
@@ -735,7 +740,7 @@ if ($conn) {
             border: 1px solid rgba(255,255,255,0.04);
             padding: 0.75rem 1rem;
             border-radius: 8px;
-            font-size: 0.85rem;
+            font-size: clamp(0.75rem, 2vw, 0.85rem);
         }
 
         .summary-row.regular {
@@ -759,7 +764,7 @@ if ($conn) {
             color: var(--text-muted);
             padding: 0.35rem 0.65rem;
             border-radius: 6px;
-            font-size: 0.75rem;
+            font-size: clamp(0.7rem, 1.8vw, 0.75rem);
             cursor: pointer;
             transition: all 0.2s ease;
         }
@@ -778,7 +783,7 @@ if ($conn) {
         .empty-summary {
             color: var(--text-muted);
             font-style: italic;
-            font-size: 0.85rem;
+            font-size: clamp(0.75rem, 2vw, 0.85rem);
             padding: 1rem 0;
             text-align: center;
         }
@@ -793,14 +798,7 @@ if ($conn) {
         }
 
         /* Bottom Navigation Bar Styles */
-        .navigation-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 3rem;
-            border-top: 1px solid var(--card-border);
-            padding-top: 2rem;
-        }
+        /* .navigation-row - now in css/style.css */
 
         .nav-btn {
             background: rgba(255,255,255,0.03);
@@ -809,7 +807,7 @@ if ($conn) {
             padding: 0.95rem 1.8rem;
             border-radius: 12px;
             font-family: var(--font-display);
-            font-size: 1rem;
+            font-size: clamp(0.85rem, 2vw, 1rem);
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -882,7 +880,7 @@ if ($conn) {
 
         .modal-header {
             font-family: var(--font-display);
-            font-size: 1.25rem;
+            font-size: clamp(1rem, 3vw, 1.25rem);
             font-weight: 700;
             color: #ffffff;
             margin-bottom: 1rem;
@@ -896,7 +894,7 @@ if ($conn) {
         }
 
         .modal-desc {
-            font-size: 0.85rem;
+            font-size: clamp(0.75rem, 2vw, 0.85rem);
             color: var(--text-muted);
             margin-bottom: 1.5rem;
             line-height: 1.4;
@@ -945,14 +943,14 @@ if ($conn) {
         }
 
         .option-info h5 {
-            font-size: 0.95rem;
+            font-size: clamp(0.8rem, 2.5vw, 0.95rem);
             font-weight: 600;
             color: #ffffff;
             margin-bottom: 0.25rem;
         }
 
         .option-info p {
-            font-size: 0.8rem;
+            font-size: clamp(0.7rem, 2vw, 0.8rem);
             color: var(--text-muted);
         }
 
@@ -975,7 +973,7 @@ if ($conn) {
         }
 
         .modal-select-wrapper label {
-            font-size: 0.75rem;
+            font-size: clamp(0.7rem, 1.8vw, 0.75rem);
             text-transform: uppercase;
             font-weight: 600;
             color: var(--text-muted);
@@ -989,7 +987,7 @@ if ($conn) {
             padding: 0.8rem 1rem;
             border-radius: 8px;
             outline: none;
-            font-size: 0.9rem;
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
             width: 100%;
         }
 
@@ -1008,7 +1006,7 @@ if ($conn) {
             color: var(--text-muted);
             padding: 0.6rem 1.2rem;
             border-radius: 8px;
-            font-size: 0.85rem;
+            font-size: clamp(0.75rem, 2vw, 0.85rem);
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
@@ -1067,7 +1065,7 @@ if ($conn) {
 </head>
 <body>
 
-    <header>
+    <header class="enrollment-header">
         <div class="logo-container">
             <i class="fa-solid fa-graduation-cap logo-icon"></i>
             <div class="logo-text">
@@ -1079,34 +1077,33 @@ if ($conn) {
         <?php if ($student): ?>
             <div class="student-chip">
                 <span>Student ID: <strong><?php echo htmlspecialchars($student['student_id']); ?></strong></span>
-                <span style="color: var(--card-border);">|</span>
+                <span class="chip-divider">|</span>
                 <span>Name: <strong><?php echo htmlspecialchars($student['name']); ?></strong></span>
-                <span style="color: var(--card-border);">|</span>
+                <span class="chip-divider">|</span>
                 <span>Cohort: <strong><?php echo htmlspecialchars($student['program_code'] . ' - ' . $student['section']); ?></strong></span>
             </div>
         <?php endif; ?>
     </header>
 
     <main>
-        <!-- Steps Indicator Progress Bar -->
-        <nav class="steps-progress-bar" aria-label="Enrollment Progress">
-            <div class="step-indicator active" id="indicator-1">
-                <div class="step-number">1</div>
-                <span>Step 1: Instructions</span>
-            </div>
-            <div class="step-line"></div>
-            <div class="step-indicator" id="indicator-2">
-                <div class="step-number">2</div>
-                <span>Step 2: Schedule & Selections</span>
-            </div>
-            <div class="step-line"></div>
-            <div class="step-indicator" id="indicator-3">
-                <div class="step-number">3</div>
-                <span>Step 3: Verification & Submit</span>
-            </div>
-        </nav>
-
         <?php if (!$student): ?>
+            <!-- Steps Indicator Progress Bar -->
+            <nav class="steps-progress-bar" aria-label="Enrollment Progress">
+                <div class="step-indicator active" id="indicator-1">
+                    <div class="step-number">1</div>
+                    <span>Step 1: Instructions</span>
+                </div>
+                <div class="step-line"></div>
+                <div class="step-indicator" id="indicator-2">
+                    <div class="step-number">2</div>
+                    <span>Step 2: Schedule & Selections</span>
+                </div>
+                <div class="step-line"></div>
+                <div class="step-indicator" id="indicator-3">
+                    <div class="step-number">3</div>
+                    <span>Step 3: Verification & Submit</span>
+                </div>
+            </nav>
             <div class="panel">
                 <div class="panel-title">
                     <i class="fa-solid fa-triangle-exclamation"></i>
@@ -1114,10 +1111,169 @@ if ($conn) {
                 </div>
                 <p>Unable to retrieve student profile. Please log out and log in again.</p>
                 <div class="navigation-row">
-                    <a href="enrollment.php?logout=1" class="nav-btn"><i class="fa-solid fa-arrow-left"></i> Back to Login</a>
+                    <a href="index.php?logout=1" class="btn btn-secondary nav-btn"><i class="fa-solid fa-arrow-left"></i> Back to Login</a>
+                </div>
+            </div>
+        <?php elseif ($hasSubmitted && $student['approval_status'] !== 'Rejected'): ?>
+            <!-- Locked Status Dashboard -->
+            <div class="panel locked-status-panel" style="animation: fadeIn 0.5s ease forwards;">
+                <div class="panel-title locked-panel-title">
+                    <?php if ($student['approval_status'] === 'Pending'): ?>
+                        <i class="fa-solid fa-hourglass-half status-icon" style="color: var(--color-warning);"></i>
+                        <span class="status-text">Enrollment Review in Progress</span>
+                    <?php elseif ($student['approval_status'] === 'Approved by Dept Head'): ?>
+                        <i class="fa-solid fa-square-poll-horizontal status-icon" style="color: var(--color-primary);"></i>
+                        <span class="status-text">Department Approved</span>
+                    <?php elseif ($student['approval_status'] === 'Enrolled'): ?>
+                        <i class="fa-solid fa-circle-check status-icon" style="color: var(--color-secondary);"></i>
+                        <span class="status-text">Officially Enrolled</span>
+                    <?php endif; ?>
+                </div>
+
+                <!-- Horizontal Status Flow Tracker -->
+                <div class="status-tracker">
+                    <!-- Step 1: Submitted -->
+                    <div class="status-step">
+                        <div class="status-circle" style="background: var(--color-secondary); color: #ffffff; border: 2px solid var(--color-secondary); box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                        <span class="status-step-label" style="color: #ffffff;">Submitted</span>
+                    </div>
+
+                    <div class="status-connector" style="background: <?php echo ($student['approval_status'] !== 'Pending') ? 'var(--color-secondary)' : 'var(--color-card-border)'; ?>;"></div>
+
+                    <!-- Step 2: Department Head -->
+                    <div class="status-step">
+                        <?php if ($student['approval_status'] === 'Pending'): ?>
+                            <div class="status-circle" style="background: rgba(245, 158, 11, 0.1); color: var(--color-warning); border: 2px solid var(--color-warning); animation: pulseGlow 1.5s infinite;">
+                                <i class="fa-solid fa-spinner fa-spin"></i>
+                            </div>
+                            <span class="status-step-label" style="color: var(--color-warning);">Dept Head Review</span>
+                        <?php else: ?>
+                            <div class="status-circle" style="background: var(--color-secondary); color: #ffffff; border: 2px solid var(--color-secondary); box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <span class="status-step-label" style="color: #ffffff;">Dept Head Approved</span>
+                        <?php endif; ?>
+                    </div>
+
+                    <div class="status-connector" style="background: <?php echo ($student['approval_status'] === 'Enrolled') ? 'var(--color-secondary)' : 'var(--color-card-border)'; ?>;"></div>
+
+                    <!-- Step 3: Registrar -->
+                    <div class="status-step">
+                        <?php if ($student['approval_status'] === 'Enrolled'): ?>
+                            <div class="status-circle" style="background: var(--color-secondary); color: #ffffff; border: 2px solid var(--color-secondary); box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <span class="status-step-label" style="color: #ffffff;">Enrolled</span>
+                        <?php elseif ($student['approval_status'] === 'Approved by Dept Head'): ?>
+                            <div class="status-circle" style="background: rgba(14, 165, 233, 0.1); color: var(--color-primary); border: 2px solid var(--color-primary); animation: pulseGlowBlue 1.5s infinite;">
+                                <i class="fa-solid fa-spinner fa-spin"></i>
+                            </div>
+                            <span class="status-step-label" style="color: var(--color-primary);">Registrar Verification</span>
+                        <?php else: ?>
+                            <div class="status-circle" style="background: rgba(255, 255, 255, 0.05); color: var(--color-text-muted); border: 2px solid var(--color-card-border);">
+                                <i class="fa-solid fa-lock"></i>
+                            </div>
+                            <span class="status-step-label" style="color: var(--color-text-muted);">Registrar Verification</span>
+                        <?php endif; ?>
+                    </div>
+                </div>
+
+                <!-- Selections List -->
+                <div class="selections-card">
+                    <h3 class="selections-card-title">
+                        <i class="fa-solid fa-list-check" style="color: var(--color-primary);"></i>
+                        <span>Submitted Subject Selections</span>
+                    </h3>
+
+                    <div class="failed-table-container">
+                        <table class="selections-table">
+                            <thead>
+                                <tr>
+                                    <th>Subject Code & Description</th>
+                                    <th style="text-align: center;">Units</th>
+                                    <th style="text-align: right;">Selection Type</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($submittedSelections as $sel): ?>
+                                    <tr>
+                                        <td>
+                                            <div style="font-weight: 600; color: #ffffff;"><?php echo htmlspecialchars($sel['subject_code']); ?></div>
+                                            <div style="font-size: 0.8rem; color: var(--color-text-muted);"><?php echo htmlspecialchars($sel['description']); ?></div>
+                                        </td>
+                                        <td style="text-align: center; font-weight: 600; color: var(--color-primary);">
+                                            <?php echo htmlspecialchars($sel['units']); ?>
+                                        </td>
+                                        <td style="text-align: right;">
+                                            <?php if ($sel['status'] === 'Regular'): ?>
+                                                <span class="type-badge regular">Regular Cohort</span>
+                                            <?php elseif ($sel['status'] === 'Dropped'): ?>
+                                                <span class="type-badge dropped">Dropped Class</span>
+                                            <?php else: ?>
+                                                <div style="display: flex; flex-direction: column; align-items: flex-end;">
+                                                    <span class="type-badge retake">Retake Class</span>
+                                                    <span style="font-size: 0.7rem; color: var(--color-text-muted); margin-top: 0.2rem;"><?php echo htmlspecialchars($sel['retake_method']); ?></span>
+                                                </div>
+                                            <?php endif; ?>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <?php if ($student['program_code'] === 'BET-00-V' && $student['current_term'] === 'Third Term' && $student['approval_status'] === 'Enrolled'): ?>
+                    <div class="glass-card" style="margin-top: 2rem; border-color: var(--color-primary); background: rgba(14, 165, 233, 0.05); text-align: center; display: flex; flex-direction: column; align-items: center; gap: 1rem; animation: fadeIn 0.6s ease; padding: 2rem;">
+                        <i class="fa-solid fa-graduation-cap" style="font-size: 3rem; color: var(--color-primary); filter: drop-shadow(0 0 10px var(--color-primary-glow));"></i>
+                        <h2 style="font-family: var(--font-display); font-weight: 700; color: #ffffff; margin: 0;">Ready to Advance to Second Year?</h2>
+                        <p style="color: var(--color-text-muted); max-width: 600px; margin: 0; font-size: 0.95rem; line-height: 1.6;">
+                            You have successfully completed all terms of the <strong>Common First Year (BET-00-V)</strong> curriculum. To proceed with Second Year enrollment, you must now select your specialized engineering technology major.
+                        </p>
+                        <a href="index.php?page=shifting" class="btn btn-primary" style="padding: 0.8rem 2rem; font-family: var(--font-display); font-weight: 600; display: inline-flex; align-items: center; gap: 0.6rem; text-decoration: none; border-radius: 8px; margin-top: 0.5rem;">
+                            <i class="fa-solid fa-arrow-right-arrow-left"></i> Select Major & Shifting Form
+                        </a>
+                    </div>
+                <?php endif; ?>
+
+                <div class="navigation-row" style="justify-content: center;">
+                    <a href="index.php?logout=1" class="btn btn-primary nav-btn"><i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out of Portal</a>
                 </div>
             </div>
         <?php else: ?>
+            <!-- Steps Indicator Progress Bar -->
+            <nav class="steps-progress-bar" aria-label="Enrollment Progress">
+                <div class="step-indicator active" id="indicator-1">
+                    <div class="step-number">1</div>
+                    <span>Step 1: Instructions</span>
+                </div>
+                <div class="step-line"></div>
+                <div class="step-indicator" id="indicator-2">
+                    <div class="step-number">2</div>
+                    <span>Step 2: Schedule & Selections</span>
+                </div>
+                <div class="step-line"></div>
+                <div class="step-indicator" id="indicator-3">
+                    <div class="step-number">3</div>
+                    <span>Step 3: Verification & Submit</span>
+                </div>
+            </nav>
+
+            <!-- Rejection Reason Banner if applicable -->
+            <?php if ($student['approval_status'] === 'Rejected' && !empty($rejectionReason)): ?>
+                <div class="rejection-banner">
+                    <i class="fa-solid fa-circle-exclamation banner-icon"></i>
+                    <div style="flex-grow: 1;">
+                        <h4>Registration Re-evaluation Required</h4>
+                        <p>Your previous enrollment submission was returned with comments. Please review the remarks below, adjust your selections in Step 2, and submit again.</p>
+                        <div class="rejection-reason-box">
+                            <strong>Comments:</strong> <?php echo htmlspecialchars($rejectionReason); ?>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
 
             <!-- ================= STEP 1 PANEL ================= -->
             <div class="step-panel active" id="panel-step-1">
@@ -1170,8 +1326,8 @@ if ($conn) {
                     </div>
 
                     <div class="navigation-row">
-                        <a href="enrollment.php?logout=1" class="nav-btn" aria-label="Cancel and return to login"><i class="fa-solid fa-arrow-left"></i> Back to Login</a>
-                        <button type="button" class="nav-btn primary-btn" onclick="goToStep(2)" aria-label="Proceed to Schedule and Selections Step">
+                        <a href="index.php?logout=1" class="btn btn-secondary nav-btn" aria-label="Cancel and return to login"><i class="fa-solid fa-arrow-left"></i> Back to Login</a>
+                        <button type="button" class="btn btn-primary nav-btn" onclick="goToStep(2)" aria-label="Proceed to Schedule and Selections Step">
                             <span>Proceed to Step 2</span>
                             <i class="fa-solid fa-arrow-right"></i>
                         </button>
@@ -1224,9 +1380,9 @@ if ($conn) {
                             <thead>
                                 <tr>
                                     <th scope="col" style="width: 15%">Subject Code</th>
-                                    <th scope="col" style="width: 45%">Description</th>
+                                    <th scope="col" style="width: auto;">Description</th>
                                     <th scope="col" style="width: 10%">Units</th>
-                                    <th scope="col" style="width: 15%">Grades Status</th>
+                                    <th scope="col" style="width: 1%; white-space: nowrap;">Grades Status</th>
                                     <th scope="col" style="width: 15%">Retake Action</th>
                                 </tr>
                             </thead>
@@ -1243,8 +1399,8 @@ if ($conn) {
                                             <td style="font-weight: 700; color: #ffffff;"><?php echo htmlspecialchars($fs['subject_code']); ?></td>
                                             <td><?php echo htmlspecialchars($fs['description']); ?></td>
                                             <td><?php echo htmlspecialchars($fs['units']); ?> u</td>
-                                            <td>
-                                                <span style="background: rgba(239, 68, 68, 0.15); color: #fca5a5; padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: 700; font-size: 0.8rem; border: 1px solid rgba(239, 68, 68, 0.2);">
+                                            <td style="white-space: nowrap;">
+                                                <span style="background: rgba(239, 68, 68, 0.15); color: #fca5a5; padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: 700; font-size: 0.8rem; border: 1px solid rgba(239, 68, 68, 0.2); white-space: nowrap; display: inline-block;">
                                                     Failed (Grade: <?php echo htmlspecialchars($fs['grade']); ?>)
                                                 </span>
                                             </td>
@@ -1274,9 +1430,9 @@ if ($conn) {
 
                     <!-- Step 2 Navigation Buttons -->
                     <div class="navigation-row">
-                        <button type="button" class="nav-btn" onclick="goToStep(1)" aria-label="Go back to Step 1 Instructions"><i class="fa-solid fa-arrow-left"></i> Previous Step</button>
-                        <a href="enrollment.php?logout=1" class="nav-btn" aria-label="Log out and return to login screen"><i class="fa-solid fa-arrow-right-from-bracket"></i> Back to Login</a>
-                        <button type="button" class="nav-btn primary-btn" onclick="submitStep2()" aria-label="Proceed to Step 3 Finalization">
+                        <button type="button" class="btn btn-secondary nav-btn" onclick="goToStep(1)" aria-label="Go back to Step 1 Instructions"><i class="fa-solid fa-arrow-left"></i> Previous Step</button>
+                        <a href="index.php?logout=1" class="btn btn-secondary nav-btn" aria-label="Log out and return to login screen"><i class="fa-solid fa-arrow-right-from-bracket"></i> Back to Login</a>
+                        <button type="button" class="btn btn-primary nav-btn" onclick="submitStep2()" aria-label="Proceed to Step 3 Finalization">
                             <span>Proceed to Step 3</span>
                             <i class="fa-solid fa-check-double"></i>
                         </button>
@@ -1287,33 +1443,33 @@ if ($conn) {
             <!-- ================= STEP 3 PANEL ================= -->
             <div class="step-panel" id="panel-step-3">
                 <!-- Stats Header Row -->
-                <div class="stats-row" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; margin-bottom: 2rem;">
-                    <div class="stat-card" style="background: rgba(22, 30, 49, 0.7); border: 1px solid var(--card-border); border-radius: 12px; padding: 1.25rem; backdrop-filter: blur(8px);">
-                        <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-bottom: 0.5rem;">Active Load</div>
-                        <div style="font-family: var(--font-display); font-size: 1.8rem; font-weight: 700; color: #ffffff;" id="stat-active-load">0 / 0 units</div>
+                <div class="stats-row">
+                    <div class="stat-card">
+                        <div class="stat-label">Active Load</div>
+                        <div class="stat-value" id="stat-active-load">0 / 0 units</div>
                     </div>
-                    <div class="stat-card" style="background: rgba(22, 30, 49, 0.7); border: 1px solid var(--card-border); border-radius: 12px; padding: 1.25rem; backdrop-filter: blur(8px);">
-                        <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-bottom: 0.5rem;">Retake Selected</div>
-                        <div style="font-family: var(--font-display); font-size: 1.8rem; font-weight: 700; color: #ffffff;" id="stat-retakes-count">0 subjects</div>
+                    <div class="stat-card">
+                        <div class="stat-label">Retake Selected</div>
+                        <div class="stat-value" id="stat-retakes-count">0 subjects</div>
                     </div>
-                    <div class="stat-card" id="stat-card-locked" style="background: rgba(22, 30, 49, 0.7); border: 1px solid var(--card-border); border-radius: 12px; padding: 1.25rem; backdrop-filter: blur(8px);">
-                        <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-bottom: 0.5rem;">Locked Subjects</div>
-                        <div style="font-family: var(--font-display); font-size: 1.8rem; font-weight: 700; color: #ffffff;" id="stat-locked-count">0</div>
+                    <div class="stat-card" id="stat-card-locked">
+                        <div class="stat-label">Locked Subjects</div>
+                        <div class="stat-value" id="stat-locked-count">0</div>
                     </div>
-                    <div class="stat-card" style="background: rgba(22, 30, 49, 0.7); border: 1px solid var(--card-border); border-radius: 12px; padding: 1.25rem; backdrop-filter: blur(8px);">
-                        <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-bottom: 0.5rem;">Status</div>
-                        <div style="font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; color: #f59e0b;" id="stat-submission-status">Pending submission</div>
+                    <div class="stat-card">
+                        <div class="stat-label">Status</div>
+                        <div class="stat-value" id="stat-submission-status" style="color: #f59e0b;">Pending submission</div>
                     </div>
                 </div>
 
                 <!-- Regular Subjects Panel -->
                 <div class="panel">
-                    <div class="panel-title" style="justify-content: space-between; display: flex; align-items: center; width: 100%;">
-                        <div style="display: flex; align-items: center; gap: 0.8rem;">
+                    <div class="panel-title panel-title-flex">
+                        <div class="title-group">
                             <i class="fa-solid fa-book-bookmark"></i>
                             <span>Regular subjects — upcoming term</span>
                         </div>
-                        <span class="badge" style="background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.25); font-size: 0.75rem; padding: 0.3rem 0.8rem; border-radius: 50px; font-weight: 600;">Cohort core class</span>
+                        <span class="badge badge-info">Cohort core class</span>
                     </div>
 
                     <div class="failed-table-container">
@@ -1335,12 +1491,12 @@ if ($conn) {
 
                 <!-- Retakes Panel -->
                 <div class="panel">
-                    <div class="panel-title" style="justify-content: space-between; display: flex; align-items: center; width: 100%;">
-                        <div style="display: flex; align-items: center; gap: 0.8rem;">
+                    <div class="panel-title panel-title-flex">
+                        <div class="title-group">
                             <i class="fa-solid fa-arrow-rotate-right"></i>
                             <span>Retake subject selection</span>
                         </div>
-                        <span class="badge" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.25); font-size: 0.75rem; padding: 0.3rem 0.8rem; border-radius: 50px; font-weight: 600;">Pending approval</span>
+                        <span class="badge badge-warning">Pending approval</span>
                     </div>
 
                     <div class="failed-table-container">
@@ -1390,36 +1546,36 @@ if ($conn) {
                         <span>ISO 25010 test and feedback panel</span>
                     </div>
 
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 2rem;">
-                        <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--card-border); border-radius: 10px; padding: 1rem;">
-                            <strong style="color: #ffffff; font-size: 0.9rem; display: block; margin-bottom: 0.3rem;">Functional suitability</strong>
-                            <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.4;">Prerequisite locks, load validation, dropping, and approval flows operate securely based on historical transcripts.</p>
+                    <div class="iso-grid">
+                        <div class="iso-card">
+                            <strong>Functional suitability</strong>
+                            <p>Prerequisite locks, load validation, dropping, and approval flows operate securely based on historical transcripts.</p>
                         </div>
-                        <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--card-border); border-radius: 10px; padding: 1rem;">
-                            <strong style="color: #ffffff; font-size: 0.9rem; display: block; margin-bottom: 0.3rem;">Performance efficiency</strong>
-                            <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.4;">Client-side validations, time overlap checks, and live summaries respond instantly to layout adjustments.</p>
+                        <div class="iso-card">
+                            <strong>Performance efficiency</strong>
+                            <p>Client-side validations, time overlap checks, and live summaries respond instantly to layout adjustments.</p>
                         </div>
-                        <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--card-border); border-radius: 10px; padding: 1rem;">
-                            <strong style="color: #ffffff; font-size: 0.9rem; display: block; margin-bottom: 0.3rem;">Usability</strong>
-                            <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.4;">Staff-visible status badges, dynamic blocked schedule tags, and interactive popups guide users step-by-step.</p>
+                        <div class="iso-card">
+                            <strong>Usability</strong>
+                            <p>Staff-visible status badges, dynamic blocked schedule tags, and interactive popups guide users step-by-step.</p>
                         </div>
-                        <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--card-border); border-radius: 10px; padding: 1rem;">
-                            <strong style="color: #ffffff; font-size: 0.9rem; display: block; margin-bottom: 0.3rem;">Reliability</strong>
-                            <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.4;">Form submission is blocked programmatically while registered load limits or prerequisite approval conflicts persist.</p>
+                        <div class="iso-card">
+                            <strong>Reliability</strong>
+                            <p>Form submission is blocked programmatically while registered load limits or prerequisite approval conflicts persist.</p>
                         </div>
                     </div>
 
                     <div class="form-group" style="margin-top: 1rem;">
-                        <label for="feedback-notes" style="font-family: var(--font-display); font-size: 1rem; font-weight: 700; color: #ffffff; text-transform: none; letter-spacing: 0px; margin-bottom: 0.8rem; display: block;">Structured feedback notes</label>
-                        <textarea id="feedback-notes" rows="4" style="width: 100%; background: rgba(17, 24, 39, 0.4); border: 1px solid var(--card-border); border-radius: 12px; color: #ffffff; padding: 1rem; font-family: var(--font-sans); font-size: 0.95rem; resize: vertical; outline: none; transition: border-color 0.3s ease;" placeholder="Record comments from TUP-Visayas students or staff..."></textarea>
+                        <label for="feedback-notes" class="form-label" style="text-transform: none; letter-spacing: 0; font-size: 1rem; color: #ffffff;">Structured feedback notes</label>
+                        <textarea id="feedback-notes" rows="4" class="feedback-textarea" placeholder="Record comments from TUP-Visayas students or staff..."></textarea>
                     </div>
                 </div>
 
                 <!-- Navigation buttons -->
                 <div class="navigation-row">
-                    <button type="button" class="nav-btn" onclick="goToStep(2)" id="btn-step3-prev" aria-label="Go back to Step 2"><i class="fa-solid fa-arrow-left"></i> Previous Step</button>
-                    <a href="enrollment.php?logout=1" class="nav-btn" id="btn-step3-logout" aria-label="Log out and return to login"><i class="fa-solid fa-arrow-right-from-bracket"></i> Back to Login</a>
-                    <button type="button" class="nav-btn primary-btn" onclick="submitEnrollment()" id="btn-step3-submit" aria-label="Submit Registration">
+                    <button type="button" class="btn btn-secondary nav-btn" onclick="goToStep(2)" id="btn-step3-prev" aria-label="Go back to Step 2"><i class="fa-solid fa-arrow-left"></i> Previous Step</button>
+                    <a href="index.php?logout=1" class="btn btn-secondary nav-btn" id="btn-step3-logout" aria-label="Log out and return to login"><i class="fa-solid fa-arrow-right-from-bracket"></i> Back to Login</a>
+                    <button type="button" class="btn btn-primary nav-btn" onclick="submitEnrollment()" id="btn-step3-submit" aria-label="Submit Registration">
                         <span>Submit Registration</span>
                         <i class="fa-solid fa-paper-plane"></i>
                     </button>
@@ -1427,7 +1583,7 @@ if ($conn) {
             </div>
 
             <!-- Custom Toast Notification -->
-            <div id="toast" class="toast-notification">
+            <div id="toast" class="toast">
                 <i id="toast-icon" class="fa-solid"></i>
                 <div>
                     <strong id="toast-title" style="display: block; font-size: 0.9rem; color: #ffffff;">Notification</strong>
@@ -1485,8 +1641,8 @@ if ($conn) {
             </div>
 
             <div class="modal-buttons">
-                <button type="button" class="modal-btn" onclick="closeRetakeModal(false)">Cancel</button>
-                <button type="button" class="modal-btn save-btn" onclick="saveRetakeOption()">Confirm Option</button>
+                <button type="button" class="btn btn-secondary modal-btn" onclick="closeRetakeModal(false)">Cancel</button>
+                <button type="button" class="btn btn-success modal-btn save-btn" onclick="saveRetakeOption()">Confirm Option</button>
             </div>
         </div>
     </div>
@@ -1953,7 +2109,7 @@ if ($conn) {
                                 <span style="color: var(--accent-primary); margin-left: 0.5rem; font-weight:600;">(Regular - ${subject.units} u)</span>
                             </div>
                             <div class="summary-actions">
-                                <button type="button" class="summary-btn remove-btn" onclick="dropCoreSubject('${code}')" aria-label="Drop ${code} from enrollment schedule"><i class="fa-solid fa-minus-circle"></i> Drop</button>
+                                <button type="button" class="btn btn-danger btn-sm summary-btn remove-btn" onclick="dropCoreSubject('${code}')" aria-label="Drop ${code} from enrollment schedule"><i class="fa-solid fa-minus-circle"></i> Drop</button>
                             </div>
                         </div>
                     `;
@@ -1966,7 +2122,7 @@ if ($conn) {
                                 <span style="color: #ef4444; margin-left: 0.5rem; font-weight:600;">(Dropped - ${subject.units} u)</span>
                             </div>
                             <div class="summary-actions">
-                                <button type="button" class="summary-btn" onclick="undropCoreSubject('${code}')" style="border-color: var(--accent-secondary); color: var(--accent-secondary);" aria-label="Restore ${code}"><i class="fa-solid fa-plus-circle"></i> Restore</button>
+                                <button type="button" class="btn btn-secondary btn-sm summary-btn" onclick="undropCoreSubject('${code}')" style="border-color: var(--accent-secondary); color: var(--accent-secondary);" aria-label="Restore ${code}"><i class="fa-solid fa-plus-circle"></i> Restore</button>
                             </div>
                         </div>
                     `;
@@ -1998,8 +2154,8 @@ if ($conn) {
                             </div>
                         </div>
                         <div class="summary-actions">
-                            <button type="button" class="summary-btn" onclick="editSummaryRetake('${code}')" aria-label="Edit retake options for ${code}"><i class="fa-solid fa-pen"></i> Edit</button>
-                            <button type="button" class="summary-btn remove-btn" onclick="removeSummaryRetake('${code}')" aria-label="Remove ${code} from retake schedule"><i class="fa-solid fa-trash-can"></i> Remove</button>
+                            <button type="button" class="btn btn-secondary btn-sm summary-btn" onclick="editSummaryRetake('${code}')" aria-label="Edit retake options for ${code}"><i class="fa-solid fa-pen"></i> Edit</button>
+                            <button type="button" class="btn btn-danger btn-sm summary-btn remove-btn" onclick="removeSummaryRetake('${code}')" aria-label="Remove ${code} from retake schedule"><i class="fa-solid fa-trash-can"></i> Remove</button>
                         </div>
                     </div>
                 `;
@@ -2310,38 +2466,72 @@ if ($conn) {
         }
 
         // Final Enrollment Submission Flow
-        function submitEnrollment() {
+        async function submitEnrollment() {
             if (!confirm("Are you sure you want to submit your final enrollment registration for validation?")) {
                 return;
             }
 
-            // Update status in stats row
-            const statusEl = document.getElementById('stat-submission-status');
-            statusEl.textContent = 'Enrolled / Complete';
-            statusEl.style.color = '#10b981';
+            const submitBtn = document.getElementById('btn-step3-submit');
+            submitBtn.disabled = true;
+            submitBtn.querySelector('span').textContent = 'Submitting...';
 
-            // Show Toast Success notification
-            showToast('Success', 'Enrollment registration submitted successfully!', 'success');
+            const payload = {
+                dropped_subjects: Array.from(droppedCoreSubjects),
+                retake_selections: selectedRetakes
+            };
 
-            // Disable controls
-            document.getElementById('feedback-notes').disabled = true;
-            document.getElementById('btn-step3-submit').disabled = true;
-            document.getElementById('btn-step3-submit').style.opacity = '0.5';
-            document.getElementById('btn-step3-submit').style.cursor = 'not-allowed';
-            document.getElementById('btn-step3-prev').disabled = true;
-            document.getElementById('btn-step3-prev').style.opacity = '0.5';
-            document.getElementById('btn-step3-prev').style.cursor = 'not-allowed';
-            
-            // Also disable Step 2 retake checkboxes to prevent tampering
-            document.querySelectorAll('.retake-checkbox').forEach(chk => {
-                chk.disabled = true;
-            });
+            try {
+                const response = await fetch('php/api/submit_enrollment.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload),
+                    credentials: 'include',
+                    cache: 'no-store'
+                });
 
-            // Redirect back to login screen after 2.5 seconds
-            setTimeout(() => {
-                alert("🎉 Enrollment registration successfully saved!\n\nYou will now be redirected to the student portal login page.");
-                window.location.href = 'enrollment.php?logout=1';
-            }, 2500);
+                const result = await response.json();
+
+                if (result.success) {
+                    // Update status in stats row
+                    const statusEl = document.getElementById('stat-submission-status');
+                    statusEl.textContent = 'Pending Review';
+                    statusEl.style.color = '#f59e0b';
+
+                    // Show Toast Success notification
+                    showToast('Success', result.message, 'success');
+
+                    // Disable controls
+                    document.getElementById('feedback-notes').disabled = true;
+                    submitBtn.disabled = true;
+                    submitBtn.style.opacity = '0.5';
+                    submitBtn.style.cursor = 'not-allowed';
+                    document.getElementById('btn-step3-prev').disabled = true;
+                    document.getElementById('btn-step3-prev').style.opacity = '0.5';
+                    document.getElementById('btn-step3-prev').style.cursor = 'not-allowed';
+                    
+                    // Also disable Step 2 retake checkboxes to prevent tampering
+                    document.querySelectorAll('.retake-checkbox').forEach(chk => {
+                        chk.disabled = true;
+                    });
+
+                    // Redirect back to login screen after 2.5 seconds
+                    setTimeout(() => {
+                        alert("🎉 Enrollment registration successfully saved!\n\nYou will now be redirected to the student portal login page.");
+                        window.location.href = 'index.php?logout=1';
+                    }, 2500);
+                } else {
+                    showToast('Submission Failed', result.message, 'error');
+                    submitBtn.disabled = false;
+                    submitBtn.querySelector('span').textContent = 'Submit Registration';
+                }
+            } catch (err) {
+                console.error(err);
+                showToast('Connection Error', 'Unable to reach the submission service.', 'error');
+                submitBtn.disabled = false;
+                submitBtn.querySelector('span').textContent = 'Submit Registration';
+            }
         }
 
         // Initialize display summary on load

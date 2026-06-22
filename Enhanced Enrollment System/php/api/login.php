@@ -25,7 +25,7 @@ $student_id = isset($_POST['student_id']) ? trim($_POST['student_id']) : null;
 $password = isset($_POST['password']) ? $_POST['password'] : null;
 $birthday = isset($_POST['birthday']) ? trim($_POST['birthday']) : null;
 
-if (!$student_id || !$password || !$birthday) {
+if (!$student_id || !$password) {
     // Attempt JSON parsing
     $json = file_get_contents('php://input');
     $data = json_decode($json, true);
@@ -36,11 +36,25 @@ if (!$student_id || !$password || !$birthday) {
     }
 }
 
+// Determine if this is a staff login
+$is_staff = false;
+if ($student_id && (strpos(strtoupper($student_id), 'DEPT-') === 0 || strpos(strtoupper($student_id), 'REG-') === 0 || strpos(strtoupper($student_id), 'ADMIN-') === 0)) {
+    $is_staff = true;
+}
+
 // Validation
-if (empty($student_id) || empty($password) || empty($birthday)) {
+if (empty($student_id) || empty($password)) {
     echo json_encode([
         "success" => false,
-        "message" => "Student ID, Password, and Date of Birth are required."
+        "message" => "ID and Password are required."
+    ]);
+    exit;
+}
+
+if (!$is_staff && empty($birthday)) {
+    echo json_encode([
+        "success" => false,
+        "message" => "Date of Birth is required for students."
     ]);
     exit;
 }
@@ -49,62 +63,119 @@ try {
     $dbClass = new Database();
     $db = $dbClass->getConnection();
 
-    // Query student
-    $query = "SELECT * FROM students WHERE student_id = :student_id LIMIT 1";
-    $stmt = $db->prepare($query);
-    $stmt->bindParam(':student_id', $student_id);
-    $stmt->execute();
-    
-    $student = $stmt->fetch();
+    if ($is_staff) {
+        // Query staff
+        $query = "SELECT * FROM staff WHERE staff_id = :staff_id LIMIT 1";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':staff_id', $student_id);
+        $stmt->execute();
+        
+        $staff = $stmt->fetch();
 
-    if (!$student) {
+        if (!$staff) {
+            echo json_encode([
+                "success" => false,
+                "message" => "Invalid credentials. Staff member not found."
+            ]);
+            exit;
+        }
+
+        // Verify Password
+        if (!password_verify($password, $staff['password'])) {
+            echo json_encode([
+                "success" => false,
+                "message" => "Invalid credentials. Incorrect password."
+            ]);
+            exit;
+        }
+
+        // Staff login successful
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        $_SESSION['staff_id'] = $staff['staff_id'];
+        $_SESSION['staff_name'] = $staff['name'];
+        $_SESSION['staff_role'] = $staff['role'];
+        $_SESSION['program_code'] = $staff['program_code'];
+
+        $redirect = 'index.php?page=registrar_dashboard';
+        if ($staff['role'] === 'Dept Head') {
+            $redirect = 'index.php?page=dept_head_dashboard';
+        } elseif ($staff['role'] === 'Admin') {
+            $redirect = 'index.php?page=admin_dashboard';
+        }
+
         echo json_encode([
-            "success" => false,
-            "message" => "Invalid credentials. Student not found."
+            "success" => true,
+            "message" => "Staff login successful!",
+            "redirect" => $redirect,
+            "data" => [
+                "staff_id" => $staff['staff_id'],
+                "name" => $staff['name'],
+                "role" => $staff['role'],
+                "program_code" => $staff['program_code']
+            ]
+        ]);
+        exit;
+    } else {
+        // Query student
+        $query = "SELECT * FROM students WHERE student_id = :student_id LIMIT 1";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':student_id', $student_id);
+        $stmt->execute();
+        
+        $student = $stmt->fetch();
+
+        if (!$student) {
+            echo json_encode([
+                "success" => false,
+                "message" => "Invalid credentials. Student not found."
+            ]);
+            exit;
+        }
+
+        // Verify Date of Birth (DB format is YYYY-MM-DD)
+        $dbBirthday = $student['birthday'];
+        $inputBirthday = date('Y-m-d', strtotime($birthday));
+
+        if ($dbBirthday !== $inputBirthday) {
+            echo json_encode([
+                "success" => false,
+                "message" => "Invalid credentials. Date of Birth does not match."
+            ]);
+            exit;
+        }
+
+        // Verify Password
+        if (!password_verify($password, $student['password'])) {
+            echo json_encode([
+                "success" => false,
+                "message" => "Invalid credentials. Incorrect password."
+            ]);
+            exit;
+        }
+
+        // Student login successful
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        $_SESSION['student_id'] = $student['student_id'];
+        $_SESSION['student_name'] = $student['name'];
+
+        echo json_encode([
+            "success" => true,
+            "message" => "Login successful!",
+            "redirect" => "index.php?page=enrollment",
+            "data" => [
+                "student_id" => $student['student_id'],
+                "name" => $student['name'],
+                "section" => $student['section'],
+                "program_code" => $student['program_code'],
+                "current_term" => $student['current_term']
+            ]
         ]);
         exit;
     }
-
-    // Verify Date of Birth (DB format is YYYY-MM-DD)
-    // Accept input either in YYYY-MM-DD or standard formats and compare
-    $dbBirthday = $student['birthday'];
-    $inputBirthday = date('Y-m-d', strtotime($birthday));
-
-    if ($dbBirthday !== $inputBirthday) {
-        echo json_encode([
-            "success" => false,
-            "message" => "Invalid credentials. Date of Birth does not match."
-        ]);
-        exit;
-    }
-
-    // Verify Password
-    if (!password_verify($password, $student['password'])) {
-        echo json_encode([
-            "success" => false,
-            "message" => "Invalid credentials. Incorrect password."
-        ]);
-        exit;
-    }
-
-    // Login successful
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
-    }
-    $_SESSION['student_id'] = $student['student_id'];
-    $_SESSION['student_name'] = $student['name'];
-
-    echo json_encode([
-        "success" => true,
-        "message" => "Login successful!",
-        "data" => [
-            "student_id" => $student['student_id'],
-            "name" => $student['name'],
-            "section" => $student['section'],
-            "program_code" => $student['program_code'],
-            "current_term" => $student['current_term']
-        ]
-    ]);
 
 } catch (PDOException $e) {
     echo json_encode([
